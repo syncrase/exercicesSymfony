@@ -1,10 +1,10 @@
-forms
+# forms
 	Exercices avec les formulaires twig
 .
 server
 	Configuration pour que le projet s'exécute sur serveur (wamp, easyPhp, ...)
 .
-files
+# files
 	Configuration pour pouvoir (down|up)load des fichiers sur le serveur
 .
 	(( tiddlywiki ))
@@ -16,7 +16,7 @@ debug
 data-provider-pool
 	Configuration de manière à avoir plusieurs data providers (ORM (MySQL, mongo) + à la main)
 .
-best-practices
+(( best-practices ))
 	Configuration respectant toutes les best practices et expliquant en quoi ce sont les meilleures
 .
 dynamic-database

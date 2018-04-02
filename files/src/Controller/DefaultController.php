@@ -26,6 +26,7 @@ class DefaultController extends Controller {
 
     /**
      * @Route("/file")
+     * https://www.w3schools.com/php/php_file_upload.asp
      */
     public function fileupload(Request $request) {
 //Request $request
