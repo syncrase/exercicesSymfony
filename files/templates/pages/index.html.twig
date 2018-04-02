@@ -1,0 +1,26 @@
+{# templates/pages/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Home page{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <br/>
+    {% if number is defined %}
+        {{ number }}
+    {% endif %}
+    <br/>
+    {% if uploadmessage is defined %}
+        {{ uploadmessage }}
+    {% endif %}
+    <br/>
+    
+    <form action="file" method="post" enctype="multipart/form-data">
+        Select image to upload:
+        <input type="file" name="fileToUpload" id="fileToUpload">
+        <input type="submit" value="Upload Image" name="submit">
+    </form>
+
+
+{% endblock %}
