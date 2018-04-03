@@ -105,8 +105,7 @@ class DefaultController extends Controller {
         } else {
             return $this->render('pages/index.html.twig');
         }
-//        return $this->render('pages/index.html.twig');
-//        }
+        
     }
 
 }

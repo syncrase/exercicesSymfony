@@ -19,11 +19,14 @@ data-provider-pool
 (( best-practices ))
 	Configuration respectant toutes les best practices et expliquant en quoi ce sont les meilleures
 .
-dynamic-database
-	Configuration qui permet de créer en runtime des tables des tables de les compléter, les modifier, les supprimer, ...
+# dynamic-database (en pause, ce n'est pas un projet important pour la suite. Mal nommé)
+	Configuration qui permet de créer en runtime des tables des tables de les compléter, les modifier, les supprimer, ... <-- pas une bonne idée, mieux vaut considérer une architecture permettant de modéliser ce comportement.
 .
 mind-map
 	Permet la construction d'une mind map
+.
+template
+	Rassemble plusieurs templates fonctionnels. Etudie les différentes manières de faire
 .
 chronologie
 	Permet la construction d'une chronologie
