@@ -16,16 +16,13 @@ debug
 #### data-provider-pool
 	Configuration de manière à avoir plusieurs data providers (ORM (MySQL, mongo) + à la main)
 .
-(( best-practices ))
-	Configuration respectant toutes les best practices et expliquant en quoi ce sont les meilleures
-.
 #### dynamic-database (en pause, ce n'est pas un projet important pour la suite. Mal nommé)
 	Configuration qui permet de créer en runtime des tables des tables de les compléter, les modifier, les supprimer, ... <-- pas une bonne idée, mieux vaut considérer une architecture permettant de modéliser ce comportement.
 .
 (( mind-map ))
 	Permet la construction d'une mind map. Même librairie que pour la chronologie.
 .
-template
+#### templates
 	Rassemble plusieurs templates fonctionnels. Etudie les différentes manières de faire
 .
 #### chronologie
@@ -42,12 +39,12 @@ encyclopedie
 .
 plantes
 	Classification des plantes, toutes les info théoriques + pratiques (lieux de présence, recettes, risque de confusion) les nécessités du sols (ph, composition, acidité) et les implications sur l'environnement (augmentation de l'acidité)
-	Les symbioses (champignon), mode de reproduction
+	Les symbioses (champignon), mode de reproduction, plantes azotées
 	photos de l'écorce fonction des âges, des fruits, des feuilles fonction de la saison, ...
 	les types de racine
 	outils d'identification
 	stades phénologiques
 .
-download-mmanager
+#### download-mmanager
 	Permet de télécharger des articles, vidéos, audio, ... directement depuis le web (YouTube, ...)
 .
