@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Concept;
+use App\Entity\MySQL\Concept;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
