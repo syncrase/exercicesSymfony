@@ -13,6 +13,9 @@ composer require doctrine maker
 :: Mongo pour php7 or later
 composer config "platform.ext-mongo" "1.6.16" && composer require "alcaeus/mongo-php-adapter" doctrine/mongodb-odm-bundle
 :: Advanced assets
-composer require asset (OR composer require symfony/asset (même chose))
-composer require encore
+composer require asset encore
 yarn install
+
+
+:: LIBRARIES
+composer require twbs/bootstrap components/font-awesome components/jquery 

@@ -1,23 +1,64 @@
-{# templates/base.html.twig #}
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Test Application {{ number }} {% endblock %}</title>
-    </head>
-    <body>
-        <div id="sidebar">
-            {% block sidebar %}
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/blog">Blog</a></li>
-                </ul>
-            {% endblock %}
-        </div>
+{% extends 'base.html.twig' %}
 
-        <div id="content">
-        {% block body %}{% endblock %}
-        {% block afterbody %}afterbody revu{% endblock %}
-    </div>
-</body>
-</html>
+
+{% block body %}
+
+    <!-- Counts Section -->
+    <section class="dashboard-counts section-padding">
+        <div class="container-fluid">
+            {{ number }}
+        </div>
+    </section>
+    <!-- Header Section-->
+    <section class="dashboard-header section-padding">
+        <div class="container-fluid">
+            <div class="row d-flex align-items-md-stretch">
+                <!-- To Do List-->
+                <div class="col-lg-3 col-md-6">
+                    azerazer
+                </div>
+                <!-- Pie Chart-->
+                <div class="col-lg-3 col-md-6">
+                    azerazer
+                </div>
+                <!-- Line Chart -->
+                <div class="col-lg-6 col-md-12 flex-lg-last flex-md-first align-self-baseline">
+                    azerazer
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Statistics Section-->
+    <section class="statistics">
+        <div class="container-fluid">
+            <div class="row d-flex">
+                <div class="col-lg-4">
+                    azerazer
+                </div>
+                <div class="col-lg-4">
+                    zerazer
+                </div>
+                <div class="col-lg-4">
+                    azerazera
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Updates Section -->
+    <section class="mt-30px mb-30px">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-4 col-md-12">
+                    azerazer
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    azerazer
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    azerazer
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

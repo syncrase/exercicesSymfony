@@ -1,0 +1,25 @@
+// assets/css/theme1.scss
+/* 
+    Created on : 5 avr. 2018, 18:33:39
+    Author     : Pierre
+*/
+
+// customize some Bootstrap variables
+//$brand-primary: darken(#428bca, 20%);
+
+// To load Bootstrap, we need to override the path to its icons
+/*$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";*/
+/*$icon-font-path: "~bootstrap/assets/fonts/bootstrap/";*/
+
+
+$fa-font-path: "~font-awesome/fonts";
+@import "~font-awesome/scss/font-awesome";
+
+// the ~ allows you to reference things in node_modules
+/*@import '~bootstrap-sass/assets/stylesheets/bootstrap';*/
+@import '~bootstrap/dist/css/bootstrap';
+//only for bootstrap alert feature => ~bootstrap-sass/assets/stylesheets/bootstrap/alerts
+
+@import './css/base.css';
+
+
