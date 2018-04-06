@@ -23,3 +23,7 @@ composer require twbs/bootstrap components/font-awesome components/jquery
 
 :: HELP example de configuration d'un bundle
 php bin/console config:dump-reference framework
+
+
+:: At the end
+composer update

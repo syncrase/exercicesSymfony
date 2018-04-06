@@ -16,9 +16,6 @@ debug
 #### data-provider-pool
 	Configuration de manière à avoir plusieurs data providers (ORM (MySQL, mongo) + à la main)
 .
-#### dynamic-database (en pause, ce n'est pas un projet important pour la suite. Mal nommé)
-	Configuration qui permet de créer en runtime des tables des tables de les compléter, les modifier, les supprimer, ... <-- pas une bonne idée, mieux vaut considérer une architecture permettant de modéliser ce comportement.
-.
 (( mind-map ))
 	Permet la construction d'une mind map. Même librairie que pour la chronologie.
 .
