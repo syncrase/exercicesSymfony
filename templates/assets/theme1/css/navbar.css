@@ -1,0 +1,166 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 6 avr. 2018, 14:57:35
+    Author     : Pierre
+*/
+
+
+/*
+* ==========================================================
+*     Main NAVBAR
+* ==========================================================
+*/
+nav.navbar {
+  background: #393836;
+  padding: .8rem 0;
+  /* Navbar Brand --------- */
+  /*  Dropdowns ------------ */
+  /* Toggle Button ---------- */
+}
+
+nav.navbar .side-navbar-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+nav.navbar .container-fluid {
+  width: 100%;
+}
+
+nav.navbar .navbar-holder {
+  width: 100%;
+}
+
+nav.navbar a {
+  font-size: 0.8em;
+  color: #fff;
+  position: relative;
+}
+
+nav.navbar .badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+nav.navbar a.logout i {
+  margin-left: 5px;
+}
+
+nav.navbar small {
+  font-size: 0.75em;
+  color: #999;
+}
+
+nav.navbar a.navbar-brand {
+  margin-left: 10px;
+}
+
+nav.navbar .brand-text {
+  text-transform: uppercase;
+}
+
+nav.navbar .brand-text strong {
+  font-size: 1.5em;
+}
+
+nav.navbar .nav-menu {
+  margin-bottom: 0;
+}
+
+nav.navbar .dropdown-menu {
+  width: 320px;
+  right: 0;
+  left: auto;
+  float: left;
+  margin-top: 16px;
+  margin-bottom: 0;
+  padding: 20px;
+  font-size: 1.1em;
+}
+
+nav.navbar .dropdown-menu a {
+  font-size: 0.75em;
+  color: #666;
+  padding: 10px;
+}
+
+nav.navbar .dropdown-menu a:active {
+  color: #fff;
+}
+
+nav.navbar .dropdown-menu a:active span {
+  color: #fff;
+}
+
+nav.navbar .dropdown-menu a span {
+  color: #777;
+}
+
+nav.navbar .dropdown-menu a i {
+  margin-right: 5px;
+}
+
+nav.navbar .msg-body span,
+nav.navbar .msg-body strong {
+  display: block;
+}
+
+nav.navbar .msg-body span {
+  font-size: 0.85em;
+}
+
+nav.navbar .msg-profile {
+  margin-right: 10px;
+  width: 50px;
+}
+
+nav.navbar .notification-content {
+  font-size: 0.8em;
+}
+
+nav.navbar a.menu-btn {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  background: #292929;
+  color: #fff;
+  text-align: center;
+  padding: 0 !important;
+}
+
+nav.navbar a.menu-btn i[class*='icon-'] {
+  -webkit-transform: translateY(4px);
+  transform: translateY(4px);
+}
+
+nav.navbar a.menu-btn:hover {
+  background: #33b35a;
+}
+
+/*  NAVBAR MEDIAQUERIES ---------------------------------- */
+@media (max-width: 575px) {
+  nav.navbar .dropdown-menu {
+    width: auto;
+    right: -40px;
+  }
+  nav.navbar .notification {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 992px) {
+  nav.navbar .dropdown-menu strong {
+    font-weight: 400;
+  }
+  nav.navbar .dropdown-menu a {
+    font-size: 0.9em;
+  }
+}

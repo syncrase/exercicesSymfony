@@ -16,6 +16,9 @@ Encore
         .addEntry('theme1/js', './assets/theme1/theme1.js')
         .addStyleEntry('theme1/css', './assets/theme1/theme1.scss')
 
+
+//        .addStyleEntry('theme1/css', './assets/css/custom.scss')
+
         // any url() paths in your Sass files must now be relative to the original source entry file 
         // instead of whatever file you're inside of
         .enableSassLoader(function (sassOptions) {}, {

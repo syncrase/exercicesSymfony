@@ -21,5 +21,10 @@ $fa-font-path: "~font-awesome/fonts";
 //only for bootstrap alert feature => ~bootstrap-sass/assets/stylesheets/bootstrap/alerts
 
 @import './css/base.css';
+@import './css/side_navbar.css';
+@import './css/navbar.css';
+@import './css/footer.css';
 @import './css/images.css';
+@import '../css/custom.css';
 
+/*@import './css/bootstrap_override.css';*/

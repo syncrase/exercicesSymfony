@@ -1,25 +1,43 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {# Les fonctions: https://twig.symfony.com/doc/2.x/functions/index.html #}
+    {#    <link rel="stylesheet" href="{{ asset('build/custom.css') }}">#}
+{% endblock %}
 
 {% block body %}
 
-    <!-- Counts Section -->
-    <section class="dashboard-counts section-padding">
+    <!-- Counts Section classes dashboard-counts section-padding-->
+    <section class=" ">
         <div class="container-fluid">
             {{ number }}
+            {% if app.debug %}
+                <p>Request method: {{ app.request.method }}</p>
+                <p>Application Environment: {{ app.environment }}</p>
+                <p></p>
+                <p>Request: {{ app.request }}</p>
+                <p></p>
+            {% endif %}
         </div>
     </section>
-    <!-- Header Section-->
-    <section class="dashboard-header section-padding">
+    <!-- Header Section classes dashboard-header section-padding -->
+    <section class="">
         <div class="container-fluid">
             <div class="row d-flex align-items-md-stretch">
                 <!-- To Do List-->
                 <div class="col-lg-3 col-md-6">
-                    azerazer
+                    {# liste des autres filtres: https://twig.symfony.com/doc/2.x/filters/index.html #}
+                    {{ 'azerazer'|upper }}
                 </div>
                 <!-- Pie Chart-->
                 <div class="col-lg-3 col-md-6">
-                    azerazer
+                    {# Liste de autres tags: https://twig.symfony.com/doc/2.x/tags/index.html#}
+                    {% for i in 1..10 %}
+                        <div class="{{ cycle(['even', 'odd'], i) }}" style="padding-left:{{ i*25 }}px;">
+                            i
+                        </div>
+                    {% endfor %}
                 </div>
                 <!-- Line Chart -->
                 <div class="col-lg-6 col-md-12 flex-lg-last flex-md-first align-self-baseline">
@@ -28,8 +46,8 @@
             </div>
         </div>
     </section>
-    <!-- Statistics Section-->
-    <section class="statistics">
+    <!-- Statistics Section classes btn-default-->
+    <section class="">
         <div class="container-fluid">
             <div class="row d-flex">
                 <div class="col-lg-4">
@@ -44,8 +62,8 @@
             </div>
         </div>
     </section>
-    <!-- Updates Section -->
-    <section class="mt-30px mb-30px">
+    <!-- Updates Section classes mt-30px mb-30px-->
+    <section class="">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-4 col-md-12">

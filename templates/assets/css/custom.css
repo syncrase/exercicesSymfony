@@ -1,0 +1,16 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 6 avr. 2018, 12:22:35
+    Author     : Pierre
+*/
+
+.even{
+    background-color:red;
+}
+.odd{
+    background-color:green;
+}
