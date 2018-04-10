@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}
+            {#            <link rel="stylesheet" href="{{ asset('build/app/css.css') }}">#}
+            <link rel="stylesheet" href="{{ asset('api/vis.css') }}">
+            <script src="{{ asset('api/vis.js') }}"></script>
+        {% endblock %}
+    </head>
+    <body>
+    {% block body %}{% endblock %}
+    {% block javascripts %}
+
+    {% endblock %}
+</body>
+</html>
