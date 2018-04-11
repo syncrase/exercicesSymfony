@@ -11,8 +11,8 @@ Encore
         // .enableVersioning(Encore.isProduction())
         .enableBuildNotifications()
         // uncomment to define the assets of the project
-        // .addEntry('js/app', './assets/js/app.js')
-        // .addStyleEntry('css/app', './assets/css/app.scss')
+        .addEntry('js/app', './assets/js.js')
+//        .addStyleEntry('css/app', './assets/css/app.scss')
         // 
         // assets for the theme 1
 //        .addEntry('vis/js', './node_modules/vis/dist/vis.js')
@@ -25,7 +25,7 @@ Encore
         })
 
         // uncomment for legacy applications that require $/jQuery as a global variable
-        // .autoProvidejQuery()
+        .autoProvidejQuery()
         ;
 
 module.exports = Encore.getWebpackConfig();

@@ -7,12 +7,16 @@
             {#            <link rel="stylesheet" href="{{ asset('build/app/css.css') }}">#}
             <link rel="stylesheet" href="{{ asset('api/vis.css') }}">
             <script src="{{ asset('api/vis.js') }}"></script>
+
+            <link rel="stylesheet" href="{{ asset('build/js/app.css') }}">
+
         {% endblock %}
     </head>
     <body>
     {% block body %}{% endblock %}
+    
     {% block javascripts %}
-
+        <script src="{{ asset('build/js/app.js') }}"></script>
     {% endblock %}
 </body>
 </html>

@@ -31,17 +31,18 @@ class MongoController extends Controller {
 //        $encoder = new JsonEncoder();
 //        $serializer = new Serializer([$normalizer], [$encoder]);
 //        $evenementsJSON = $serializer->serialize($evenements, 'json');
-        $visDataSet = $this->createVisDataSet($evenements);
+        $visDataSet = $this->generateVisDataSet($evenements);
         // Normalize in order to be used by vis.js
         // 1. Ids must be integers
         // 2. Date must be Date, not String
         // 3. Quotation marks of attribute must be removed
-
+        $options = $this->generateVisOption();
         return $this->render('chronologie/index.html.twig', [
 //                    'evenement' => $evenement,
                     'evenements' => $evenements,
 //                    'evenementsJSON' => $evenementsJSON,
-                    'visDataSet' => $visDataSet
+                    'visDataSet' => $visDataSet,
+                    'options' => $options
         ]);
     }
 
@@ -98,7 +99,7 @@ class MongoController extends Controller {
 //        return $evenement;
     }
 
-    private function createVisDataSet($evenements) {
+    private function generateVisDataSet($evenements) {
         // Parcours des éléments du JSON
         // Si je tombe sur l'id je remplace par un chiffre (garder la correspondance en mémoire??)
         // Si je tombe sur la date je la formatte en ajoutant new Date(-428, 0, 1) 
@@ -120,6 +121,19 @@ class MongoController extends Controller {
         $dataSet = substr($dataSet, 0, -1);
         $dataSet .= ']';
         return $dataSet;
+    }
+
+    private function generateVisOption() {
+
+
+//    start: '2014-01-10',  Calculer la date la plus reculée
+//    end: '2014-02-10',    Calculer la date la plus avancée
+//    editable: true,
+//    showCurrentTime: true
+        $options = '';
+        $options .= 'editable: true, ';
+        $options .= 'showCurrentTime: false';
+        return $options;
     }
 
 }

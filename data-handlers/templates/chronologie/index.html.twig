@@ -5,63 +5,62 @@
 {% block body %}
 
 
-    <div class="example-wrapper">
-        {#    <h1>Hello {{ controller_name }}! ✅</h1>#}
 
-{#        This friendly message is coming from:
-        <ul>
-            <li>Your controller at <code>src/Controller/ConceptController.php</code></li>
-            <li>Your template at <code>templates/concept/index.html.twig</code></li>
-        </ul>#}
-        {#{% if conceptId is defined %}
-            {{ conceptId }}
-        {% endif %}#}
-
-
-        {#{% if evenement is defined %}
-            {{ evenement.id }}
-            {{ evenement.name }}
-            {{ evenement.startDate }}
-            {{ evenement.endDate }}
-        {% endif %}#}
+    <section class="">
+        <div class="container-fluid">
+            <div class="row d-flex">
+                {% if visDataSet is defined %}
+                    {{ visDataSet }}
+                {% endif %}
+            </div>
+        </div>
+    </section>
 
 
-        {#{% if evenements is defined %}
-            {% for evenement in evenements %}
-                {{ evenement.id }}
-                {{ evenement.name }}
-                {{ evenement.startDate }}
-                {{ evenement.endDate }}<br/>
-            {% endfor %}
-            {{ evenements|json_encode() }}
-        {% endif %}#}
+    <section class="">
+        <div class="container-fluid">
+            <div class="row d-flex">
+                <div class="col-lg-4">
+                    azerazer
+                </div>
+                <div class="col-lg-4">
+                    zerazer
+                </div>
+                <div class="col-lg-4">
+                    azerazera
+                </div>
+            </div>
+        </div>
+    </section>
 
-        {% if evenementsJSON is defined %}
-            {{ evenementsJSON }}
-        {% endif %}
-        {% if visDataSet is defined %}
-            {{ visDataSet }}
-        {% endif %}
-    </div>
+
+
     <div>
         Avant vis<br/>
         <div id="visualization"></div>
         Après vis<br/>
-        <script type="text/javascript">
-            // DOM element where the Timeline will be attached
-            var container = document.getElementById('visualization');
 
-            // Create a DataSet (allows two way data-binding)
-            var items = new vis.DataSet({{ visDataSet|raw }});
-
-            // Configuration for the Timeline
-            var options = {};
-
-            // Create a Timeline
-            var timeline = new vis.Timeline(container, items, options);
-        </script>
 
 
     </div>
 
 {% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        // DOM element where the Timeline will be attached
+        var container = document.getElementById('visualization');
+
+        // Create a DataSet (allows two way data-binding)
+        var items = new vis.DataSet({{ visDataSet|raw }});
+
+        // Configuration for the Timeline
+        var options = { {{ options|raw }} };
+
+        // Create a Timeline
+        var timeline = new vis.Timeline(container, items, options);
+    </script>
+{% endblock %}
+

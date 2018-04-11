@@ -9,6 +9,11 @@
 */
 require('./style.scss');
 
+var $ = require('jquery');
+
+
+require('popper.js');
+require('bootstrap');
 //require('vis');
 //var vis = require('vis');
 //var $ = require('vis');
@@ -19,7 +24,7 @@ require('./style.scss');
 //
 //require('vis/dist/vis.js');
 //var vis = require('vis/dist/vis.js');
-var $ = require('vis/dist/vis.js');
+//var $ = require('vis/dist/vis.js');
 //
 //var vis = require('vis/dist/vis.min');
 //require('vis/dist/vis-timeline-graph2d.min');

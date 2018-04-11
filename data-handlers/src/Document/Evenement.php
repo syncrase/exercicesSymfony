@@ -61,6 +61,9 @@ class Evenement {
             $this->startDay = $array[2];
         }
         return 'new Date(' . $this->startYear . ',' . $this->startMonth . ',' . $this->startDay . ')';
+        // Les formats ci-dessous fonctionnetn mais ne permettent pas de gérer des dates négatives
+        // 2014-01-01T06:00:00 
+        // 01-01-2014 
     }
 
     public function setStartDate($year, $month = '0', $day = '0'): self {
