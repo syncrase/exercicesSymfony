@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Document\Evenement;
+use App\Document\TimelineItem;
 //use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 //use Symfony\Bridge\Doctrine\RegistryInterface;
 use Doctrine\ODM\MongoDB\DocumentRepository;

@@ -2,22 +2,43 @@
 
 {% block title %}Hello world!{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 5px;
+            text-align: left;
+        }
+    </style>
+{% endblock %}
 {% block body %}
 
 
-
     <section class="">
+        <br/><hr><br/>
+        <h1>Chronologie</h1>
         <div class="container-fluid">
-            <div class="row d-flex">
-                {% if visDataSet is defined %}
-                    {{ visDataSet }}
-                {% endif %}
+            <div class="d-flex row">
+                <div class="" style="width:100%;">
+
+                    <div id="visualization"></div>
+
+                    <button type="button" class="btn btn-primary btn-lg btn-block"  data-toggle="modal" data-target="#addItemModal">
+                        Ajouter une date
+                    </button>
+
+                </div>
             </div>
         </div>
     </section>
 
 
     <section class="">
+        <br/><hr><br/>
         <div class="container-fluid">
             <div class="row d-flex">
                 <div class="col-lg-4">
@@ -34,15 +55,68 @@
     </section>
 
 
+    {% if visChronologie.dataSet is defined %}
+        <br/><hr><br/>
+        <h1>visDataSet</h1>
+        <section class="">
+            <div class="container-fluid">
+                <div class="row d-flex">
 
-    <div>
-        Avant vis<br/>
-        <div id="visualization"></div>
-        Après vis<br/>
+                    {{ visChronologie.dataSet }}
+
+                </div>
+            </div>
+        </section>
+    {% endif %}
 
 
+    {% if evenements is defined %}
+        <br/><hr><br/>
+        <h1>evenements</h1>
+        <section class="">
+            <div class="container-fluid">
+                <div class="row d-flex">
+                    <table style="width:100%">
+                        <caption>All mongo content</caption>
+                        {% for ev in evenements %}
+                            <tr>
+                                <td>{{ ev.id|e }}</td>
+                                <td>{{ ev.content|e }}</td>
+                                <td>{{ ev.start|e }}</td>
+                                {% if ev.end is defined %}
+                                    <td>{{ ev.end|e }}</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </section>
+    {% endif %}
 
+    
+    <!-- The Modal -->
+    <div class="modal fade" id="addItemModal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Ajout d'un élément</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
     </div>
+
+
 
 {% endblock %}
 
@@ -54,13 +128,109 @@
         var container = document.getElementById('visualization');
 
         // Create a DataSet (allows two way data-binding)
-        var items = new vis.DataSet({{ visDataSet|raw }});
-
+        var items = new vis.DataSet({{ visChronologie.getDataSet()|raw }});
         // Configuration for the Timeline
-        var options = { {{ options|raw }} };
+        var options = { {{ visChronologie.getOption()|raw }} };
 
         // Create a Timeline
         var timeline = new vis.Timeline(container, items, options);
+
+        function validate() {
+
+            var contentId = 'add_timeline_item_form_content';
+            if (document.getElementById(contentId).value !== '') {
+                document.getElementById(contentId).classList.remove('is-invalid');
+                document.getElementById(contentId).classList.add('is-valid');
+            } else {
+                document.getElementById(contentId).classList.remove('is-valid');
+                document.getElementById(contentId).classList.add('is-invalid');
+            }
+
+
+            var startId = 'add_timeline_item_form_start';
+            if (isValideDate(document.getElementById(startId).value)) {
+                document.getElementById(startId).classList.remove('is-invalid');
+                document.getElementById(startId).classList.add('is-valid');
+            } else {
+                document.getElementById(startId).classList.remove('is-valid');
+                document.getElementById(startId).classList.add('is-invalid');
+            }
+
+
+            var endId = 'add_timeline_item_form_end';
+            if (document.getElementById("add_timeline_item_form_end").value !== '') {
+                if (isValideDate(document.getElementById(endId).value)) {
+                    document.getElementById(endId).classList.remove('is-invalid');
+                    document.getElementById(endId).classList.add('is-valid');
+                } else {
+                    document.getElementById(endId).classList.remove('is-valid');
+                    document.getElementById(endId).classList.add('is-invalid');
+                }
+            } else {
+                // Si le champ est vide c'est valide
+                document.getElementById(endId).classList.remove('is-invalid');
+                document.getElementById(endId).classList.add('is-valid');
+            }
+
+
+
+            //alert(document.getElementById("add_timeline_item_form_content").value !== '');
+            //alert(document.getElementById("add_timeline_item_form_start").classList.contains('is-valid'));
+            //alert(document.getElementById("add_timeline_item_form_end").classList.contains('is-valid'));
+
+            // si les deux sont valid, supprimer l'attribut disabled
+            if (document.getElementById("add_timeline_item_form_end").classList.contains('is-valid') && document.getElementById("add_timeline_item_form_start").classList.contains('is-valid') && document.getElementById("add_timeline_item_form_content").value !== '') {
+                //var attributes = document.getElementById("add_timeline_item_form_valider").attributes;
+                //var output = "";
+                //for (var i = attributes.length - 1; i >= 0; i--) {
+                //    output += attributes[i].name + "->" + attributes[i].value + " ; ";
+                //}
+                //alert(output);
+                document.getElementById("add_timeline_item_form_valider").removeAttribute('disabled')
+            } else {
+                document.getElementById("add_timeline_item_form_valider").setAttribute('disabled')
+            }
+
+        }
+
+        function isValideDate(date) {
+            var splitedDateContent = date.split('/');
+            if (splitedDateContent.length === 1) {
+                // Dans ce cas c'est censé n'être que l'année
+                var res = (/^-?\d+$/).test(splitedDateContent[0]);
+                if (res === true) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else if (splitedDateContent.length === 3) {
+                // Les expressions régulières peuvent être largement améliorées!
+                var res = (/^-?\d+$/).test(splitedDateContent[0]);
+                if (res === true) {
+                    // OK pour l'année
+                    res = (/^[0-1]?\d{1}$/).test(splitedDateContent[1]);
+                    if (res === true) {
+                        // OK pour le mois
+                        res = (/^[0-3]?\d{1}$/).test(splitedDateContent[2]);
+                        if (res === true) {
+                            // OK pour le jours
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                // Ni une seule année ni une date complète.
+                return false;
+            }
+        }
+
+
     </script>
 {% endblock %}
 
