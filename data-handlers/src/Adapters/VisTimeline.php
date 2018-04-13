@@ -27,25 +27,25 @@ class VisTimeline {
 //    
 
 
-    private $items;
+    private $visTimelineItems;
 
     public function createTimeline($evenements) {
-        $items = [];
+        $visTimelineItems = [];
         $id = 1;
         foreach ($evenements as $ev) {
-            $item = new VisTimelineItem();
-            $item->setId($id++);
-            $item->setContent($ev->getContent());
-            $item->setStart($ev->getStart());
-            $item->setEnd($ev->getEnd());
-            $items[] = $item;
+            $visTimelineItem = new VisTimelineItem();
+            $visTimelineItem->setId($id++);
+            $visTimelineItem->setContent($ev->getContent());
+            $visTimelineItem->setStart($ev->getStart());
+            $visTimelineItem->setEnd($ev->getEnd());
+            $visTimelineItems[] = $visTimelineItem;
         }
-        $this->items = $items;
+        $this->visTimelineItems = $visTimelineItems;
     }
 
     public function getDataSet() {
         $dataSet = '[';
-        foreach ($this->items as $item) {
+        foreach ($this->visTimelineItems as $item) {
             $dataSet .= $item->getDataSet();
             $dataSet .= ',';
         }

@@ -44,7 +44,7 @@ class VisTimelineItem {
             // Dans le cas où la valeur vient du formulaire
             $array = explode('/', $start);
         } else {
-            // Dans le cas où l'on vient du formulaire et que l'on a renseigné que l'année
+            // Dans le cas où l'on vient du formulaire mais que l'on a renseigné que l'année
             $array[] = $start;
         }
 
@@ -80,12 +80,11 @@ class VisTimelineItem {
             if (strpos($end, ',') !== false) {
                 // Dans le cas où la valeur vient de la base de données
                 $array = explode(',', $end);
-            }
-            if (strpos($end, '/') !== false) {
+            } elseif (strpos($end, '/') !== false) {
                 // Dans le cas où la valeur vient du formulaire
                 $array = explode('/', $end);
             } else {
-                // Dans le cas où l'on vient du formulaire et que l'on a renseigné que l'année
+                // Dans le cas où l'on vient du formulaire mais que l'on a renseigné que l'année
                 $array[] = $end;
             }
 

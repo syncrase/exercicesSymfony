@@ -54,19 +54,6 @@ class TimelineItem {
         return $this->start;
     }
 
-//    public function getVisFriendlyStart() {//: ?string 
-////        if (!isset($this->startYear)) {
-//            $array = explode(',', $this->start);
-//            $this->startYear = $array[0];
-//            $this->startMonth = $array[1];
-//            $this->startDay = $array[2];
-////        }
-//        return 'new Date(' . $this->startYear . ',' . $this->startMonth . ',' . $this->startDay . ')';
-//        // Les formats ci-dessous fonctionnetn mais ne permettent pas de gérer des dates négatives
-//        // 2014-01-01T06:00:00 
-//        // 01-01-2014 
-//    }
-
     /**
      * 
      * @param string $year
@@ -100,19 +87,6 @@ class TimelineItem {
     public function getEnd() {//: ?string 
         return $this->end;
     }
-
-//    public function getVisFriendlyEnd() {//: ?string 
-//        if (!isset($this->endYear)) {
-//            $array = explode(',', $this->end);
-//            if (count($array) !== 3) {
-//                return '';
-//            }
-//            $this->endYear = $array[0];
-//            $this->endMonth = $array[1];
-//            $this->endDay = $array[2];
-//        }
-//        return 'new Date(' . $this->endYear . ',' . $this->endMonth . ',' . $this->endDay . ')';
-//    }
 
     /*
      * Unable to set default values directly usable: 
