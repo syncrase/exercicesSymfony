@@ -2,17 +2,23 @@
 
 namespace App\Controller;
 
+// Symfony basics
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 //use Symfony\Component\Validator\Validator\ValidatorInterface;
-//use Symfony\Component\Serializer\Serializer;
-//use Symfony\Component\Serializer\Encoder\XmlEncoder;
-//use Symfony\Component\Serializer\Encoder\JsonEncoder;
-//use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+// Serializer
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+// Handled objects
 use App\Document\TimelineItem;
 use App\Adapters\VisTimeline;
+use App\Adapters\VisTimelineItem;
 use App\Adapters\AddTimelineItemFormType;
+use App\Adapters\VisTimelineSerializationHelper;
 
 //use Doctrine\ODM\MongoDB\Mapping\Annotations\Date;
 //use MongoDB\BSON\UTCDatetime;
@@ -25,14 +31,14 @@ class MongoController extends Controller {
     public function index() {
 
 
-        
+
 //        $this->delete('5acfc36b15c8b92484000e02');
-        
-        
+
+
         $repository = $this->get('doctrine_mongodb')->getRepository(TimelineItem::class);
         $evenements = $repository->findAll();
 //        $this->deleteAll();
-//        $this->addingTest();
+        $this->addingTest();
 
         $visChronologie = new VisTimeline();
         $visChronologie->createTimeline($evenements);
@@ -70,6 +76,63 @@ class MongoController extends Controller {
             $entityManager->flush();
         }
         return $this->redirectToRoute('home');
+    }
+
+    /**
+     * @Route("/updateMongo", name="updateMongo")
+     */
+    public function updateMongo(Request $request) {
+
+        $dataset = $request->get('updatedDataSet');
+        $idsAssociation = $request->get('idsAssociation');
+        // Retourne un tableau associatif http://php.net/manual/fr/function.json-decode.php
+        $idsAssociation = json_decode($idsAssociation, true);
+        // see doc.: https://symfony.com/doc/current/components/serializer.html
+        $encoders = array(new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer(), new ArrayDenormalizer());
+        $serializer = new Serializer($normalizers, $encoders);
+        $updatedDataSet = $serializer->deserialize($dataset, VisTimelineSerializationHelper::class . '[]', 'json');
+
+        $mongoId = '';
+        $visId = '';
+        $report = '';
+        $timelineItem;
+        $visTimelineItem;
+        foreach ($updatedDataSet as $visTimelineItem) {
+            // Pour chacun des objets je regarde s'il existe une correspondance d'id
+            $visId = (string) $visTimelineItem->getId();
+            if (array_key_exists($visId, $idsAssociation)) {
+                // L'objet existait de base dans la timeline => mise à jour
+                // On met l'id originel
+                $mongoId = $idsAssociation[$visId];
+                $visTimelineItem->setId($mongoId);
+                $timelineItem = new TimelineItem();
+                $timelineItem->equalize($visTimelineItem);
+//                $this->update($timelineItem);
+                // Suppression de la table d'association (les objets non supprimés de la table d'association sont
+                // les objets supprimés depuis la UI)
+                unset($idsAssociation[$visId]);
+                // $report .= 'u';
+            } else {
+                // L'évènement à été ajouté depuis la UI et doit être ajouté au document mongo
+                // $report .= 'c';
+            }
+            // Si oui, j'update l'élément en question en question
+            // Si non, je crée un nouvel évènement dans le document mongo
+        }
+        // Parcours de la table d'association pour supprimer du document mongo les évènement restants
+        foreach ($idsAssociation as $idAssociation) {
+            // $report .= 's';
+        }
+
+
+//                . '$idsAssociation : ' . var_dump($idsAssociation) . var_dump($dataset)
+//                . '$timelineItems : ' . var_dump($updatedDataSet)
+        //  . var_dump($timelineItem). var_dump($visTimelineItem). var_dump($updatedDataSet)
+        return new Response(
+                '<html><body>Report: ' . $report . '<br/>' . var_dump($dataset)
+                . '</body></html>'
+        );
     }
 
     /*     * ********************

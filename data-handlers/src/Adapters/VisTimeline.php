@@ -25,8 +25,11 @@ class VisTimeline {
 //    préférer mutualiser toutes les méthodes relatives a vis timeline dans cet 
 //    objet.
 //    
-
-
+    /**
+     *
+     * @var array[visId][mongoId]
+     */
+    private $idsAssociation = [];
     private $visTimelineItems;
 
     public function createTimeline($evenements) {
@@ -34,7 +37,9 @@ class VisTimeline {
         $id = 1;
         foreach ($evenements as $ev) {
             $visTimelineItem = new VisTimelineItem();
-            $visTimelineItem->setId($id++);
+            $visTimelineItem->setId($id);
+            $this->idsAssociation[$id] = $ev->getId();
+            $id++;
             $visTimelineItem->setContent($ev->getContent());
             $visTimelineItem->setStart($ev->getStart());
             $visTimelineItem->setEnd($ev->getEnd());
@@ -64,6 +69,10 @@ class VisTimeline {
         $options .= 'editable: true, ';
         $options .= 'showCurrentTime: false';
         return $options;
+    }
+
+    public function getIdsAssociation() {
+        return $this->idsAssociation;
     }
 
 }

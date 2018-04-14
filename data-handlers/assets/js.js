@@ -30,3 +30,6 @@ require('bootstrap');
 //require('vis/dist/vis-timeline-graph2d.min');
 //require('vis/dist/vis-network.min');
 //C:\Users\Pierre\dev\perso\exercicesSymfony\data-handlers\node_modules\vis\dist\vis-timeline-graph2d.min.js
+
+//require('./js/vis.js');
+

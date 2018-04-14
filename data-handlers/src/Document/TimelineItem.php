@@ -6,7 +6,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 //use Doctrine\ODM\MongoDB\Mapping\Annotations\Date;
 /**
- * @MongoDB\Document(repositoryClass="App\Repository\EvenementRepository")
+ * @MongoDB\Document(repositoryClass="App\Repository\TimelineItemRepository")
  */
 class TimelineItem {
     /*
@@ -120,4 +120,11 @@ class TimelineItem {
         }
     }
 
+    
+    public function equalize($similarObject){
+        $this->id = $similarObject->getId();
+        $this->content = $similarObject->getContent();
+        $this->start = $similarObject->getStart();
+        $this->end = $similarObject->getEnd();
+    }
 }

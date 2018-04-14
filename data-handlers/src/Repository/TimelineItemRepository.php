@@ -13,7 +13,7 @@ use Doctrine\ODM\MongoDB\DocumentRepository;
  * @ method Concept[]    findAll()
  * @ method Concept[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EvenementRepository extends DocumentRepository {
+class TimelineItemRepository extends DocumentRepository {
     
     
 }

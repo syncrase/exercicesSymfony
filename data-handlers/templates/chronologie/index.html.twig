@@ -27,10 +27,20 @@
 
                     <div id="visualization"></div>
 
-                    <button type="button" class="btn btn-primary btn-lg btn-block"  data-toggle="modal" data-target="#addItemModal">
-                        Ajouter une date
+                    <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#addItemModal">
+                        Ajouter une date dans la base
                     </button>
-
+                    <button type="button" class="btn btn-primary btn-lg btn-block" onclick="ajout()">
+                        Test d'ajout front-side seulement
+                    </button>
+                    <form action="/updateMongo" method="POST">
+                        <input type="hidden" id="updatedDataSet" name="updatedDataSet" value="no-value-yet">
+                        <input type="hidden" id="idsAssociation" name="idsAssociation" value="no-value-yet">
+                        <input type="submit" id="updateMongo" 
+                               class="btn btn-primary btn-lg btn-block" 
+                               value="Test de mise à jour de la base" 
+                               onclick="setDataSet()">
+                    </form>
                 </div>
             </div>
         </div>
@@ -94,7 +104,7 @@
         </section>
     {% endif %}
 
-    
+
     <!-- The Modal -->
     <div class="modal fade" id="addItemModal">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -125,96 +135,120 @@
     {{ parent() }}
     <script type="text/javascript">
         // DOM element where the Timeline will be attached
-        var container = document.getElementById('visualization');
-
+        var HTMLContainer = document.getElementById('visualization');
+// alert();
         // Create a DataSet (allows two way data-binding)
-        var items = new vis.DataSet({{ visChronologie.getDataSet()|raw }});
+        var dataSetItems = new vis.DataSet({{ visChronologie.getDataSet()|raw }});
+        // Get the last id now. Permet d'identifier les ajouts, les suppression et les updates
+        // Parmis les ids allant de 1 à N. S'il y en a un de manquant il a été supprimé
+        // Tous les ids strictement supérieurs à N sont nouveaux
+        var ids = dataSetItems.getIds();
+        var lastId = ids[ids.length - 1];
         // Configuration for the Timeline
-        var options = { {{ visChronologie.getOption()|raw }} };
+        var dataSetOptions = { {{ visChronologie.getOption()|raw }} };
 
-        // Create a Timeline
-        var timeline = new vis.Timeline(container, items, options);
+        // Correspondance entre les ids visjs {key} et les ids mongo {value}
+        {% set idsAssociation = visChronologie.getIdsAssociation() %}
+            // Initiate the key value array ([] or new Array() is just a basic array)
+            var idsAssociation = {};
+        {% for id in 1..idsAssociation|length %}
+            idsAssociation['{{ id }}'] = '{{ idsAssociation[id] }}';
+        {% endfor %}
+            //alert(idsAssociation);
 
-        function validate() {
+            // alert(idsAssociation);
+            // Create a Timeline
+            var timeline = new vis.Timeline(HTMLContainer, dataSetItems, dataSetOptions);
 
-            var contentId = 'add_timeline_item_form_content';
-            if (document.getElementById(contentId).value !== '') {
-                document.getElementById(contentId).classList.remove('is-invalid');
-                document.getElementById(contentId).classList.add('is-valid');
-            } else {
-                document.getElementById(contentId).classList.remove('is-valid');
-                document.getElementById(contentId).classList.add('is-invalid');
-            }
-
-
-            var startId = 'add_timeline_item_form_start';
-            if (isValideDate(document.getElementById(startId).value)) {
-                document.getElementById(startId).classList.remove('is-invalid');
-                document.getElementById(startId).classList.add('is-valid');
-            } else {
-                document.getElementById(startId).classList.remove('is-valid');
-                document.getElementById(startId).classList.add('is-invalid');
-            }
+// subscribe to any change in the DataSet
+            dataSetItems.on('*', function (event, properties, senderId) {
+                console.log('event', event, properties);
+            });
 
 
-            var endId = 'add_timeline_item_form_end';
-            if (document.getElementById("add_timeline_item_form_end").value !== '') {
-                if (isValideDate(document.getElementById(endId).value)) {
+            function validate() {
+
+                var contentId = 'add_timeline_item_form_content';
+                if (document.getElementById(contentId).value !== '') {
+                    document.getElementById(contentId).classList.remove('is-invalid');
+                    document.getElementById(contentId).classList.add('is-valid');
+                } else {
+                    document.getElementById(contentId).classList.remove('is-valid');
+                    document.getElementById(contentId).classList.add('is-invalid');
+                }
+
+
+                var startId = 'add_timeline_item_form_start';
+                if (isValideDate(document.getElementById(startId).value)) {
+                    document.getElementById(startId).classList.remove('is-invalid');
+                    document.getElementById(startId).classList.add('is-valid');
+                } else {
+                    document.getElementById(startId).classList.remove('is-valid');
+                    document.getElementById(startId).classList.add('is-invalid');
+                }
+
+
+                var endId = 'add_timeline_item_form_end';
+                if (document.getElementById("add_timeline_item_form_end").value !== '') {
+                    if (isValideDate(document.getElementById(endId).value)) {
+                        document.getElementById(endId).classList.remove('is-invalid');
+                        document.getElementById(endId).classList.add('is-valid');
+                    } else {
+                        document.getElementById(endId).classList.remove('is-valid');
+                        document.getElementById(endId).classList.add('is-invalid');
+                    }
+                } else {
+                    // Si le champ est vide c'est valide
                     document.getElementById(endId).classList.remove('is-invalid');
                     document.getElementById(endId).classList.add('is-valid');
-                } else {
-                    document.getElementById(endId).classList.remove('is-valid');
-                    document.getElementById(endId).classList.add('is-invalid');
                 }
-            } else {
-                // Si le champ est vide c'est valide
-                document.getElementById(endId).classList.remove('is-invalid');
-                document.getElementById(endId).classList.add('is-valid');
+
+
+
+                //alert(document.getElementById("add_timeline_item_form_content").value !== '');
+                //alert(document.getElementById("add_timeline_item_form_start").classList.contains('is-valid'));
+                //alert(document.getElementById("add_timeline_item_form_end").classList.contains('is-valid'));
+
+                // si les deux sont valid, supprimer l'attribut disabled
+                if (document.getElementById("add_timeline_item_form_end").classList.contains('is-valid') && document.getElementById("add_timeline_item_form_start").classList.contains('is-valid') && document.getElementById("add_timeline_item_form_content").value !== '') {
+                    //var attributes = document.getElementById("add_timeline_item_form_valider").attributes;
+                    //var output = "";
+                    //for (var i = attributes.length - 1; i >= 0; i--) {
+                    //    output += attributes[i].name + "->" + attributes[i].value + " ; ";
+                    //}
+                    //alert(output);
+                    document.getElementById("add_timeline_item_form_valider").removeAttribute('disabled')
+                } else {
+                    document.getElementById("add_timeline_item_form_valider").setAttribute('disabled')
+                }
+
             }
 
-
-
-            //alert(document.getElementById("add_timeline_item_form_content").value !== '');
-            //alert(document.getElementById("add_timeline_item_form_start").classList.contains('is-valid'));
-            //alert(document.getElementById("add_timeline_item_form_end").classList.contains('is-valid'));
-
-            // si les deux sont valid, supprimer l'attribut disabled
-            if (document.getElementById("add_timeline_item_form_end").classList.contains('is-valid') && document.getElementById("add_timeline_item_form_start").classList.contains('is-valid') && document.getElementById("add_timeline_item_form_content").value !== '') {
-                //var attributes = document.getElementById("add_timeline_item_form_valider").attributes;
-                //var output = "";
-                //for (var i = attributes.length - 1; i >= 0; i--) {
-                //    output += attributes[i].name + "->" + attributes[i].value + " ; ";
-                //}
-                //alert(output);
-                document.getElementById("add_timeline_item_form_valider").removeAttribute('disabled')
-            } else {
-                document.getElementById("add_timeline_item_form_valider").setAttribute('disabled')
-            }
-
-        }
-
-        function isValideDate(date) {
-            var splitedDateContent = date.split('/');
-            if (splitedDateContent.length === 1) {
-                // Dans ce cas c'est censé n'être que l'année
-                var res = (/^-?\d+$/).test(splitedDateContent[0]);
-                if (res === true) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else if (splitedDateContent.length === 3) {
-                // Les expressions régulières peuvent être largement améliorées!
-                var res = (/^-?\d+$/).test(splitedDateContent[0]);
-                if (res === true) {
-                    // OK pour l'année
-                    res = (/^[0-1]?\d{1}$/).test(splitedDateContent[1]);
+            function isValideDate(date) {
+                var splitedDateContent = date.split('/');
+                if (splitedDateContent.length === 1) {
+                    // Dans ce cas c'est censé n'être que l'année
+                    var res = (/^-?\d+$/).test(splitedDateContent[0]);
                     if (res === true) {
-                        // OK pour le mois
-                        res = (/^[0-3]?\d{1}$/).test(splitedDateContent[2]);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else if (splitedDateContent.length === 3) {
+                    // Les expressions régulières peuvent être largement améliorées!
+                    var res = (/^-?\d+$/).test(splitedDateContent[0]);
+                    if (res === true) {
+                        // OK pour l'année
+                        res = (/^[0-1]?\d{1}$/).test(splitedDateContent[1]);
                         if (res === true) {
-                            // OK pour le jours
-                            return true;
+                            // OK pour le mois
+                            res = (/^[0-3]?\d{1}$/).test(splitedDateContent[2]);
+                            if (res === true) {
+                                // OK pour le jours
+                                return true;
+                            } else {
+                                return false;
+                            }
                         } else {
                             return false;
                         }
@@ -222,14 +256,52 @@
                         return false;
                     }
                 } else {
+                    // Ni une seule année ni une date complète.
                     return false;
                 }
-            } else {
-                // Ni une seule année ni une date complète.
-                return false;
             }
-        }
 
+            function ajout() {
+                // alert();
+
+                lastId++;
+                dataSetItems.add([
+                    {id: lastId, content: 'item 1', start: new Date(2013, 6, 20)}
+                ]);
+
+
+            }
+
+            function updateMongo() {
+                // alert();
+                var items = dataSetItems.get();
+                alert(items.length);
+                window.location = "\\";
+
+            }
+
+            function setDataSet() {
+
+                // fields: ['id', 'date'],
+                //type: {
+                //        start: 'ISODate',
+                //        end: 'ISODate'
+                //    }
+                var JSONDataSet = dataSetItems.get({
+                    fields: ['id', 'content', 'start', 'end'],
+                    type: {
+                        id: 'Number',
+                        start: 'Date',
+                        end: 'Date'
+                    }
+                });
+                // the http request size could be a problem 
+                // In this case check this : https://stackoverflow.com/questions/2364840/what-is-the-size-limit-of-a-post-request
+                // Add the full content of the timeline to the 'updatedDataSet' hidden input
+                document.getElementById('updatedDataSet').setAttribute('value', JSON.stringify(JSONDataSet, null, 2));
+                // Add the first loaded (and unmodified) ids timeline item association
+                document.getElementById('idsAssociation').setAttribute('value', JSON.stringify(idsAssociation, null, 2));
+            }
 
     </script>
 {% endblock %}
