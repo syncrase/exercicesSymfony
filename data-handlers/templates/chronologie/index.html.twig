@@ -35,11 +35,12 @@
                     </button>
                     <form action="/updateMongo" method="POST">
                         <input type="hidden" id="updatedDataSet" name="updatedDataSet" value="no-value-yet">
-                        <input type="hidden" id="idsAssociation" name="idsAssociation" value="no-value-yet">
+                        <input type="hidden" id="visFriendlyIds" name="visFriendlyIds" value="no-value-yet">
+                        <input type="hidden" id="visFriendlyDates" name="visFriendlyDates" value="no-value-yet">
                         <input type="submit" id="updateMongo" 
                                class="btn btn-primary btn-lg btn-block" 
                                value="Test de mise à jour de la base" 
-                               onclick="setDataSet()">
+                               onclick="fillHiddenField()">
                     </form>
                 </div>
             </div>
@@ -92,9 +93,9 @@
                             <tr>
                                 <td>{{ ev.id|e }}</td>
                                 <td>{{ ev.content|e }}</td>
-                                <td>{{ ev.start|e }}</td>
-                                {% if ev.end is defined %}
-                                    <td>{{ ev.end|e }}</td>
+                                <td>{{ ev.startYear|e }}/{{ ev.startMonth|e }}/{{ ev.startDay|e }}</td>
+                                {% if ev.endYear is defined %}
+                                    <td>{{ ev.endYear|e }}/{{ ev.endMonth|e }}/{{ ev.endDay|e }}</td>
                                 {% endif %}
                             </tr>
                         {% endfor %}
@@ -134,12 +135,11 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript">
-        // DOM element where the Timeline will be attached
         var HTMLContainer = document.getElementById('visualization');
-// alert();
-        // Create a DataSet (allows two way data-binding)
+        // Getting data to feed the timeline
         var dataSetItems = new vis.DataSet({{ visChronologie.getDataSet()|raw }});
-        // Get the last id now. Permet d'identifier les ajouts, les suppression et les updates
+        // Get the last id before any modification. 
+        // Permet d'identifier les ajouts, les suppression et les updates
         // Parmis les ids allant de 1 à N. S'il y en a un de manquant il a été supprimé
         // Tous les ids strictement supérieurs à N sont nouveaux
         var ids = dataSetItems.getIds();
@@ -147,23 +147,34 @@
         // Configuration for the Timeline
         var dataSetOptions = { {{ visChronologie.getOption()|raw }} };
 
-        // Correspondance entre les ids visjs {key} et les ids mongo {value}
-        {% set idsAssociation = visChronologie.getIdsAssociation() %}
-            // Initiate the key value array ([] or new Array() is just a basic array)
-            var idsAssociation = {};
-        {% for id in 1..idsAssociation|length %}
-            idsAssociation['{{ id }}'] = '{{ idsAssociation[id] }}';
-        {% endfor %}
-            //alert(idsAssociation);
 
-            // alert(idsAssociation);
+        // Correspondance entre les ids visjs {key} et les ids mongo {value}
+        {% set visFriendlyIds = visChronologie.getVisFriendlyIds() %}
+            // Initiate the associative array ([] or new Array() is just a basic array)
+            var visFriendlyIds = {};
+        {% for id in 1..visFriendlyIds|length %}
+            visFriendlyIds['{{ id }}'] = '{{ visFriendlyIds[id] }}';
+        {% endfor %}
+
+
+        {% set visFriendlyDates = visChronologie.getVisFriendlyDates() %}
+            var visFriendlyDates = {};
+        {% for id in 1..visFriendlyDates|length %}
+            visFriendlyDates['{{ id }}'] = {
+                start: '{{ visFriendlyDates[id]['start'] }}',
+                end: '{{ visFriendlyDates[id]['end'] }}'
+            };
+        {% endfor %}
+
+
             // Create a Timeline
             var timeline = new vis.Timeline(HTMLContainer, dataSetItems, dataSetOptions);
 
-// subscribe to any change in the DataSet
+            // subscribe to any change in the DataSet
             dataSetItems.on('*', function (event, properties, senderId) {
                 console.log('event', event, properties);
             });
+
 
 
             function validate() {
@@ -204,19 +215,12 @@
                 }
 
 
-
-                //alert(document.getElementById("add_timeline_item_form_content").value !== '');
-                //alert(document.getElementById("add_timeline_item_form_start").classList.contains('is-valid'));
-                //alert(document.getElementById("add_timeline_item_form_end").classList.contains('is-valid'));
-
-                // si les deux sont valid, supprimer l'attribut disabled
-                if (document.getElementById("add_timeline_item_form_end").classList.contains('is-valid') && document.getElementById("add_timeline_item_form_start").classList.contains('is-valid') && document.getElementById("add_timeline_item_form_content").value !== '') {
-                    //var attributes = document.getElementById("add_timeline_item_form_valider").attributes;
-                    //var output = "";
-                    //for (var i = attributes.length - 1; i >= 0; i--) {
-                    //    output += attributes[i].name + "->" + attributes[i].value + " ; ";
-                    //}
-                    //alert(output);
+                // si les deux sont valides, supprimer l'attribut disabled
+                // TODO Il faut vérifier que les données sont cohérentes
+                // La date de début est-elle antérieure à la date de fin?
+                if (document.getElementById("add_timeline_item_form_end").classList.contains('is-valid') &&
+                        document.getElementById("add_timeline_item_form_start").classList.contains('is-valid') &&
+                        document.getElementById("add_timeline_item_form_content").value !== '') {
                     document.getElementById("add_timeline_item_form_valider").removeAttribute('disabled')
                 } else {
                     document.getElementById("add_timeline_item_form_valider").setAttribute('disabled')
@@ -262,45 +266,44 @@
             }
 
             function ajout() {
-                // alert();
-
                 lastId++;
                 dataSetItems.add([
                     {id: lastId, content: 'item 1', start: new Date(2013, 6, 20)}
                 ]);
-
-
-            }
-
-            function updateMongo() {
-                // alert();
-                var items = dataSetItems.get();
-                alert(items.length);
-                window.location = "\\";
+                // **TODO** ajout de la date dans le tableau associatif des dates 
+                // pour signaler quels éléments n'ont pas été renseignés par 
+                // l'utilisateur mais ajoutés tout de même pour rendre les 
+                // dates visJS Friendly
 
             }
 
-            function setDataSet() {
-
-                // fields: ['id', 'date'],
-                //type: {
-                //        start: 'ISODate',
-                //        end: 'ISODate'
-                //    }
-                var JSONDataSet = dataSetItems.get({
+            /**
+             * Fill hidden fields just before sending the request to the controller
+             * @returns no return
+             */
+            function fillHiddenField() {
+                // the http request size could be a problem 
+                // In this case check this url: 
+                // https://stackoverflow.com/questions/2364840/what-is-the-size-limit-of-a-post-request
+                // // JSON.stringify documentation: 
+                // https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/JSON/stringify
+                // Add the full content of the timeline to the 'updatedDataSet' hidden input
+                var dataSet = dataSetItems.get({
                     fields: ['id', 'content', 'start', 'end'],
                     type: {
                         id: 'Number',
-                        start: 'Date',
-                        end: 'Date'
+                        start: 'String',
+                        end: 'String'
                     }
                 });
-                // the http request size could be a problem 
-                // In this case check this : https://stackoverflow.com/questions/2364840/what-is-the-size-limit-of-a-post-request
-                // Add the full content of the timeline to the 'updatedDataSet' hidden input
-                document.getElementById('updatedDataSet').setAttribute('value', JSON.stringify(JSONDataSet, null, 2));
-                // Add the first loaded (and unmodified) ids timeline item association
-                document.getElementById('idsAssociation').setAttribute('value', JSON.stringify(idsAssociation, null, 2));
+                // TODO mettre un log a cet endroit pour indiquer la taille de la requête avant du'elle parte
+                // + si possible la taille de la configuration serveur
+                // Log d'erreur si la taille de la requête est supérieur à la taille permise par le serveur
+                document.getElementById('updatedDataSet').setAttribute('value', JSON.stringify(dataSet, null, 2));
+                // Add the first loaded (and unmodified) ids timelineItem association
+                document.getElementById('visFriendlyIds').setAttribute('value', JSON.stringify(visFriendlyIds, null, 2));
+                // Add the associative array to inform which dates are by default
+                document.getElementById('visFriendlyDates').setAttribute('value', JSON.stringify(visFriendlyDates, null, 2));
             }
 
     </script>

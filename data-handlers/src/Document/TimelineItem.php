@@ -27,6 +27,10 @@ class TimelineItem {
         return $this->id;
     }
 
+//    public function setId($id) {
+//        $this->id = $id;
+//    }
+
     /**
      * @MongoDB\Field(type="string")
      */
@@ -44,68 +48,86 @@ class TimelineItem {
 
     /**
      * @MongoDB\Field(type="string")
-     * format y,m,d
      */
-    private $start;
-
-//    private $startYear, $startMonth, $startDay;
-
-    public function getStart() {//: ?string 
-        return $this->start;
-    }
+    private $startYear;
 
     /**
-     * 
-     * @param string $year
-     * @param string $month
-     * @param string $day
-     * @return \self
+     * @MongoDB\Field(type="string")
      */
-    public function setStart($year, $month = null, $day = null): self {
-        if (null === $month) {
-            $month = '00';
-        }
-        if (null === $day) {
-            $day = '00';
-        }
-//        preg_match('/-?[0-9]+/', $year);
-        $this->start = $year . ',' . $month . ',' . $day;
-//        $this->startYear = $year;
-//        $this->startMonth = $month;
-//        $this->startDay = $day;
-        return $this;
+    private $startMonth;
+
+    /**
+     * @MongoDB\Field(type="string")
+     */
+    private $startDay;
+
+    public function getStartYear() {//: ?string 
+        return $this->startYear;
+    }
+
+    public function getStartMonth() {//: ?string 
+        return $this->startMonth;
+    }
+
+    public function getStartDay() {//: ?string 
+        return $this->startDay;
+    }
+
+    public function setStartYear($startYear) {//: ?string 
+        // TODO vérifier qu'il y a 4 ou 6 chiffres
+        $this->startYear = $startYear;
+    }
+
+    public function setStartMonth($startMonth) {//: ?string 
+        // TODO vérifier qu'il y a deux chiffres contenus entre 01 et 12
+        $this->startMonth = $startMonth;
+    }
+
+    public function setStartDay($startDay) {//: ?string 
+        // TODO vérifier qu'il y a deux chiffres contenus entre 01 et 31
+        $this->startDay = $startDay;
     }
 
     /**
      * @MongoDB\Field(type="string")
-     * format y,m,d
      */
-    private $end;
+    private $endYear;
 
-//    private $endYear, $endMonth, $endDay;
+    /**
+     * @MongoDB\Field(type="string")
+     */
+    private $endMonth;
 
-    public function getEnd() {//: ?string 
-        return $this->end;
+    /**
+     * @MongoDB\Field(type="string")
+     */
+    private $endDay;
+
+    public function getEndYear() {//: ?string 
+        return $this->endYear;
     }
 
-    /*
-     * Unable to set default values directly usable: 
-     * https://stackoverflow.com/questions/9166914/using-default-arguments-in-a-function
-     */
+    public function getEndMonth() {//: ?string 
+        return $this->endMonth;
+    }
 
-    public function setEnd($year, $month = null, $day = null): self {
-        if (null === $month) {
-            $month = '00';
-        }
-        if (null === $day) {
-            $day = '00';
-        }
+    public function getEndDay() {//: ?string 
+        return $this->endDay;
+    }
 
-        $this->end = $year . ',' . $month . ',' . $day;
-//        $this->endYear = $year;
-//        $this->endMonth = $month;
-//        $this->endDay = $day;
-        return $this;
+    public function setEndYear($endYear) {//: ?string 
+        // TODO vérifier qu'il y a 4 ou 6 chiffres
+        $this->endYear = $endYear;
+    }
+
+    public function setEndMonth($endMonth) {//: ?string 
+        // TODO vérifier qu'il y a deux chiffres contenus entre 01 et 12
+        $this->endMonth = $endMonth;
+    }
+
+    public function setEndDay($endDay) {//: ?string 
+        // TODO vérifier qu'il y a deux chiffres contenus entre 01 et 31
+        $this->endDay = $endDay;
     }
 
     /**
@@ -113,18 +135,41 @@ class TimelineItem {
      * @return boolean
      */
     public function hasEnd() {
-        if (isset($this->end) && $this->end !== '') {
+        if (isset($this->endYear) && $this->endYear !== '') {
             return true;
         } else {
             return false;
         }
     }
 
-    
-    public function equalize($similarObject){
-        $this->id = $similarObject->getId();
+    /**
+     * Specific to the used patern. 
+     * Parceque l'on utilise plusieurs classe représentant la même mais a des fins différentes
+     * on a besoins de pouvoir "changer" de classe pour avoir accès à des méthodes différentes
+     * TODO un design patern (Decorator?) serait peut-être une bonne idée!
+     * @param type $similarObject
+     */
+    public function updateFields($similarObject) {
         $this->content = $similarObject->getContent();
-        $this->start = $similarObject->getStart();
-        $this->end = $similarObject->getEnd();
+        // start date
+        $this->startYear = $similarObject->getStartYear();
+        $this->startMonth = $similarObject->getStartMonth();
+        $this->startDay = $similarObject->getStartDay();
+        // end date
+        $this->endYear = $similarObject->getEndYear();
+        $this->endMonth = $similarObject->getEndMonth();
+        $this->endDay = $similarObject->getEndDay();
     }
+
+    public function equals($similarObject) {
+        $isEquals = $this->content === $similarObject->getContent() &&
+                $this->startYear === $similarObject->getStartYear() &&
+                $this->startMonth === $similarObject->getStartMonth() &&
+                $this->startDay === $similarObject->getStartDay() &&
+                $this->endYear === $similarObject->getEndYear() &&
+                $this->endMonth === $similarObject->getEndMonth() &&
+                $this->endDay === $similarObject->getEndDay();
+        return $isEquals;
+    }
+
 }

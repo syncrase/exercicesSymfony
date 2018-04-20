@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Adapters;
+namespace App\Core\VisJS\Timeline;
 
-use App\Adapters\VisTimelineItem;
+use App\Core\VisJS\Timeline\VisTimelineItem;
 
+/**
+ * This is the dataset generator. 
+ * Formate data specifically for the vis.js use.
+ */
 class VisTimeline {
-
 // Cet objet me permet d'avoir un adapter qui me permet de distinguer l'objet 
 // inscrit en base de données et l'objet serialisé à l'utilisation de vis timeline.
 // Si je n'utilise pas l'adapter j'obtiens ceci :
@@ -25,25 +28,36 @@ class VisTimeline {
 //    préférer mutualiser toutes les méthodes relatives a vis timeline dans cet 
 //    objet.
 //    
+
     /**
      *
      * @var array[visId][mongoId]
      */
-    private $idsAssociation = [];
+    private $visFriendlyIds = [];
+
+    /**
+     * 
+     * @var array[visId][initialDateFormatCode]
+     */
+    private $visFriendlyDates = [];
     private $visTimelineItems;
 
-    public function createTimeline($evenements) {
+    /**
+     * 
+     * @param type $evenements
+     */
+    public function initTimeline($evenements) {
         $visTimelineItems = [];
         $id = 1;
         foreach ($evenements as $ev) {
             $visTimelineItem = new VisTimelineItem();
+            $this->visFriendlyDates[$id] = $visTimelineItem->initVisTimelineItem($ev);
             $visTimelineItem->setId($id);
-            $this->idsAssociation[$id] = $ev->getId();
-            $id++;
-            $visTimelineItem->setContent($ev->getContent());
-            $visTimelineItem->setStart($ev->getStart());
-            $visTimelineItem->setEnd($ev->getEnd());
             $visTimelineItems[] = $visTimelineItem;
+
+            // Fill associative array
+            $this->visFriendlyIds[$id] = $ev->getId();
+            $id++;
         }
         $this->visTimelineItems = $visTimelineItems;
     }
@@ -54,7 +68,7 @@ class VisTimeline {
             $dataSet .= $item->getDataSet();
             $dataSet .= ',';
         }
-        //Revome the last coma
+        //Remove the last coma
         $dataSet = substr($dataSet, 0, -1);
         $dataSet .= ']';
         return $dataSet;
@@ -71,8 +85,12 @@ class VisTimeline {
         return $options;
     }
 
-    public function getIdsAssociation() {
-        return $this->idsAssociation;
+    public function getVisFriendlyIds() {
+        return $this->visFriendlyIds;
+    }
+
+    public function getVisFriendlyDates() {
+        return $this->visFriendlyDates;
     }
 
 }

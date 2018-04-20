@@ -1,8 +1,19 @@
 <?php
 
-namespace App\Adapters;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
-class VisTimelineItem {
+namespace App\Core\VisJS\Timeline;
+
+/**
+ * Handle data going from the form AddTimelineItemFormType
+ *
+ * @author Pierre
+ */
+class AddTimelineItemData {
 
     private $id;
 
@@ -36,7 +47,12 @@ class VisTimelineItem {
         return explode(',', $start);
     }
 
+    /**
+     * 
+     * @param type $start
+     */
     public function setStart($start) {
+        // This is a copy paste. MUST BE VALIDATE!!!
         if (strpos($start, ',') !== false) {
             // Dans le cas où la valeur vient de la base de données
             $array = explode(',', $start);
@@ -74,6 +90,7 @@ class VisTimelineItem {
     }
 
     public function setEnd($end) {
+        // This is a copy paste. MUST BE VALIDATE!!!
         if (null === $end) {
             $this->end = '';
         } else {
@@ -96,25 +113,6 @@ class VisTimelineItem {
                 //throw exception
             }
         }
-    }
-
-    public function getDataSet() {
-//        Retourne une information de type
-//        [{id: 1, content: 'Platon', start: new Date(-428,00,00), end:new Date(-348,00,00)},
-//        {id: 2, content: '1ère guerre mondiale', start: new Date(1914,07,28), end:new Date(1918,11,11)},
-//        {id: 3, content: '2nde guerre mondiale', start: new Date(1939,09,01), end:new Date(1945,09,02)},
-//        {id: 4, content: 'déclaration Balfour', start: new Date(1917,11,2)}] 
-//        Cette information est censée être traitée par du Javascript
-        $dataSet = '';
-        $dataSet .= '{'
-                . 'id: ' . $this->id
-                . ', content: \'' . $this->content . '\''
-                . ', start: ' . $this->start;
-        if (null !== $this->end && '' !== $this->end) {
-            $dataSet .= ', end:' . $this->end;
-        }
-        $dataSet .= '}';
-        return $dataSet;
     }
 
 }
