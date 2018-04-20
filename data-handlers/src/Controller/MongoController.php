@@ -31,7 +31,9 @@ class MongoController extends Controller {
 
 
 //        $this->deleteAll();
-        $this->addingTest();
+//        $this->adding5Tests();
+//        $this->addingJCTest();
+//        $this->addingPlatonTest();
         $repository = $this->get('doctrine_mongodb')->getRepository(TimelineItem::class);
         $evenements = $repository->findAll();
 
@@ -160,13 +162,13 @@ class MongoController extends Controller {
      * 
      * @return TimelineItem
      */
-    private function addingTest() {
+    private function adding5Tests() {
         $this->deleteAll();
 
         $evenement = new TimelineItem();
         $evenement->setContent('Platon');
-        $evenement->setStartYear('-0428');
-        $evenement->setEndYear('-0348');
+        $evenement->setStartYear('-000428');
+        $evenement->setEndYear('-000348');
 
         $evenement2 = new TimelineItem();
         $evenement2->setContent('1ère guerre mondiale');
@@ -194,7 +196,7 @@ class MongoController extends Controller {
 
         $evenement5 = new TimelineItem();
         $evenement5->setContent('Jésus christ');
-        $evenement5->setStartYear('-0001');
+        $evenement5->setStartYear('0000');
         $evenement5->setEndYear('0033');
 
 
@@ -204,6 +206,44 @@ class MongoController extends Controller {
         $entityManager->persist($evenement3);
         $entityManager->persist($evenement4);
         $entityManager->persist($evenement5);
+        $entityManager->flush();
+        return $evenement;
+    }
+
+    /**
+     * 
+     * @return TimelineItem
+     */
+    private function addingJCTest() {
+        $this->deleteAll();
+
+        $evenement5 = new TimelineItem();
+        $evenement5->setContent('Jésus christ');
+        $evenement5->setStartYear('0000');
+        $evenement5->setEndYear('0033');
+
+
+        $entityManager = $this->get('doctrine_mongodb')->getManager();
+        $entityManager->persist($evenement5);
+        $entityManager->flush();
+        return $evenement5;
+    }
+
+    /**
+     * 
+     * @return TimelineItem
+     */
+    private function addingPlatonTest() {
+        $this->deleteAll();
+
+        $evenement = new TimelineItem();
+        $evenement->setContent('Platon');
+        $evenement->setStartYear('-000428');
+        $evenement->setEndYear('-000348');
+
+
+        $entityManager = $this->get('doctrine_mongodb')->getManager();
+        $entityManager->persist($evenement);
         $entityManager->flush();
         return $evenement;
     }
