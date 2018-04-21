@@ -74,17 +74,17 @@ class TimelineItem {
     }
 
     public function setStartYear($startYear) {//: ?string 
-        // TODO vérifier qu'il y a 4 ou 6 chiffres
+        // TODO vérifier qu'il y a 4 ou 6 chiffres => /^(\d{4}|-\d{6})$/
         $this->startYear = $startYear;
     }
 
     public function setStartMonth($startMonth) {//: ?string 
-        // TODO vérifier qu'il y a deux chiffres contenus entre 01 et 12
+        // TODO vérifier qu'il y a deux chiffres contenus entre 01 et 12 => (^0[1-9]|1[0-2]$)
         $this->startMonth = $startMonth;
     }
 
     public function setStartDay($startDay) {//: ?string 
-        // TODO vérifier qu'il y a deux chiffres contenus entre 01 et 31
+        // TODO vérifier qu'il y a deux chiffres contenus entre 01 et 31 => (^[0-2][1-9]|3[0-1]$)
         $this->startDay = $startDay;
     }
 
@@ -116,17 +116,17 @@ class TimelineItem {
     }
 
     public function setEndYear($endYear) {//: ?string 
-        // TODO vérifier qu'il y a 4 ou 6 chiffres
+        // TODO vérifier qu'il y a 4 ou 6 chiffres => /^(\d{4}|-\d{6})$/
         $this->endYear = $endYear;
     }
 
     public function setEndMonth($endMonth) {//: ?string 
-        // TODO vérifier qu'il y a deux chiffres contenus entre 01 et 12
+        // TODO vérifier qu'il y a deux chiffres contenus entre 01 et 12 => (^0[1-9]|1[0-2]$)
         $this->endMonth = $endMonth;
     }
 
     public function setEndDay($endDay) {//: ?string 
-        // TODO vérifier qu'il y a deux chiffres contenus entre 01 et 31
+        // TODO vérifier qu'il y a deux chiffres contenus entre 01 et 31 => (^[0-2][1-9]|3[0-1]$)
         $this->endDay = $endDay;
     }
 

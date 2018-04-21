@@ -31,7 +31,7 @@ class MongoController extends Controller {
 
 
 //        $this->deleteAll();
-//        $this->adding5Tests();
+        $this->adding5Tests();
 //        $this->addingJCTest();
 //        $this->addingPlatonTest();
         $repository = $this->get('doctrine_mongodb')->getRepository(TimelineItem::class);
@@ -129,7 +129,7 @@ class MongoController extends Controller {
                     $datamanager->flush();
                     $report .= 'u';
                 } else {
-                    // Do not update anything because the current item wasn't be modified
+                    // Do not update the item because the current item wasn't be modified
                     $report .= 'n';
                 }
                 // Suppression de la table d'association (les objets non supprimés de la table d'association sont

@@ -80,21 +80,24 @@ class VisTimelineItem {
         return $timelineItem;
     }
 
-    public function initVisTimelineItem($ev) {
+    public function adapt($ev) {
         $this->setContent($ev->getContent());
         // Start date
         // Quand il n'y a que l'année de disponible => placement de la date au 1er janvier
-        $startMonth = $ev->getStartMonth() !== null ? $ev->getStartMonth() : '01';
-        $startDay = $ev->getStartDay() !== null ? $ev->getStartDay() : '01';
-        $this->setStart('\'' . $ev->getStartYear() . '-' . $startMonth . '-' . $startDay . '\'');
+        $this->setStart(
+                '\'' . $ev->getStartYear() . '-' .
+                ($ev->getStartMonth() !== null ? $ev->getStartMonth() : '01') . '-' .
+                ($ev->getStartDay() !== null ? $ev->getStartDay() : '01') . '\''
+        );
 
         // End date
-        $endMonth = $ev->getEndMonth() !== null ? $ev->getEndMonth() : '01';
-        $endDay = $ev->getEndDay() !== null ? $ev->getEndDay() : '01';
-        $this->setEnd($ev->hasEnd() ? '\'' . $ev->getEndYear() . '-' . $endMonth . '-' . $endDay . '\'' : null);
-
-
-
+        $this->setEnd(
+                $ev->hasEnd() ?
+                        '\'' .
+                        $ev->getEndYear() . '-' .
+                        ($ev->getEndMonth() !== null ? $ev->getEndMonth() : '01') . '-' .
+                        ($ev->getEndDay() !== null ? $ev->getEndDay() : '01') . '\'' : null
+        );
 
         return $this->computeDateAdaptationCode($ev);
     }
@@ -113,7 +116,7 @@ class VisTimelineItem {
      * 1		1		1		7 <- signifie date complète: année, mois & jour connus
      * 
      * @param type $ev
-     * @return The associative array representative of which value was set to default value
+     * @return The associative array representative of which values was set to the default value.
      */
     private function computeDateAdaptationCode($ev) {
         $startDateCode = 4 + // there's always a start date
@@ -126,16 +129,6 @@ class VisTimelineItem {
             'start' => $startDateCode,
             'end' => $endDateCode
         ];
-    }
-
-    /**
-     * @param type $month
-     * @return type
-     */
-    private function decrementMonth($month) {
-        $intValue = intval($month);
-        $decrementedMonth = ($intValue >= 1 && $intValue <= 12) ? $intValue - 1 : 0;
-        return (string) $decrementedMonth;
     }
 
 }

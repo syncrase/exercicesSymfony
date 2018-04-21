@@ -11,7 +11,8 @@ namespace App\Core\VisJS\Timeline;
 use App\Document\TimelineItem;
 
 /**
- * Constructed in order to keep the vis.js dataset values.
+ * Les attributs de cet objets sont dédiés à reçevoir les valeurs du JSON 
+ * représentant la timeline puis à les mettre en forme avant la persistence
  * Provide methods to get data in shape 
  * 
  *
@@ -19,7 +20,6 @@ use App\Document\TimelineItem;
  */
 class VisTimelineSerializationHelper {
 
-    private $timelineItem;
     private $id;
 
     public function getId() {
@@ -46,10 +46,6 @@ class VisTimelineSerializationHelper {
         return $this->start;
     }
 
-    /**
-     * 
-     * @param string $end représente une date formatée comme suit -000429-12-30T23:00:00.000Z
-     */
     public function setStart($start) {
         $this->start = $start;
     }
@@ -60,81 +56,37 @@ class VisTimelineSerializationHelper {
         return $this->end;
     }
 
-    /**
-     * 
-     * @param string $end représente une date formatée comme suit -000429-12-30T23:00:00.000Z
-     */
     public function setEnd($end) {
         $this->end = $end;
     }
 
+    private $timelineItem;
+
     public function initTimelineItem() {
         $this->timelineItem = new TimelineItem();
-
         $this->timelineItem->setContent($this->content);
 
-        // Match dates like
-        //Fri Dec 31 -0429 00:00:00 GMT+0100 (Paris, Madrid)
-        //Fri Aug 28 1914 00:00:00 GMT+0200
-        //Sun Oct 01 1939 00:00:00 GMT+0200
-        //Sun Dec 02 1917 00:00:00 GMT+0100 (Paris, Madrid)
-        // 0:weekDay 1:month 2:day 3:year
-        if (preg_match('/^\w{3} \w{3} \d{2} -?\d{1,6} \d{2}:\d{2}:\d{2} GMT\+0(100 \(Paris, Madrid\)|200)$/', $this->start) === 1) {
-            $start = explode(' ', $this->start);
-            $this->timelineItem->setStartYear($start[3]);
-            // $this->decrementMonth($this->convertMonthAsNumber($start[1]))
-            $this->timelineItem->setStartMonth($this->convertMonthAsNumber($start[1]));
-            $this->timelineItem->setStartDay($start[2]);
-        }
+        $isBC = $this->start[0] === '-';
+        // documentation http://php.net/ltrim
+        $this->start = ltrim($this->start, '-');
+        $start = explode('-', $this->start);
+        $this->timelineItem->setStartYear(($isBC ? '-' : '') . $start[0]);
+        $this->timelineItem->setStartMonth($start[1]);
+        $this->timelineItem->setStartDay($start[2]);
 
-        if (preg_match('/^\w{3} \w{3} \d{2} -?\d{1,6} \d{2}:\d{2}:\d{2} GMT\+0(100 \(Paris, Madrid\)|200)$/', $this->end) === 1) {
-            $end = explode(' ', $this->end);
-            $this->timelineItem->setEndYear($end[3]);
-            // $this->decrementMonth($this->convertMonthAsNumber($end[1]))
-            $this->timelineItem->setEndMonth($this->convertMonthAsNumber($end[1]));
+        if ($this->end !== null) {
+            $isBC = $this->end[0] === '-';
+            // documentation http://php.net/ltrim
+            $this->end = ltrim($this->end, '-');
+            $end = explode('-', $this->end);
+            $this->timelineItem->setEndYear(($isBC ? '-' : '') . $end[0]);
+            $this->timelineItem->setEndMonth($end[1]);
             $this->timelineItem->setEndDay($end[2]);
         }
     }
 
     public function getTimelineItem() {
         return $this->timelineItem;
-    }
-
-    private function convertMonthAsNumber($monthWithLetters) {
-        switch ($monthWithLetters) {
-            case 'Jan':
-                return '01';
-            case 'Feb':
-                return '02';
-            case 'Mar':
-                return '03';
-            case 'Apr':
-                return '04';
-            case 'May':
-                return '05';
-            case 'Jun':
-                return '06';
-            case 'Jul':
-                return '07';
-            case 'Aug':
-                return '08';
-            case 'Sep':
-                return '09';
-            case 'Oct':
-                return '10';
-            case 'Nov':
-                return '11';
-            case 'Dec':
-                return '12';
-            default:
-                return'00';
-        }
-    }
-
-    private function incrementMonth($month) {
-        $intValue = intval($month);
-        $intValue = ($intValue >= 1 && $intValue <= 12) ? $intValue + 1 : null;
-        return (string) $intValue;
     }
 
     public function unadapt($visFriendlyCodes) {
@@ -166,7 +118,6 @@ class VisTimelineSerializationHelper {
             // L'année n'est pas null
             $endCode -= 4;
         } else {
-            // Should never append!!!
             // Here, an exception have to be thrown
             $this->timelineItem->setEndYear(null);
         }

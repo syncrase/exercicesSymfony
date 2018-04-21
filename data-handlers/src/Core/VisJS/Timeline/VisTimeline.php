@@ -51,7 +51,7 @@ class VisTimeline {
         $id = 1;
         foreach ($evenements as $ev) {
             $visTimelineItem = new VisTimelineItem();
-            $this->visFriendlyDates[$id] = $visTimelineItem->initVisTimelineItem($ev);
+            $this->visFriendlyDates[$id] = $visTimelineItem->adapt($ev);
             $visTimelineItem->setId($id);
             $visTimelineItems[] = $visTimelineItem;
 
