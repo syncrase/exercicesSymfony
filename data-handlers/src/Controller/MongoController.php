@@ -103,16 +103,12 @@ class MongoController extends Controller {
 
         $datamanager = $this->get('doctrine_mongodb')->getManager();
 
-        $mongoId = '';
-        $visId = '';
-        $report = '';
         foreach ($deserializedVisDataset as $deserializedVisTimelineItem) {
 
             $visId = (string) $deserializedVisTimelineItem->getId();
             // Initialize a timeline from the serialization helper
-//            var_dump($deserializedVisTimelineItem);
             $deserializedVisTimelineItem->initTimelineItem();
-            // Remove  the visJSFriendly adaptation
+            // Remove the visJSFriendly adaptation
             $deserializedVisTimelineItem->unadapt($visFriendlyDates[$visId]);
             $timelineItem = $deserializedVisTimelineItem->getTimelineItem();
 
@@ -128,32 +124,33 @@ class MongoController extends Controller {
                 if (!$storedItem->equals($timelineItem)) {
                     $storedItem->updateFields($timelineItem);
                     $datamanager->flush();
-                    $report .= 'u';
                 } else {
                     // Do not update the item because the current item wasn't be modified
-                    $report .= 'n';
                 }
                 // Suppression de la table d'association (les objets non supprimés de la table d'association sont
                 // les objets supprimés depuis la UI)
                 unset($visFriendlyIds[$visId]);
             } else {
                 // L'évènement à été ajouté depuis la UI et doit être ajouté au document mongo
-                $report .= 'c';
                 $datamanager->persist($timelineItem);
                 $datamanager->flush();
             }
         }
-        // Parcours de la table d'association pour supprimer du document mongo les évènement restants
+        // Parcours de la table d'association pour supprimer du document mongo les évènements restants
         // Les évènements qui restent dans la table d'association sont ceux qui ne sont pas dans la liste
         // d'évènements reçue => ils ont donc été supprimés par l'utilisateur.
         foreach ($visFriendlyIds as $visFriendlyId) {
-            $report .= 's';
+            $storedItem = $datamanager->getRepository(TimelineItem::class)->find($visFriendlyId);
+            if (!$storedItem) {
+                throw $this->createNotFoundException(
+                        'No TimelineItem found for id ' . $visFriendlyId
+                );
+            }
+            $datamanager->remove($storedItem);
+            $datamanager->flush();
         }
 
-        return new Response(
-                '<html><body>Report: ' . $report . '<br/>'
-                . '</body></html>'
-        );
+        return $this->redirectToRoute('home');
     }
 
     /*     * *******************************************************************
