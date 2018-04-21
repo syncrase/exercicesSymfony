@@ -229,13 +229,25 @@
                 return JSON.stringify(object, replacer)
             }
             function logEvent(event, properties) {
-                var log = document.getElementById('log');
-                var msg = document.createElement('div');
-                //msg.innerHTML = 'event=' + JSON.stringify(event) + ', ' +
-                //        'properties=' + stringifyObject(properties);
-                msg.innerHTML = properties.item;
-                log.firstChild ? log.insertBefore(msg, log.firstChild) : log.appendChild(msg);
-                // TODO Ici mettre à jour le formulaire avec les information de l'item cliqué
+                // Complète le control panel avec les informations de l'item sélectionné
+                var contentId = 'timeline_control_panel_form_content';
+                var startId = 'timeline_control_panel_form_start';
+                var endId = 'timeline_control_panel_form_end';
+                var notesId = 'timeline_control_panel_form_notes';
+                if (properties.item !== null) {
+                    var dataSetItem = dataSetItems.get(properties.item);
+                    document.getElementById(contentId).setAttribute('value', dataSetItem.content);
+                    document.getElementById(startId).setAttribute('value', dataSetItem.start);
+                    if (dataSetItem.end !== undefined) {
+                        document.getElementById(endId).setAttribute('value', dataSetItem.end);
+                    }
+                    document.getElementById(notesId).setAttribute('value', 'To be implemented');
+                } else {
+                    document.getElementById(contentId).removeAttribute('value');
+                    document.getElementById(startId).removeAttribute('value');
+                    document.getElementById(endId).removeAttribute('value');
+                    document.getElementById(notesId).removeAttribute('value');
+                }
             }
 
             function validate() {

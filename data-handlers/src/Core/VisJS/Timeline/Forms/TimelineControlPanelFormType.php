@@ -26,13 +26,11 @@ class TimelineControlPanelFormType extends AbstractType {
                 ->add('content', TextType::class)
                 ->add('start', TextType::class, array(
 //                    'attr' => ['class' => 'form-control',
-//                        'placeholder' => 'Exemple: -348 ou aaaa/mm/jj',
 //                        'onmouseout' => 'validate()',
 //                        'onchange' => 'validate()']
                 ))
                 ->add('end', TextType::class, array(
 //                    'attr' => ['class' => 'form-control',
-//                        'placeholder' => 'Exemple: -348 ou aaaa/mm/jj',
 //                        'onmouseout' => 'validate()',
 //                        'onchange' => 'validate()']
                 ))
