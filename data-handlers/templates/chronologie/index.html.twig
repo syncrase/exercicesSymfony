@@ -4,26 +4,16 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <style>
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 5px;
-            text-align: left;
-        }
-    </style>
 {% endblock %}
 {% block body %}
 
 
     <section class="">
-        <br/><hr><br/>
+
         <h1>Chronologie</h1>
         <div class="container-fluid">
             <div class="d-flex row">
-                <div class="" style="width:100%;">
+                <div id="timeline-container" class="">
 
                     <div id="visualization"></div>
 
@@ -53,57 +43,97 @@
         <div class="container-fluid">
             <div class="row d-flex">
                 <div class="col-lg-4">
-                    azerazer
+                    <div id="log"></div>
                 </div>
-                <div class="col-lg-4">
-                    zerazer
-                </div>
-                <div class="col-lg-4">
-                    azerazera
+                <div class="col-lg-8">
+                    {{ form_start(controlPanel) }}
+                    <div class="form-row">
+                        <div class="col-lg-8" style="height:100%;">
+                            {{ form_row(controlPanel.notes, {
+                                'attr': {
+                                    'class': 'form-control', 
+                                    'rows': '7'
+                                }, 
+                                'label': 'Mes notes',
+                                'required': 'false'
+                            }) }}
+                        </div>
+                        <div class="col-lg-4">
+                            {{ form_row(controlPanel.content, {
+                                'attr': {'class': 'form-control'}, 
+                                'label': 'Titre',
+                                'required': 'true'
+                            }) }}
+                            {{ form_row(controlPanel.start, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': 'Exemple: -348 ou aaaa/mm/jj'
+                                }, 
+                                'label': 'Date de début',
+                                'required': 'true'
+                            }) }}
+                            {{ form_row(controlPanel.end, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': 'Exemple: -348 ou aaaa/mm/jj'
+                                }, 
+                                'label': 'Date de fin',
+                                'required': 'false'
+                            }) }}
+                            {{ form_row(controlPanel.submit, { 
+                                'attr': {
+                                    'class': 'btn btn-primary'
+                                }, 
+                                'label': 'Visualiser',
+                                'disabled': 'false'
+                            }) }}
+                        </div>
+                    </div>
+                    {{ form_end(controlPanel) }}
                 </div>
             </div>
         </div>
     </section>
 
 
-    {% if visChronologie.dataSet is defined %}
-        <br/><hr><br/>
-        <h1>visDataSet</h1>
-        <section class="">
-            <div class="container-fluid">
-                <div class="row d-flex">
-
-                    {{ visChronologie.dataSet }}
-
+    {#    {% if visChronologie.dataSet is defined %}
+            <br/><hr><br/>
+            <h1>visDataSet</h1>
+            <section class="">
+                <div class="container-fluid">
+                    <div class="row d-flex">
+    
+                        {{ visChronologie.dataSet }}
+    
+                    </div>
                 </div>
-            </div>
-        </section>
-    {% endif %}
+            </section>
+        {% endif %}#}
 
 
-    {% if evenements is defined %}
-        <br/><hr><br/>
-        <h1>evenements</h1>
-        <section class="">
-            <div class="container-fluid">
-                <div class="row d-flex">
-                    <table style="width:100%">
-                        <caption>All mongo content</caption>
-                        {% for ev in evenements %}
-                            <tr>
-                                <td>{{ ev.id|e }}</td>
-                                <td>{{ ev.content|e }}</td>
-                                <td>{{ ev.startYear|e }}/{{ ev.startMonth|e }}/{{ ev.startDay|e }}</td>
-                                {% if ev.endYear is defined %}
-                                    <td>{{ ev.endYear|e }}/{{ ev.endMonth|e }}/{{ ev.endDay|e }}</td>
-                                {% endif %}
-                            </tr>
-                        {% endfor %}
-                    </table>
+    {#    {% if evenements is defined %}
+            <br/><hr><br/>
+            <h1>evenements</h1>
+            <section class="">
+                <div class="container-fluid">
+                    <div class="row d-flex">
+                        <table style="width:100%">
+                            <caption>All mongo content</caption>
+                            {% for ev in evenements %}
+                                <tr>
+                                    <td>{{ ev.id|e }}</td>
+                                    <td>{{ ev.content|e }}</td>
+                                    <td>{{ ev.startYear|e }}/{{ ev.startMonth|e }}/{{ ev.startDay|e }}</td>
+                                    {% if ev.endYear is defined %}
+                                        <td>{{ ev.endYear|e }}/{{ ev.endMonth|e }}/{{ ev.endDay|e }}</td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
                 </div>
-            </div>
-        </section>
-    {% endif %}
+            </section>
+        {% endif %}#}
 
 
     <!-- The Modal -->
@@ -175,9 +205,38 @@
             var timeline = new vis.Timeline(HTMLContainer, dataSetItems, dataSetOptions);
 
             // subscribe to any change in the DataSet
-            dataSetItems.on('*', function (event, properties, senderId) {
-                console.log('event', event, properties);
+            //dataSetItems.on('*', function (event, properties, senderId) {
+            //    console.log('event', event, properties);
+            //});
+
+            // Event listener
+            timeline.on('click', function (properties) {
+                logEvent('click', properties);
             });
+            items.on('*', function (event, properties) {
+                logEvent(event, properties);
+            });
+            function stringifyObject(object) {
+                if (!object)
+                    return;
+                var replacer = function (key, value) {
+                    if (value && value.tagName) {
+                        return "DOM Element";
+                    } else {
+                        return value;
+                    }
+                }
+                return JSON.stringify(object, replacer)
+            }
+            function logEvent(event, properties) {
+                var log = document.getElementById('log');
+                var msg = document.createElement('div');
+                //msg.innerHTML = 'event=' + JSON.stringify(event) + ', ' +
+                //        'properties=' + stringifyObject(properties);
+                msg.innerHTML = properties.item;
+                log.firstChild ? log.insertBefore(msg, log.firstChild) : log.appendChild(msg);
+                // TODO Ici mettre à jour le formulaire avec les information de l'item cliqué
+            }
 
             function validate() {
 

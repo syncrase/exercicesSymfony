@@ -16,11 +16,9 @@ use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 // Handled objects
 use App\Document\TimelineItem;
 use App\Core\VisJS\Timeline\VisTimeline;
-use App\Core\VisJS\Timeline\AddTimelineItemFormType;
+use App\Core\VisJS\Timeline\Forms\AddTimelineItemFormType;
+use App\Core\VisJS\Timeline\Forms\TimelineControlPanelFormType;
 use App\Core\VisJS\Timeline\VisTimelineSerializationHelper;
-
-//use Doctrine\ODM\MongoDB\Mapping\Annotations\Date;
-//use MongoDB\BSON\UTCDatetime;
 
 class MongoController extends Controller {
 
@@ -28,8 +26,6 @@ class MongoController extends Controller {
      * @Route("/", name="home")
      */
     public function index() {
-
-
 //        $this->deleteAll();
 //        $this->adding5Tests();
 //        $this->addingJCTest();
@@ -41,11 +37,13 @@ class MongoController extends Controller {
         $visChronologie->initTimeline($evenements);
 
         $form = $this->createForm(AddTimelineItemFormType::class);
+        $controlPanel = $this->createForm(TimelineControlPanelFormType::class);
 
         return $this->render('chronologie/index.html.twig', [
                     'evenements' => $evenements,
                     'visChronologie' => $visChronologie,
                     'form' => $form->createView(),
+                    'controlPanel' => $controlPanel->createView(),
         ]);
     }
 
@@ -59,12 +57,9 @@ class MongoController extends Controller {
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
-
-
             $evenement = new TimelineItem();
             $evenement->setContent($data->getContent());
             $start = $data->getSplitedStart();
-//            $evenement->setStart($start[0], $start[1], $start[2]);
             $evenement->setStartYear($start[0]);
             $evenement->setStartMonth($start[1]);
             $evenement->setStartDay($start[2]);
@@ -72,12 +67,10 @@ class MongoController extends Controller {
             // Comment ça count == 3 ? 
             // Ca veut dire que je ne peux pas rentrer juste une année et un mois ?!
             if ($end !== null && count($end) === 3) {
-//                $evenement->setEnd($end[0], $end[1], $end[2]);
                 $evenement->setEndYear($start[0]);
                 $evenement->setEndMonth($start[1]);
                 $evenement->setEndDay($start[2]);
             }
-
             $entityManager = $this->get('doctrine_mongodb')->getManager();
             $entityManager->persist($evenement);
             $entityManager->flush();

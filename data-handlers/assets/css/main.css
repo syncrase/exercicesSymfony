@@ -1,15 +1,10 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
 /* 
     Created on : 9 avr. 2018, 17:19:57
     Author     : Pierre
 */
 
 body{
-    background-color:white;
+    background-color:whitesmoke;
 }
 
 .example-wrapper { 
@@ -21,4 +16,24 @@ body{
 .example-wrapper code { 
     background: #F5F5F5; 
     padding: 2px 6px; 
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+    text-align: left;
+}
+
+#timeline-container {
+    width:80%;
+    margin-right:10%;
+    margin-left:10%;
+}
+
+#log {
+    word-wrap: break-word;
+    /*overflow: hidden;*/
 }

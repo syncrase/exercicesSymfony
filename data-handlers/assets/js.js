@@ -1,13 +1,8 @@
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ Created on : 9 avr. 2018, 16:55:05
+ Author     : Pierre
  */
-/* 
-    Created on : 9 avr. 2018, 16:55:05
-    Author     : Pierre
-*/
-require('./style.scss');
+
 
 var $ = require('jquery');
 
@@ -33,3 +28,5 @@ require('bootstrap');
 
 //require('./js/vis.js');
 
+// Les styles suivant ne sont pas nécessaire au JS => en dernier pour ne pas être écrasé.
+require('./style.scss');

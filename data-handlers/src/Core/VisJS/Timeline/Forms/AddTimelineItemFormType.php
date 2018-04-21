@@ -2,14 +2,14 @@
 
 // src/Form/DefaultFormType.php
 
-namespace App\Core\VisJS\Timeline;
+namespace App\Core\VisJS\Timeline\Forms;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use App\Core\VisJS\Timeline\AddTimelineItemData;
+use App\Core\VisJS\Timeline\Forms\AddTimelineItemData;
 
 class AddTimelineItemFormType extends AbstractType {
 

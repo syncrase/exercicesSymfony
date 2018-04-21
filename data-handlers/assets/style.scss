@@ -12,7 +12,8 @@ $icon-font-path: "~bootstrap/assets/fonts/bootstrap/";
 
 
 
-@import './css/main.css';
 /*@import './node_modules\vis\dist\vis.css';*/
-@import '~vis/dist/vis.css'; 
+/*@import '~vis/dist/vis.css';*/ 
 @import '~bootstrap/dist/css/bootstrap.css'; 
+/* ne fonctionne pas si c'est avant l'import bootstrap !? '*/
+@import './css/main.css';

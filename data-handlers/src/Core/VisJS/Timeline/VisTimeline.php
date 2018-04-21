@@ -91,6 +91,8 @@ class VisTimeline {
 //    showCurrentTime: true
         $options = '';
         $options .= 'editable: true, ';
+        $options .= 'clickToUse: true, ';
+//        $options .= 'onInitialDrawComplete: function() { logEvent(\'Timeline initial draw completed\', {}); }, ';
         $options .= 'showCurrentTime: false';
         return $options;
     }

@@ -12,7 +12,7 @@ Encore
         .enableBuildNotifications()
         // uncomment to define the assets of the project
         .addEntry('js/app', './assets/js.js')
-//        .addStyleEntry('css/app', './assets/css/app.scss')
+//        .addStyleEntry('css/app', './assets/style.scss') --> already inclue in js.js
         // 
         // assets for the theme 1
 //        .addEntry('vis/js', './node_modules/vis/dist/vis.js')

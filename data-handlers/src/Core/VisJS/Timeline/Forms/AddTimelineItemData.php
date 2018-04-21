@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\VisJS\Timeline;
+namespace App\Core\VisJS\Timeline\Forms;
 
 /**
  * Handle data going from the form AddTimelineItemFormType
