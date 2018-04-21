@@ -159,11 +159,13 @@
 
         {% set visFriendlyDates = visChronologie.getVisFriendlyDates() %}
             var visFriendlyDates = {};
+            var visFriendlyDatesLength = 0;
         {% for id in 1..visFriendlyDates|length %}
             visFriendlyDates['{{ id }}'] = {
                 start: '{{ visFriendlyDates[id]['start'] }}',
                 end: '{{ visFriendlyDates[id]['end'] }}'
             };
+            visFriendlyDatesLength = {{ id }};
         {% endfor %}
 
 
@@ -174,8 +176,6 @@
             dataSetItems.on('*', function (event, properties, senderId) {
                 console.log('event', event, properties);
             });
-
-
 
             function validate() {
 
@@ -274,7 +274,11 @@
                 // pour signaler quels éléments n'ont pas été renseignés par 
                 // l'utilisateur mais ajoutés tout de même pour rendre les 
                 // dates visJS Friendly
-
+                visFriendlyDatesLength++;
+                visFriendlyDates[String(visFriendlyDatesLength)] = {
+                    start: '7',
+                    end: '0'
+                };
             }
 
             /**

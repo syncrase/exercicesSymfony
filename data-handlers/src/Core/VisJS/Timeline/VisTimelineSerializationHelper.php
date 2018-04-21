@@ -66,22 +66,56 @@ class VisTimelineSerializationHelper {
         $this->timelineItem = new TimelineItem();
         $this->timelineItem->setContent($this->content);
 
-        $isBC = $this->start[0] === '-';
-        // documentation http://php.net/ltrim
-        $this->start = ltrim($this->start, '-');
-        $start = explode('-', $this->start);
-        $this->timelineItem->setStartYear(($isBC ? '-' : '') . $start[0]);
-        $this->timelineItem->setStartMonth($start[1]);
-        $this->timelineItem->setStartDay($start[2]);
+        // Match date format like: Sat Dec 31 1149 00:00:00 GMT+0100 (Paris, Madrid)
+        if (preg_match('/^\w{3} \w{3} \d{2} -?\d{1,6} \d{2}:\d{2}:\d{2} GMT\+0(100 \(Paris, Madrid\)|200)$/', $this->start) === 1) {
+            $start = explode(' ', $this->start);
+            $startYear = $start[3];
+            $startMonth = $this->convertMonthAsNumber($start[1]);
+            $startDay = $start[2];
+
+
+            // Match date format like: -000426-01-01 ou 2012-12-31
+        } elseif (preg_match('/^-?\d{1,6}-\d{2}-\d{2}$/', $this->start) === 1) {
+
+            $isBC = $this->start[0] === '-';
+            // documentation http://php.net/ltrim
+            $this->start = ltrim($this->start, '-');
+            $start = explode('-', $this->start);
+            $startYear = ($isBC ? '-' : '') . $start[0];
+            $startMonth = $start[1];
+            $startDay = $start[2];
+        } else {
+            var_dump('Start Date (' . (string) $this->start . ') non prise en charge');
+        }
+        $this->timelineItem->setStartYear($startYear);
+        $this->timelineItem->setStartMonth($startMonth);
+        $this->timelineItem->setStartDay($startDay);
 
         if ($this->end !== null) {
-            $isBC = $this->end[0] === '-';
-            // documentation http://php.net/ltrim
-            $this->end = ltrim($this->end, '-');
-            $end = explode('-', $this->end);
-            $this->timelineItem->setEndYear(($isBC ? '-' : '') . $end[0]);
-            $this->timelineItem->setEndMonth($end[1]);
-            $this->timelineItem->setEndDay($end[2]);
+            // Match date format like: Sat Dec 31 1149 00:00:00 GMT+0100 (Paris, Madrid)
+            if (preg_match('/^\w{3} \w{3} \d{2} -?\d{1,6} \d{2}:\d{2}:\d{2} GMT\+0(100 \(Paris, Madrid\)|200)$/', $this->end) === 1) {
+                $end = explode(' ', $this->end);
+                $endYear = $end[3];
+                $endMonth = $this->convertMonthAsNumber($end[1]);
+                $endDay = $end[2];
+
+
+                // Match date format like: -000426-01-01 ou 2012-12-31
+            } elseif (preg_match('/^-?\d{1,6}-\d{2}-\d{2}$/', $this->end) === 1) {
+
+                $isBC = $this->end[0] === '-';
+                // documentation http://php.net/ltrim
+                $this->end = ltrim($this->end, '-');
+                $end = explode('-', $this->end);
+                $endYear = ($isBC ? '-' : '') . $end[0];
+                $endMonth = $end[1];
+                $endDay = $end[2];
+            } else {
+                var_dump('End Date (' . (string) $this->end . ') non prise en charge');
+            }
+            $this->timelineItem->setEndYear($endYear);
+            $this->timelineItem->setEndMonth($endMonth);
+            $this->timelineItem->setEndDay($endDay);
         }
     }
 
@@ -132,6 +166,37 @@ class VisTimelineSerializationHelper {
             $endCode -= 1;
         } else {
             $this->timelineItem->setEndDay(null);
+        }
+    }
+
+    private function convertMonthAsNumber($monthWithLetters) {
+        switch ($monthWithLetters) {
+            case 'Jan':
+                return '01';
+            case 'Feb':
+                return '02';
+            case 'Mar':
+                return '03';
+            case 'Apr':
+                return '04';
+            case 'May':
+                return '05';
+            case 'Jun':
+                return '06';
+            case 'Jul':
+                return '07';
+            case 'Aug':
+                return '08';
+            case 'Sep':
+                return '09';
+            case 'Oct':
+                return '10';
+            case 'Nov':
+                return '11';
+            case 'Dec':
+                return '12';
+            default:
+                return'00';
         }
     }
 

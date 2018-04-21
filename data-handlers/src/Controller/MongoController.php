@@ -31,7 +31,7 @@ class MongoController extends Controller {
 
 
 //        $this->deleteAll();
-        $this->adding5Tests();
+//        $this->adding5Tests();
 //        $this->addingJCTest();
 //        $this->addingPlatonTest();
         $repository = $this->get('doctrine_mongodb')->getRepository(TimelineItem::class);
@@ -93,6 +93,7 @@ class MongoController extends Controller {
         // Retourne un tableau associatif http://php.net/manual/fr/function.json-decode.php
         $visFriendlyIds = json_decode($request->get('visFriendlyIds'), true);
         $visFriendlyDates = json_decode($request->get('visFriendlyDates'), true);
+        var_dump($visFriendlyDates);
         // see doc.: https://symfony.com/doc/current/components/serializer.html
         $encoders = array(new JsonEncoder());
         $normalizers = array(new ObjectNormalizer(), new ArrayDenormalizer());
@@ -107,8 +108,15 @@ class MongoController extends Controller {
         $visId = '';
         $report = '';
         foreach ($deserializedVisDataset as $deserializedVisTimelineItem) {
-            // Pour chacun des objets je regarde s'il existe une correspondance d'id
+
             $visId = (string) $deserializedVisTimelineItem->getId();
+            // Initialize a timeline from the serialization helper
+            var_dump($deserializedVisTimelineItem);
+            $deserializedVisTimelineItem->initTimelineItem();
+            // Remove  the visJSFriendly adaptation
+            $deserializedVisTimelineItem->unadapt($visFriendlyDates[$visId]);
+            $timelineItem = $deserializedVisTimelineItem->getTimelineItem();
+
             if (array_key_exists($visId, $visFriendlyIds)) {
                 $mongoId = $visFriendlyIds[$visId];
                 $storedItem = $datamanager->getRepository(TimelineItem::class)->find($mongoId);
@@ -117,12 +125,6 @@ class MongoController extends Controller {
                             'No TimelineItem found for id ' . $mongoId
                     );
                 }
-
-                // Initialize a timeline from the serialization helper
-                $deserializedVisTimelineItem->initTimelineItem();
-                // Remove  the visJSFriendly adaptation
-                $deserializedVisTimelineItem->unadapt($visFriendlyDates[$visId]);
-                $timelineItem = $deserializedVisTimelineItem->getTimelineItem();
                 // Si les deux objets sont différents => update
                 if (!$storedItem->equals($timelineItem)) {
                     $storedItem->updateFields($timelineItem);
@@ -138,7 +140,8 @@ class MongoController extends Controller {
             } else {
                 // L'évènement à été ajouté depuis la UI et doit être ajouté au document mongo
                 $report .= 'c';
-                // TODO ajout de l'évènement au document mongo
+                $datamanager->persist($timelineItem);
+                $datamanager->flush();
             }
         }
         // Parcours de la table d'association pour supprimer du document mongo les évènement restants
