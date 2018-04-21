@@ -110,7 +110,7 @@ class MongoController extends Controller {
 
             $visId = (string) $deserializedVisTimelineItem->getId();
             // Initialize a timeline from the serialization helper
-            var_dump($deserializedVisTimelineItem);
+//            var_dump($deserializedVisTimelineItem);
             $deserializedVisTimelineItem->initTimelineItem();
             // Remove  the visJSFriendly adaptation
             $deserializedVisTimelineItem->unadapt($visFriendlyDates[$visId]);

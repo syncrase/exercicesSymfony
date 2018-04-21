@@ -64,22 +64,6 @@ class VisTimelineItem {
         return $dataSet;
     }
 
-    public function getTimelineItem() {
-        $timelineItem = new TimelineItem();
-
-        $timelineItem->setContent($this->content);
-
-        $timelineItem->setStartYear($this->startYear);
-        $timelineItem->setStartMonth($this->startMonth);
-        $timelineItem->setStartDay($this->startDay);
-
-        $timelineItem->setEndYear($this->endYear);
-        $timelineItem->setEndMonth($this->endMonth);
-        $timelineItem->setEndDay($this->endDay);
-
-        return $timelineItem;
-    }
-
     public function adapt($ev) {
         $this->setContent($ev->getContent());
         // Start date

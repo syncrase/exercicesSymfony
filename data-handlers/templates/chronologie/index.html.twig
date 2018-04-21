@@ -152,6 +152,8 @@
         {% set visFriendlyIds = visChronologie.getVisFriendlyIds() %}
             // Initiate the associative array ([] or new Array() is just a basic array)
             var visFriendlyIds = {};
+
+// TODO vérifier que la taille du tableau est supérieure à 1
         {% for id in 1..visFriendlyIds|length %}
             visFriendlyIds['{{ id }}'] = '{{ visFriendlyIds[id] }}';
         {% endfor %}
