@@ -93,7 +93,6 @@ class MongoController extends Controller {
         // Retourne un tableau associatif http://php.net/manual/fr/function.json-decode.php
         $visFriendlyIds = json_decode($request->get('visFriendlyIds'), true);
         $visFriendlyDates = json_decode($request->get('visFriendlyDates'), true);
-        var_dump($visFriendlyDates);
         // see doc.: https://symfony.com/doc/current/components/serializer.html
         $encoders = array(new JsonEncoder());
         $normalizers = array(new ObjectNormalizer(), new ArrayDenormalizer());
@@ -157,9 +156,9 @@ class MongoController extends Controller {
         );
     }
 
-    /*     * ********************
-     * PRIVATE FUNCTIONS
-     * *********************** */
+    /*     * *******************************************************************
+     * ************************ PRIVATE FUNCTIONS ******************************
+     * ********************************************************************** */
 
     /**
      * 
