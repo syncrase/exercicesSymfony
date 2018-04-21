@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace App\Core\VisJS\Timeline;
 
 use App\Document\TimelineItem;
@@ -63,6 +57,9 @@ class VisTimelineSerializationHelper {
 
     private $timelineItem;
 
+    /**
+     * Reconstruit un objet TimelineItem à partir des données recues de la UI
+     */
     public function initTimelineItem() {
         $this->timelineItem = new TimelineItem();
         $this->timelineItem->setContent($this->content);
@@ -79,11 +76,17 @@ class VisTimelineSerializationHelper {
             $this->timelineItem->setEndDay($endDate->getDay());
         }
     }
-    
+
     public function getTimelineItem() {
         return $this->timelineItem;
     }
 
+    /**
+     * Les valeurs par défault sont mises à null
+     * @param ['start' => number, 'end' => number] Tableau associatif contenant 
+     * les codes permetttant de savoir quel valeurs de la date ont été mises 
+     * aux valeurs par défault
+     */
     public function unadapt($visFriendlyCodes) {
         // Start date
         $startCode = $visFriendlyCodes['start'];

@@ -1,15 +1,10 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace App\Core\VisJS\Timeline;
 
 /**
- * Description of Date
+ * Reçoit une chaîne de caractère représentant une date pour en extraire les 
+ * valeurs nécessaires
  *
  * @author Pierre
  */

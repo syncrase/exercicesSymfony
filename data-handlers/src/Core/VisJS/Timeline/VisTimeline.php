@@ -43,8 +43,9 @@ class VisTimeline {
     private $visTimelineItems;
 
     /**
-     * 
-     * @param type $evenements
+     * Récupère les informations reçues du document Mongo et les formate pour
+     * leur utilisation par vis.js
+     * @param TimelineItem[] $evenements
      */
     public function initTimeline($evenements) {
         $visTimelineItems = [];
@@ -62,6 +63,11 @@ class VisTimeline {
         $this->visTimelineItems = $visTimelineItems;
     }
 
+    /**
+     * 
+     * @return string à donner en paramètre au constructeur JavaScript 
+     * vis.DataSet({{ getDataSet() }})
+     */
     public function getDataSet() {
         $dataSet = '[';
         foreach ($this->visTimelineItems as $item) {
@@ -74,6 +80,10 @@ class VisTimeline {
         return $dataSet;
     }
 
+    /**
+     * 
+     * @return string Les options de la timeline
+     */
     public function getOption() {
 //    start: '2014-01-10',  Calculer la date la plus reculée
 //    end: '2014-02-10',    Calculer la date la plus avancée

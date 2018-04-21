@@ -2,6 +2,13 @@
 
 namespace App\Core\VisJS\Timeline;
 
+/**
+ * Les attributs de cet objets sont dédiés à reçevoir les valeurs persistées 
+ * représentant la timeline puis à les mettre en forme avant l'affichage
+ * 
+ *
+ * @author Pierre
+ */
 class VisTimelineItem {
 
     private $id;
@@ -44,6 +51,11 @@ class VisTimelineItem {
         $this->end = $end;
     }
 
+    /**
+     * 
+     * @return string Element de la timeline alimentant la string reçue 
+     * dans la UI
+     */
     public function getDataSet() {
         //        Retourne une information de type
         //        [{id: 1, content: 'Platon', start: '-000428-00-00', end:'-000348-00-00'},
@@ -64,6 +76,15 @@ class VisTimelineItem {
         return $dataSet;
     }
 
+    /**
+     * Transforme un objet TimelineItem de manière à ce qu'il soit utilisable 
+     * par vis.js. Dans cette méthode, les valeurs sont récupérées et 
+     * transformées. Les valeurs qui sont null sont remplécées par les valeurs
+     * par défault.
+     * @param TimelineItem $ev
+     * @return ['start' => number, 'end' => number] permet de mémoriser quelles 
+     * valeurs parmis année, mois et jour ont été mise par défault
+     */
     public function adapt($ev) {
         $this->setContent($ev->getContent());
         // Start date
@@ -99,8 +120,8 @@ class VisTimelineItem {
      * 1		1		0		6 <- signifie année et mois mais jour inconnu
      * 1		1		1		7 <- signifie date complète: année, mois & jour connus
      * 
-     * @param type $ev
-     * @return The associative array representative of which values was set to the default value.
+     * @param TimelineItem $ev
+     * @return ['start' => number, 'end' => number] The associative array representative of which values was set to the default value.
      */
     private function computeDateAdaptationCode($ev) {
         $startDateCode = 4 + // there's always a start date
