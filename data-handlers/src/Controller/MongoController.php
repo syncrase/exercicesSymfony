@@ -16,7 +16,6 @@ use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 // Handled objects
 use App\Document\TimelineItem;
 use App\Core\VisJS\Timeline\VisTimeline;
-use App\Core\VisJS\Timeline\Forms\AddTimelineItemFormType;
 use App\Core\VisJS\Timeline\Forms\TimelineControlPanelFormType;
 use App\Core\VisJS\Timeline\VisTimelineSerializationHelper;
 
@@ -36,13 +35,12 @@ class MongoController extends Controller {
         $visChronologie = new VisTimeline();
         $visChronologie->initTimeline($evenements);
 
-        $form = $this->createForm(AddTimelineItemFormType::class);
+
         $controlPanel = $this->createForm(TimelineControlPanelFormType::class);
 
         return $this->render('chronologie/index.html.twig', [
                     'evenements' => $evenements,
                     'visChronologie' => $visChronologie,
-                    'form' => $form->createView(),
                     'controlPanel' => $controlPanel->createView(),
         ]);
     }
