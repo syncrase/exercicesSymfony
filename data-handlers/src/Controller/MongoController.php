@@ -82,18 +82,14 @@ class MongoController extends Controller {
      * @Route("/updateMongo", name="updateMongo")
      */
     public function updateMongo(Request $request) {
-
-        // Retourne un tableau associatif http://php.net/manual/fr/function.json-decode.php
         $visFriendlyIds = json_decode($request->get('visFriendlyIds'), true);
         $visFriendlyDates = json_decode($request->get('visFriendlyDates'), true);
-        // see doc.: https://symfony.com/doc/current/components/serializer.html
         $encoders = array(new JsonEncoder());
         $normalizers = array(new ObjectNormalizer(), new ArrayDenormalizer());
         $serializer = new Serializer($normalizers, $encoders);
         $deserializedVisDataset = $serializer->deserialize(
                 $request->get('updatedDataSet'), VisTimelineSerializationHelper::class . '[]', 'json'
         );
-
         $datamanager = $this->get('doctrine_mongodb')->getManager();
 
         foreach ($deserializedVisDataset as $deserializedVisTimelineItem) {
@@ -113,6 +109,7 @@ class MongoController extends Controller {
                             'No TimelineItem found for id ' . $mongoId
                     );
                 }
+                
                 // Si les deux objets sont différents => update
                 if (!$storedItem->equals($timelineItem)) {
                     $storedItem->updateFields($timelineItem);
@@ -133,6 +130,7 @@ class MongoController extends Controller {
         // Les évènements qui restent dans la table d'association sont ceux qui ne sont pas dans la liste
         // d'évènements reçue => ils ont donc été supprimés par l'utilisateur.
         foreach ($visFriendlyIds as $visFriendlyId) {
+            // $visFriendlyId: this is the value = mongo id
             $storedItem = $datamanager->getRepository(TimelineItem::class)->find($visFriendlyId);
             if (!$storedItem) {
                 throw $this->createNotFoundException(
@@ -144,6 +142,9 @@ class MongoController extends Controller {
         }
 
         return $this->redirectToRoute('home');
+//        return new Response(
+//            '<html><body>ok</body></html>'
+//        );
     }
 
     /*     * *******************************************************************

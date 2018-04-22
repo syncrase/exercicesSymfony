@@ -131,6 +131,19 @@ class TimelineItem {
     }
 
     /**
+     * @MongoDB\Field(type="string")
+     */
+    private $notes;
+
+    public function getNotes() {
+        return $this->notes;
+    }
+
+    public function setNotes($notes) {
+        $this->notes = $notes;
+    }
+
+    /**
      * 
      * @return boolean
      */
@@ -159,6 +172,8 @@ class TimelineItem {
         $this->endYear = $similarObject->getEndYear();
         $this->endMonth = $similarObject->getEndMonth();
         $this->endDay = $similarObject->getEndDay();
+
+        $this->notes = $similarObject->getNotes();
     }
 
     public function equals($similarObject) {
@@ -168,7 +183,8 @@ class TimelineItem {
                 $this->startDay === $similarObject->getStartDay() &&
                 $this->endYear === $similarObject->getEndYear() &&
                 $this->endMonth === $similarObject->getEndMonth() &&
-                $this->endDay === $similarObject->getEndDay();
+                $this->endDay === $similarObject->getEndDay() &&
+                $this->notes === $similarObject->getNotes();
         return $isEquals;
     }
 

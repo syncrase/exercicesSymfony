@@ -55,10 +55,20 @@ class VisTimelineSerializationHelper {
         $this->end = $end;
     }
 
+    private $notes;
+
+    public function getNotes() {
+        return $this->notes;
+    }
+
+    public function setNotes($notes) {
+        $this->notes = $notes;
+    }
+
     private $timelineItem;
 
     /**
-     * Reconstruit un objet TimelineItem à partir des données recues de la UI
+     * Reconstruit un objet TimelineItem à partir des données reçues de la UI
      */
     public function initTimelineItem() {
         $this->timelineItem = new TimelineItem();
@@ -74,6 +84,9 @@ class VisTimelineSerializationHelper {
             $this->timelineItem->setEndYear($endDate->getYear());
             $this->timelineItem->setEndMonth($endDate->getMonth());
             $this->timelineItem->setEndDay($endDate->getDay());
+        }
+        if ($this->notes !== null) {
+            $this->timelineItem->setNotes($this->notes);
         }
     }
 

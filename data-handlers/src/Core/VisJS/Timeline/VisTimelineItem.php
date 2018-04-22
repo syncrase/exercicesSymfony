@@ -51,6 +51,16 @@ class VisTimelineItem {
         $this->end = $end;
     }
 
+    private $notes;
+
+    public function getNotes() {
+        return $this->notes;
+    }
+
+    public function setNotes($notes) {
+        $this->notes = $notes;
+    }
+
     /**
      * 
      * @return string Element de la timeline alimentant la string reçue 
@@ -64,6 +74,7 @@ class VisTimelineItem {
         //        {id: 4, content: 'déclaration Balfour', start: '1917-11-02'},
         //        {id: 5, content: 'Jésus Christ', start: '0000-01-01', end:'0033-01-01'}] 
         //        Cette information est censée être traitée par du Javascript
+
         $dataSet = '';
         $dataSet .= '{'
                 . 'id: ' . $this->id
@@ -71,6 +82,9 @@ class VisTimelineItem {
                 . ', start: ' . $this->start;
         if (null !== $this->end && '' !== $this->end) {
             $dataSet .= ', end:' . $this->end;
+        }
+        if (null !== $this->notes && '' !== $this->notes) {
+            $dataSet .= ', notes: \'' . $this->notes . '\'';
         }
         $dataSet .= '}';
         return $dataSet;
@@ -103,6 +117,8 @@ class VisTimelineItem {
                         ($ev->getEndMonth() !== null ? $ev->getEndMonth() : '01') . '-' .
                         ($ev->getEndDay() !== null ? $ev->getEndDay() : '01') . '\'' : null
         );
+
+        $this->setNotes($ev->getNotes());
 
         return $this->computeDateAdaptationCode($ev);
     }
