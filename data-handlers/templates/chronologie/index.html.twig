@@ -173,16 +173,46 @@
     <script type="text/javascript">
         var HTMLContainer = document.getElementById('visualization');
         // Getting data to feed the timeline
+        // Works if getDataSet() returns double quotes instead of simple quotes
         var dataSetItems = new vis.DataSet({{ visChronologie.getDataSet()|raw }});
-        // Get the last id before any modification. 
-        // Permet d'identifier les ajouts, les suppression et les updates
-        // Parmis les ids allant de 1 à N. S'il y en a un de manquant il a été supprimé
-        // Tous les ids strictement supérieurs à N sont nouveaux
-        var ids = dataSetItems.getIds();
-        var lastId = ids[ids.length - 1];
-        // Configuration for the Timeline
-        var dataSetOptions = { {{ visChronologie.getOption()|raw }} };
-        // Correspondance entre les ids visjs {key} et les ids mongo {value}
+
+        {#            
+        // Construct the dataSet here in order to manage escaping
+                    // It's necessary to have quotes and double quotes!!
+                {% set visTimelineItems = visChronologie.getVisTimelineItems() %}
+                {% set dataset = '[' %}
+                    //var dataSet = '[';
+                {% for visTimelineItem in visTimelineItems %}
+                    {% set dataset = dataset ~ '{' %}
+                    {% set dataset = dataset ~ 'id: ' ~ visTimelineItem.id %}
+                    {% set dataset = dataset ~ ', content: "'|raw ~ visTimelineItem.content ~ '"'|raw %}
+                    {% set dataset = dataset ~ ', start: "'|raw ~ visTimelineItem.start ~ '"'|raw %}
+                    {% if visTimelineItem.end is defined %}
+                        {% set dataset = dataset ~ ', end: "'|raw ~ visTimelineItem.end ~ '"'|raw %}
+                    {% endif %}
+                    {% if visTimelineItem.notes is defined %}
+                        {% set dataset = dataset ~ ', notes: "'|raw ~ visTimelineItem.notes ~ '"'|raw %}
+                    {% endif %}
+                    {% set dataset = dataset ~ '}' %}
+                        //Do not set coma at the end
+                    {% if not loop.last %}
+                        {% set dataset = dataset ~ ', ' %}
+                    {% endif %}
+                {% endfor %}
+
+                {% set dataset = dataset ~ ']' %}
+                    var dataSetItems = new vis.DataSet({{ dataset|raw }});
+        #}
+
+            // Get the last id before any modification. 
+            // Permet d'identifier les ajouts, les suppression et les updates
+            // Parmis les ids allant de 1 à N. S'il y en a un de manquant il a été supprimé
+            // Tous les ids strictement supérieurs à N sont nouveaux
+            var ids = dataSetItems.getIds();
+            var lastId = ids[ids.length - 1];
+            // Configuration for the Timeline
+            var dataSetOptions = { {{ visChronologie.getOption()|raw }} };
+            // Correspondance entre les ids visjs {key} et les ids mongo {value}
         {% set visFriendlyIds = visChronologie.getVisFriendlyIds() %}
             // Initiate the associative array ([] or new Array() is just a basic array)
             var visFriendlyIds = {};
@@ -199,7 +229,8 @@
             visFriendlyDates['{{ id }}'] = {
                 start: '{{ visFriendlyDates[id]['start'] }}',
                 end: '{{ visFriendlyDates[id]['end'] }}'
-            };
+            }
+            ;
             visFriendlyDatesLength = {{ id }};
         {% endfor %}
 
@@ -319,7 +350,11 @@
 
             }
 
-            function validate() {
+            /**
+             * Front side modal validation
+             * @returns {undefined}
+             */
+            function modalFormValidation() {
 
                 var contentId = 'add_timeline_item_form_content';
                 if (document.getElementById(contentId).value !== '') {
@@ -332,7 +367,7 @@
 
 
                 var startId = 'add_timeline_item_form_start';
-                if (isValideDate(document.getElementById(startId).value)) {
+                if (modalFormIsValideDate(document.getElementById(startId).value)) {
                     document.getElementById(startId).classList.remove('is-invalid');
                     document.getElementById(startId).classList.add('is-valid');
                 } else {
@@ -343,7 +378,7 @@
 
                 var endId = 'add_timeline_item_form_end';
                 if (document.getElementById("add_timeline_item_form_end").value !== '') {
-                    if (isValideDate(document.getElementById(endId).value)) {
+                    if (modalFormIsValideDate(document.getElementById(endId).value)) {
                         document.getElementById(endId).classList.remove('is-invalid');
                         document.getElementById(endId).classList.add('is-valid');
                     } else {
@@ -370,7 +405,12 @@
 
             }
 
-            function isValideDate(date) {
+            /**
+             * Front-side date format validation
+             * @param {type} date
+             * @returns {Boolean}
+             */
+            function modalFormIsValideDate(date) {
                 var splitedDateContent = date.split('/');
                 if (splitedDateContent.length === 1) {
                     // Dans ce cas c'est censé n'être que l'année

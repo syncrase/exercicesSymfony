@@ -78,13 +78,13 @@ class VisTimelineItem {
         $dataSet = '';
         $dataSet .= '{'
                 . 'id: ' . $this->id
-                . ', content: \'' . $this->content . '\''
-                . ', start: ' . $this->start;
+                . ', content: "' . $this->content . '"'
+                . ', start: "' . $this->start . '"';
         if (null !== $this->end && '' !== $this->end) {
-            $dataSet .= ', end:' . $this->end;
+            $dataSet .= ', end: "' . $this->end . '"';
         }
         if (null !== $this->notes && '' !== $this->notes) {
-            $dataSet .= ', notes: \'' . $this->notes . '\'';
+            $dataSet .= ', notes: "' . $this->notes . '"';
         }
         $dataSet .= '}';
         return $dataSet;
@@ -103,19 +103,20 @@ class VisTimelineItem {
         $this->setContent($ev->getContent());
         // Start date
         // Quand il n'y a que l'année de disponible => placement de la date au 1er janvier
+        // '\'' .  . '\''
         $this->setStart(
-                '\'' . $ev->getStartYear() . '-' .
+                $ev->getStartYear() . '-' .
                 ($ev->getStartMonth() !== null ? $ev->getStartMonth() : '01') . '-' .
-                ($ev->getStartDay() !== null ? $ev->getStartDay() : '01') . '\''
+                ($ev->getStartDay() !== null ? $ev->getStartDay() : '01')
         );
 
         // End date
+        //'\'' .  . '\''
         $this->setEnd(
                 $ev->hasEnd() ?
-                        '\'' .
                         $ev->getEndYear() . '-' .
                         ($ev->getEndMonth() !== null ? $ev->getEndMonth() : '01') . '-' .
-                        ($ev->getEndDay() !== null ? $ev->getEndDay() : '01') . '\'' : null
+                        ($ev->getEndDay() !== null ? $ev->getEndDay() : '01') : null
         );
 
         $this->setNotes($ev->getNotes());

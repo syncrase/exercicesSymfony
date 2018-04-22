@@ -28,16 +28,16 @@ class AddTimelineItemFormType extends AbstractType {
                     'label' => 'Date de début',
                     'attr' => ['class' => 'form-control', 
                         'placeholder' => 'Exemple: -348 ou aaaa/mm/jj',
-                        'onmouseout' => 'validate()',
-                        'onchange' => 'validate()']
+                        'onmouseout' => 'modalFormValidation()',
+                        'onchange' => 'modalFormValidation()']
                 ))
                 ->add('end', TextType::class, array(
                     'required' => false,
                     'label' => 'Date de fin',
                     'attr' => ['class' => 'form-control', 
                         'placeholder' => 'Exemple: -348 ou aaaa/mm/jj',
-                        'onmouseout' => 'validate()',
-                        'onchange' => 'validate()']
+                        'onmouseout' => 'modalFormValidation()',
+                        'onchange' => 'modalFormValidation()']
                 ))
                 ->add('valider', SubmitType::class, array(
                     'label' => 'Valider',

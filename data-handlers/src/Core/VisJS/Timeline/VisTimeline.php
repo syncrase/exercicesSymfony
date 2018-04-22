@@ -35,12 +35,25 @@ class VisTimeline {
      */
     private $visFriendlyIds = [];
 
+    public function getVisFriendlyIds() {
+        return $this->visFriendlyIds;
+    }
+
     /**
      * 
      * @var array[visId][initialDateFormatCode]
      */
     private $visFriendlyDates = [];
+
+    public function getVisFriendlyDates() {
+        return $this->visFriendlyDates;
+    }
+
     private $visTimelineItems;
+
+    public function getVisTimelineItems() {
+        return $this->visTimelineItems;
+    }
 
     /**
      * Récupère les informations reçues du document Mongo et les formate pour
@@ -95,14 +108,6 @@ class VisTimeline {
 //        $options .= 'onInitialDrawComplete: function() { logEvent(\'Timeline initial draw completed\', {}); }, ';
         $options .= 'showCurrentTime: false';
         return $options;
-    }
-
-    public function getVisFriendlyIds() {
-        return $this->visFriendlyIds;
-    }
-
-    public function getVisFriendlyDates() {
-        return $this->visFriendlyDates;
     }
 
 }
