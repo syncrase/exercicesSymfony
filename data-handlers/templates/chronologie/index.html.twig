@@ -18,20 +18,11 @@
                     <div id="visualization"></div>
 
                     <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#addItemModal">
-                        Ajouter une date dans la base
+                        Ouvrir une fenêtre modal
                     </button>
                     <button type="button" class="btn btn-primary btn-lg btn-block" onclick="ajout()">
-                        Test d'ajout front-side seulement
+                        Ajout d'un item au dataset
                     </button>
-                    <form action="/updateMongo" method="POST">
-                        <input type="hidden" id="updatedDataSet" name="updatedDataSet" value="no-value-yet">
-                        <input type="hidden" id="visFriendlyIds" name="visFriendlyIds" value="no-value-yet">
-                        <input type="hidden" id="visFriendlyDates" name="visFriendlyDates" value="no-value-yet">
-                        <input type="submit" id="updateMongo" 
-                               class="btn btn-primary btn-lg btn-block" 
-                               value="Test de mise à jour de la base" 
-                               onclick="fillHiddenField()">
-                    </form>
                 </div>
             </div>
         </div>
@@ -86,13 +77,32 @@
                                 'label': 'Date de fin',
                                 'required': 'false'
                             }) }}
-                            {{ form_row(controlPanel.submit, { 
-                                'attr': {
-                                    'class': 'btn btn-primary'
-                                }, 
-                                'label': 'Visualiser',
-                                'disabled': 'false'
-                            }) }}
+                            <div class="form-row">
+                                <div class="col-lg-4">
+                                    {{ form_row(controlPanel.ajout, { 
+                                        'attr': {
+                                            'class': 'btn btn-primary btn-block btn-lg',
+                                            'onclick': 'ajout()'
+                                        }, 
+                                        'label': 'Ajouter',
+                                        'disabled': 'false'
+                                    }) }}
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="hidden" id="updatedDataSet" name="updatedDataSet" value="no-value-yet">
+                                    <input type="hidden" id="visFriendlyIds" name="visFriendlyIds" value="no-value-yet">
+                                    <input type="hidden" id="visFriendlyDates" name="visFriendlyDates" value="no-value-yet">
+                                    {{ form_row(controlPanel.save, { 
+                                        'attr': {
+                                            'class': 'btn btn-primary btn-block btn-lg',
+                                            'onclick': 'fillHiddenField()',
+                                            'formaction': '/updateMongo',
+                                            'formmethod': 'post'
+                                        }, 
+                                        'label': 'Sauvegarder'
+                                    }) }}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     {{ form_end(controlPanel) }}
@@ -321,8 +331,9 @@
                     // Modification live de l'item sélectionné
                     var dataSetItem = dataSetItems.get(focusedItem);
                     if (formField.id === 'timeline_control_panel_form_notes') {
-                        //alert('note modif');
-                        dataSetItem.notes = formField.value;
+                        //alert(formField.value.replace(/\n/g, "\\n"));
+                        // see https://stackoverflow.com/questions/25921319/escape-new-lines-with-js
+                        dataSetItem.notes = formField.value.replace(/\n/g, "\\n");
                         dataSetItems.update(dataSetItem);
                     } else if (formField.id === 'timeline_control_panel_form_content') {
                         //alert('content modif');
