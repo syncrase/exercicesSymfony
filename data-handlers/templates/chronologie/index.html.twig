@@ -20,9 +20,7 @@
                     <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#addItemModal">
                         Ouvrir une fenêtre modal
                     </button>
-                    <button type="button" class="btn btn-primary btn-lg btn-block" onclick="ajout()">
-                        Ajout d'un item au dataset
-                    </button>
+
                 </div>
             </div>
         </div>
@@ -44,7 +42,7 @@
                                 'attr': {
                                     'class': 'form-control', 
                                     'rows': '7',
-                                    'oninput': 'ctrlPnlManageUserInput(this)'
+                                    'oninput': 'ctrlPnlManageUpdate(this)'
                                 }, 
                                 'label': 'Mes notes',
                                 'required': 'false'
@@ -54,7 +52,7 @@
                             {{ form_row(controlPanel.content, {
                                 'attr': {
                                     'class': 'form-control',
-                                    'oninput': 'ctrlPnlManageUserInput(this)'
+                                    'oninput': 'ctrlPnlManageUpdate(this)'
                                 }, 
                                 'label': 'Titre',
                                 'required': 'true'
@@ -62,8 +60,8 @@
                             {{ form_row(controlPanel.start, {
                                 'attr': {
                                     'class': 'form-control',
-                                    'placeholder': 'Exemple: -348 ou aaaa/mm/jj',
-                                    'oninput': 'ctrlPnlManageUserInput(this)'
+                                    'placeholder': 'Exemple: -aaaaaa-mm-jj ou aaaa/mm/jj',
+                                    'oninput': 'ctrlPnlManageUpdate(this)'
                                 }, 
                                 'label': 'Date de début',
                                 'required': 'true'
@@ -71,8 +69,8 @@
                             {{ form_row(controlPanel.end, {
                                 'attr': {
                                     'class': 'form-control',
-                                    'placeholder': 'Exemple: -348 ou aaaa/mm/jj',
-                                    'oninput': 'ctrlPnlManageUserInput(this)'
+                                    'placeholder': 'Exemple: -aaaaaa-mm-jj ou aaaa-mm-jj',
+                                    'oninput': 'ctrlPnlManageUpdate(this)'
                                 }, 
                                 'label': 'Date de fin',
                                 'required': 'false'
@@ -80,13 +78,14 @@
                             <div class="form-row">
                                 <div class="col-lg-4">
                                     {{ form_row(controlPanel.ajout, { 
-                                        'attr': {
+                                            'attr': {
                                             'class': 'btn btn-primary btn-block btn-lg',
-                                            'onclick': 'ajout()'
+                                            'onclick': 'ctrlPnlManageAjout()'
                                         }, 
                                         'label': 'Ajouter',
                                         'disabled': 'false'
                                     }) }}
+
                                 </div>
                                 <div class="col-lg-8">
                                     <input type="hidden" id="updatedDataSet" name="updatedDataSet" value="no-value-yet">
@@ -247,10 +246,10 @@
 
             // Create a Timeline
             var timeline = new vis.Timeline(HTMLContainer, dataSetItems, dataSetOptions);
-            // subscribe to any change in the DataSet
-            //dataSetItems.on('*', function (event, properties, senderId) {
-            //    console.log('event', event, properties);
-            //});
+            // subscribe to any change in the DataSet (drag & drop items)
+            dataSetItems.on('*', function (event, properties, senderId) {
+                console.log('event', event, properties);
+            });
 
 
             var focusedItem = 0;
@@ -260,6 +259,12 @@
                 ctrlPnlInputFeeder('click', properties);
             });
 
+
+            var controlPanelContent = 'timeline_control_panel_form_content';
+            var controlPanelStart = 'timeline_control_panel_form_start';
+            var controlPanelEnd = 'timeline_control_panel_form_end';
+            var controlPanelNotes = 'timeline_control_panel_form_notes';
+            var ctrlPnlAddBtn = 'timeline_control_panel_form_ajout';
             /**
              * Get timeline content to add it in the control panel
              * @param {type} event
@@ -268,17 +273,10 @@
              */
             function ctrlPnlInputFeeder(event, properties) {
                 // Complète le control panel avec les informations de l'item sélectionné
-                var controlPanelContent = 'timeline_control_panel_form_content';
-                var controlPanelStart = 'timeline_control_panel_form_start';
-                var controlPanelEnd = 'timeline_control_panel_form_end';
-                var controlPanelNotes = 'timeline_control_panel_form_notes';
                 if (properties.item !== null) {
-                    // properties.item is the id's item
+                    // properties.item is the id of the timeline item
                     focusedItem = properties.item;
                     var dataSetItem = dataSetItems.get(focusedItem);
-                    //dataSetItem.content = 'New content';
-                    //alert(dataSetItem.content);
-                    //dataSetItems.update(dataSetItem);
                     // Handle the live DOM
                     document.getElementById(controlPanelContent).setAttribute('value', dataSetItem.content);
                     document.getElementById(controlPanelStart).setAttribute('value', dataSetItem.start);
@@ -298,120 +296,134 @@
                         document.querySelector('#'.concat(controlPanelNotes)).value = dataSetItem.notes;
                     }
                 } else {
-                    // Handle the static DOM (le texte tapé à la main)
-                    document.querySelector('#'.concat(controlPanelContent)).value = '';
-                    // BUG? Each time the value is set to '', the 'required' 
-                    // attribute is added and the form is validate (all fields 
-                    // borders are printed in red)
-                    document.querySelector('#'.concat(controlPanelContent)).removeAttribute('required');
-                    document.querySelector('#'.concat(controlPanelStart)).value = '';
-                    document.querySelector('#'.concat(controlPanelStart)).removeAttribute('required');
-                    document.querySelector('#'.concat(controlPanelEnd)).value = '';
-                    document.querySelector('#'.concat(controlPanelEnd)).removeAttribute('required');
-                    document.querySelector('#'.concat(controlPanelNotes)).value = '';
-                    document.querySelector('#'.concat(controlPanelNotes)).removeAttribute('required');
-                    // Handle the live DOM
-                    //document.getElementById(controlPanelContent).innerHTML = 'tututu';
-                    document.getElementById(controlPanelContent).removeAttribute('value');
-                    document.getElementById(controlPanelStart).removeAttribute('value');
-                    document.getElementById(controlPanelEnd).removeAttribute('value');
-                    document.getElementById(controlPanelNotes).removeAttribute('value');
-                    focusedItem = 0;
+                    resetControlPanel();
                 }
             }
 
             /**
-             * Get control panel content to add it in the timeline
+             * Reset the control panel fields
+             * @returns {undefined}
+             */
+            function resetControlPanel() {
+                // Handle the static DOM (le texte tapé à la main)
+                document.querySelector('#'.concat(controlPanelContent)).value = '';
+                // BUG? Each time the value is set to '', the 'required' 
+                // attribute is added and the form is validate (all fields 
+                // borders are printed in red)
+                document.querySelector('#'.concat(controlPanelContent)).removeAttribute('required');
+                document.querySelector('#'.concat(controlPanelStart)).value = '';
+                document.querySelector('#'.concat(controlPanelStart)).removeAttribute('required');
+                document.querySelector('#'.concat(controlPanelEnd)).value = '';
+                document.querySelector('#'.concat(controlPanelEnd)).removeAttribute('required');
+                document.querySelector('#'.concat(controlPanelNotes)).value = '';
+                document.querySelector('#'.concat(controlPanelNotes)).removeAttribute('required');
+                // Handle the live DOM
+                //document.getElementById(controlPanelContent).innerHTML = 'tututu';
+                document.getElementById(controlPanelContent).removeAttribute('value');
+                document.getElementById(controlPanelStart).removeAttribute('value');
+                document.getElementById(controlPanelEnd).removeAttribute('value');
+                document.getElementById(controlPanelNotes).removeAttribute('value');
+                focusedItem = 0;
+            }
+
+            /**
+             * Get control panel content to add it in the timeline.
+             * Method called at each modification in control panel.
              * @param {type} formField
              * @returns {undefined}
              */
-            function ctrlPnlManageUserInput(formField) {
+            function ctrlPnlManageUpdate(formField) {
                 //alert(formField.id);
                 if (focusedItem !== 0) {
                     // Modification live de l'item sélectionné
                     var dataSetItem = dataSetItems.get(focusedItem);
-                    if (formField.id === 'timeline_control_panel_form_notes') {
+                    if (formField.id === controlPanelContentNotes) {
                         //alert(formField.value.replace(/\n/g, "\\n"));
                         // see https://stackoverflow.com/questions/25921319/escape-new-lines-with-js
                         dataSetItem.notes = formField.value.replace(/\n/g, "\\n");
                         dataSetItems.update(dataSetItem);
-                    } else if (formField.id === 'timeline_control_panel_form_content') {
+                    } else if (formField.id === controlPanelContent) {
                         //alert('content modif');
                         dataSetItem.content = formField.value;
                         dataSetItems.update(dataSetItem);
-                    } else if (formField.id === 'timeline_control_panel_form_start') {
+                    } else if (formField.id === controlPanelStart) {
                         //alert('start date modif');
-                        dataSetItem.start = formField.value;
-                        dataSetItems.update(dataSetItem);
-                    } else if (formField.id === 'timeline_control_panel_form_end') {
+                        if (dateFormatValidation(formField.value)) {
+                            dataSetItem.start = formField.value;
+                            dataSetItems.update(dataSetItem);
+                        } else {
+
+                        }
+                    } else if (formField.id === controlPanelEnd) {
                         //alert('end date modif');
-                        dataSetItem.end = formField.value;
-                        dataSetItems.update(dataSetItem);
+                        if (dateFormatValidation(formField.value)) {
+                            dataSetItem.end = formField.value;
+                            dataSetItems.update(dataSetItem);
+                        }
                     } else {
                         // Remove this alert. Prefer to add a log error
-                        alert('Id is unknown, please refer to the ctrlPnlManageUserInput method');
+                        alert('Id is unknown, please refer to the ctrlPnlManageUpdate method');
                     }
-
-                    //alert(dataSetItem.content);
-                    dataSetItems.update(dataSetItem);
                 } else {
                     //alert('no selected item');
                     //=> on débloque le bouton valider pour la création d'un nouvel objet
+                    ctrlPnlAddBtnActivation();
                 }
 
             }
 
             /**
-             * Front side modal validation
+             * Check the control panel fields in order to activate the add button
              * @returns {undefined}
              */
-            function modalFormValidation() {
+            function ctrlPnlAddBtnActivation() {
 
-                var contentId = 'add_timeline_item_form_content';
-                if (document.getElementById(contentId).value !== '') {
-                    document.getElementById(contentId).classList.remove('is-invalid');
-                    document.getElementById(contentId).classList.add('is-valid');
+                if (document.getElementById(controlPanelContent).value !== '') {
+                    document.getElementById(controlPanelContent).classList.remove('is-invalid');
+                    document.getElementById(controlPanelContent).classList.add('is-valid');
                 } else {
-                    document.getElementById(contentId).classList.remove('is-valid');
-                    document.getElementById(contentId).classList.add('is-invalid');
+                    document.getElementById(controlPanelContent).classList.remove('is-valid');
+                    document.getElementById(controlPanelContent).classList.add('is-invalid');
                 }
 
-
-                var startId = 'add_timeline_item_form_start';
-                if (modalFormIsValideDate(document.getElementById(startId).value)) {
-                    document.getElementById(startId).classList.remove('is-invalid');
-                    document.getElementById(startId).classList.add('is-valid');
+                if (dateFormatValidation(document.getElementById(controlPanelStart).value)) {
+                    document.getElementById(controlPanelStart).classList.remove('is-invalid');
+                    document.getElementById(controlPanelStart).classList.add('is-valid');
                 } else {
-                    document.getElementById(startId).classList.remove('is-valid');
-                    document.getElementById(startId).classList.add('is-invalid');
+                    document.getElementById(controlPanelStart).classList.remove('is-valid');
+                    document.getElementById(controlPanelStart).classList.add('is-invalid');
                 }
 
-
-                var endId = 'add_timeline_item_form_end';
-                if (document.getElementById("add_timeline_item_form_end").value !== '') {
-                    if (modalFormIsValideDate(document.getElementById(endId).value)) {
-                        document.getElementById(endId).classList.remove('is-invalid');
-                        document.getElementById(endId).classList.add('is-valid');
+                //alert(document.getElementById(controlPanelEnd).value !== '');
+                if (document.getElementById(controlPanelEnd).value !== '') {
+                    if (dateFormatValidation(document.getElementById(controlPanelEnd).value)) {
+                        document.getElementById(controlPanelEnd).classList.remove('is-invalid');
+                        document.getElementById(controlPanelEnd).classList.add('is-valid');
                     } else {
-                        document.getElementById(endId).classList.remove('is-valid');
-                        document.getElementById(endId).classList.add('is-invalid');
+                        document.getElementById(controlPanelEnd).classList.remove('is-valid');
+                        document.getElementById(controlPanelEnd).classList.add('is-invalid');
                     }
                 } else {
                     // Si le champ est vide c'est valide
-                    document.getElementById(endId).classList.remove('is-invalid');
-                    document.getElementById(endId).classList.add('is-valid');
+                    document.getElementById(controlPanelEnd).classList.remove('is-invalid');
+                    document.getElementById(controlPanelEnd).classList.add('is-valid');
                 }
-
+                //
+                // No validation for notes
 
                 // si les deux sont valides, supprimer l'attribut disabled
                 // TODO Il faut vérifier que les données sont cohérentes
                 // La date de début est-elle antérieure à la date de fin?
-                if (document.getElementById("add_timeline_item_form_end").classList.contains('is-valid') &&
-                        document.getElementById("add_timeline_item_form_start").classList.contains('is-valid') &&
-                        document.getElementById("add_timeline_item_form_content").value !== '') {
-                    document.getElementById("add_timeline_item_form_valider").removeAttribute('disabled')
+                //    alert(document.getElementById(controlPanelEnd).classList.contains('is-valid'));
+
+                if (document.getElementById(controlPanelEnd).classList.contains('is-valid') &&
+                        document.getElementById(controlPanelStart).classList.contains('is-valid') &&
+                        document.getElementById(controlPanelContent).classList.contains('is-valid')) {
+                    //alert('removeAttribute');
+                    document.getElementById(ctrlPnlAddBtn).removeAttribute('disabled');
                 } else {
-                    document.getElementById("add_timeline_item_form_valider").setAttribute('disabled')
+                    //alert('removeAttribute');
+                    document.getElementById(ctrlPnlAddBtn).setAttribute('disabled', 'true');
                 }
 
             }
@@ -421,8 +433,9 @@
              * @param {type} date
              * @returns {Boolean}
              */
-            function modalFormIsValideDate(date) {
-                var splitedDateContent = date.split('/');
+            function dateFormatValidation(date) {
+                // see the html pattern attribute < ... pattern="[A-Za-z]{3}" ... >
+                var splitedDateContent = date.split('-');
                 if (splitedDateContent.length === 1) {
                     // Dans ce cas c'est censé n'être que l'année
                     var res = (/^-?\d+$/).test(splitedDateContent[0]);
@@ -431,9 +444,10 @@
                     } else {
                         return false;
                     }
+                    // Dance ce cas la il va falloir que je renvoie le code d'adaptation de la date saisie!
                 } else if (splitedDateContent.length === 3) {
                     // Les expressions régulières peuvent être largement améliorées!
-                    var res = (/^-?\d+$/).test(splitedDateContent[0]);
+                    var res = (/^(-\d{6}|\d{4})$/).test(splitedDateContent[0]);
                     if (res === true) {
                         // OK pour l'année
                         res = (/^[0-1]?\d{1}$/).test(splitedDateContent[1]);
@@ -458,20 +472,41 @@
                 }
             }
 
-            function ajout() {
+            /**
+             * Add the control panel new item to the timeline.
+             * The content must be validate before.
+             * @returns {undefined}
+             */
+            function ctrlPnlManageAjout() {
+                var controlPanelContent = 'timeline_control_panel_form_content';
+                var contentVal = document.getElementById(controlPanelContent).value;
+                var controlPanelStart = 'timeline_control_panel_form_start';
+                var startVal = document.getElementById(controlPanelStart).value;
+                var controlPanelEnd = 'timeline_control_panel_form_end';
+                var endVal = document.getElementById(controlPanelEnd).value;
+                var controlPanelNotes = 'timeline_control_panel_form_notes';
+                var notesVal = document.getElementById(controlPanelNotes).value;
                 lastId++;
-                dataSetItems.add([
-                    {id: lastId, content: 'item 1', start: new Date(2013, 6, 20)}
-                ]);
+                dataSetItems.add({id: lastId, content: contentVal, start: startVal});
+                if (endVal !== '') {
+                    dataSetItems.update({id: lastId, end: endVal});
+                }
+                if (notesVal !== '') {
+                    dataSetItems.update({id: lastId, notes: notesVal});
+                }
                 // **TODO** ajout de la date dans le tableau associatif des dates 
                 // pour signaler quels éléments n'ont pas été renseignés par 
                 // l'utilisateur mais ajoutés tout de même pour rendre les 
                 // dates visJS Friendly
                 visFriendlyDatesLength++;
+                // Dépends de ce qu'à renseigné l'utilisateur
+                // TODO Check pour les deux dates si c'est 
+                // année | année & mois | année & mois & jour
                 visFriendlyDates[String(visFriendlyDatesLength)] = {
                     start: '7',
                     end: '0'
                 };
+                resetControlPanel();
             }
 
             /**
