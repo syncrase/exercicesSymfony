@@ -24,16 +24,8 @@ class TimelineControlPanelFormType extends AbstractType {
 //                ->setAction('#') // No action because this is a front side only form
                 ->setMethod('POST')
                 ->add('content', TextType::class)
-                ->add('start', TextType::class, array(
-//                    'attr' => ['class' => 'form-control',
-//                        'onmouseout' => 'validate()',
-//                        'onchange' => 'validate()']
-                ))
-                ->add('end', TextType::class, array(
-//                    'attr' => ['class' => 'form-control',
-//                        'onmouseout' => 'validate()',
-//                        'onchange' => 'validate()']
-                ))
+                ->add('start', TextType::class)
+                ->add('end', TextType::class)
                 ->add('notes', TextareaType::class)
                 ->add('submit', SubmitType::class)
         ;

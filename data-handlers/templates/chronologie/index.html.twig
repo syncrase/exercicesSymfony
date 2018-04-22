@@ -60,7 +60,10 @@
                         </div>
                         <div class="col-lg-4">
                             {{ form_row(controlPanel.content, {
-                                'attr': {'class': 'form-control'}, 
+                                'attr': {
+                                    'class': 'form-control',
+                                    'onchange': ''
+                                }, 
                                 'label': 'Titre',
                                 'required': 'true'
                             }) }}
@@ -230,23 +233,73 @@
             }
             function logEvent(event, properties) {
                 // Complète le control panel avec les informations de l'item sélectionné
-                var contentId = 'timeline_control_panel_form_content';
-                var startId = 'timeline_control_panel_form_start';
-                var endId = 'timeline_control_panel_form_end';
-                var notesId = 'timeline_control_panel_form_notes';
+                var controlPanelContent = 'timeline_control_panel_form_content';
+                var controlPanelStart = 'timeline_control_panel_form_start';
+                var controlPanelEnd = 'timeline_control_panel_form_end';
+                var controlPanelNotes = 'timeline_control_panel_form_notes';
                 if (properties.item !== null) {
                     var dataSetItem = dataSetItems.get(properties.item);
-                    document.getElementById(contentId).setAttribute('value', dataSetItem.content);
-                    document.getElementById(startId).setAttribute('value', dataSetItem.start);
+
+                    // Handle the live DOM
+                    document.getElementById(controlPanelContent).setAttribute('value', dataSetItem.content);
+                    document.getElementById(controlPanelStart).setAttribute('value', dataSetItem.start);
                     if (dataSetItem.end !== undefined) {
-                        document.getElementById(endId).setAttribute('value', dataSetItem.end);
+                        document.getElementById(controlPanelEnd).setAttribute('value', dataSetItem.end);
                     }
-                    document.getElementById(notesId).setAttribute('value', 'To be implemented');
+                    document.getElementById(controlPanelNotes).setAttribute('value', 'To be implemented');
+
+                    // Handle the static DOM (le texte tapé à la main)
+                    document.querySelector('#'.concat(controlPanelContent)).value = dataSetItem.content;
+                    document.querySelector('#'.concat(controlPanelStart)).value = dataSetItem.start;
+                    if (dataSetItem.end !== undefined) {
+                        document.querySelector('#'.concat(controlPanelEnd)).value = dataSetItem.end;
+                    }
+                    document.querySelector('#'.concat(controlPanelNotes)).value = 'To be implemented';
+
                 } else {
-                    document.getElementById(contentId).removeAttribute('value');
-                    document.getElementById(startId).removeAttribute('value');
-                    document.getElementById(endId).removeAttribute('value');
-                    document.getElementById(notesId).removeAttribute('value');
+                    // Handle the static DOM (le texte tapé à la main)
+                    document.querySelector('#'.concat(controlPanelContent)).value = '';
+                    document.querySelector('#'.concat(controlPanelContent)).removeAttribute('required');
+                    document.querySelector('#'.concat(controlPanelStart)).value = '';
+                    document.querySelector('#'.concat(controlPanelStart)).removeAttribute('required');
+                    document.querySelector('#'.concat(controlPanelEnd)).value = '';
+                    document.querySelector('#'.concat(controlPanelEnd)).removeAttribute('required');
+                    document.querySelector('#'.concat(controlPanelNotes)).value = '';
+                    document.querySelector('#'.concat(controlPanelNotes)).removeAttribute('required');
+
+                    // Handle the live DOM
+                    //document.getElementById(controlPanelContent).innerHTML = 'tututu';
+                    document.getElementById(controlPanelContent).removeAttribute('value');
+                    document.getElementById(controlPanelStart).removeAttribute('value');
+                    document.getElementById(controlPanelEnd).removeAttribute('value');
+                    document.getElementById(controlPanelNotes).removeAttribute('value');
+
+                    //document.getElementById(controlPanelContent).setAttribute('value', '');
+                    //document.getElementById(controlPanelContent).innerHTML = '';
+                    //document.getElementById(controlPanelContent).value.innerHTML = '';
+                    //document.getElementById(controlPanelContent).value.replaceChild('');
+                    //document.getElementById(controlPanelStart).setAttribute('value', '');
+                    //document.getElementById(controlPanelEnd).setAttribute('value', '');
+                    //document.getElementById(controlPanleNotes).setAttribute('value', '');
+
+                    //alert(document.getElementById(controlPanelContent).innerHTML); // value
+                    //alert(document.getElementById(controlPanelContent).outerHTML); // html input
+                    //alert(document.getElementById(controlPanelContent).getAttribute('value')); // value
+                    //alert(document.getElementById(controlPanelContent).textContent); // value
+                    //alert(document.getElementById(controlPanelContent).innerText); // Rien
+
+
+                    //alert(document.getElementById(controlPanelContent).firstChild); // [Object Text]
+                    //alert(document.getElementById(controlPanelContent).firstChild.textContent); // value
+                    //alert(document.getElementById(controlPanelContent).firstChild.innerText); // undefined
+                    //alert(document.getElementById(controlPanelContent).firstChild.nodeValue);  // value
+                    //alert(document.getElementById(controlPanelContent).firstChild.innerHTML); // undefined
+                    //alert(document.getElementById(controlPanelContent).firstChild.outerHTML); // undefined
+                    //alert(document.getElementById(controlPanelContent).firstChild.outerText);  // undefined
+
+
+
+
                 }
             }
 
