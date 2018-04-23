@@ -8,19 +8,6 @@ Pas tout de suite, si je veux un bouton pour focus sur une certaine période il 
 
 TODO
 
-BUG les sauts de lignes des notes ne sont pas pris en charge!!!
-
-1. Priorité: modélisation
-	dessiner les schémas du code pour faciliter le développement et le refactoring 
-		1. Diagramme de cas d'utilisation 	Spécification, cahier des charges
-		2. Diagramme de séquence
-		3. Diagramme d'activité (processus métiers)
-		4. Diagramme d'activité (cinématique et/ou processus applicatifs)
-		5. Diagramme de classe 	Conception architecturale
-		6. Diagramme d'objets
-		7. Diagramme de communication
-		8. Diagramme de déploiement
-		9. Diagramme de composants
 
 2. Amélioration UI
 Améliorer le template

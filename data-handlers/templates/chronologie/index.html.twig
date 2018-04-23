@@ -198,7 +198,7 @@
         {% set visFriendlyIds = visChronologie.getVisFriendlyIds() %}
             // Initiate the associative array ([] or new Array() is just a basic array)
             var visFriendlyIds = {};
-// TODO vérifier que la taille du tableau est supérieure à 1
+            // TODO vérifier que la taille du tableau est supérieure à 1
         {% for id in 1..visFriendlyIds|length %}
             visFriendlyIds['{{ id }}'] = '{{ visFriendlyIds[id] }}';
         {% endfor %}
@@ -238,6 +238,7 @@
             var controlPanelEnd = 'timeline_control_panel_form_end';
             var controlPanelNotes = 'timeline_control_panel_form_notes';
             var ctrlPnlAddBtn = 'timeline_control_panel_form_ajout';
+
             /**
              * Get timeline content to add it in the control panel
              * @param {type} event
@@ -297,6 +298,13 @@
                 document.getElementById(controlPanelStart).removeAttribute('value');
                 document.getElementById(controlPanelEnd).removeAttribute('value');
                 document.getElementById(controlPanelNotes).removeAttribute('value');
+                // Reset the validation coloration
+                document.getElementById(controlPanelContent).classList.remove('is-invalid');
+                document.getElementById(controlPanelContent).classList.remove('is-valid');
+                document.getElementById(controlPanelStart).classList.remove('is-invalid');
+                document.getElementById(controlPanelStart).classList.remove('is-valid');
+                document.getElementById(controlPanelEnd).classList.remove('is-invalid');
+                document.getElementById(controlPanelEnd).classList.remove('is-valid');
                 focusedItem = 0;
             }
 

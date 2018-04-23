@@ -6,28 +6,9 @@ use App\Core\VisJS\Timeline\VisTimelineItem;
 
 /**
  * This is the dataset generator. 
- * Formate data specifically for the vis.js use.
+ * Get data in shape specifically for the vis.js use.
  */
 class VisTimeline {
-// Cet objet me permet d'avoir un adapter qui me permet de distinguer l'objet 
-// inscrit en base de données et l'objet serialisé à l'utilisation de vis timeline.
-// Si je n'utilise pas l'adapter j'obtiens ceci :
-//    [{"id":"5acdf9f115c8b92484000df6","content":"Platon","start":"-428,00,00",
-//    "visFriendlyStart":"new Date(-428,00,00)","end":"-348,00,00",
-//    "visFriendlyEnd":"new Date(-348,00,00)"},{"id":"5acdf9f115c8b92484000df7",
-//    "content":"1\u00e8re guerre mondiale","start":"1914,07,28",
-//    "visFriendlyStart":"new Date(1914,07,28)","end":"1918,11,11",
-//    "visFriendlyEnd":"new Date(1918,11,11)"},{"id":"5acdf9f115c8b92484000df8",
-//    "content":"2nde guerre mondiale","start":"1939,09,01","visFriendlyStart":
-//    "new Date(1939,09,01)","end":"1945,09,02","visFriendlyEnd":
-//    "new Date(1945,09,02)"},{"id":"5acdf9f115c8b92484000df9",
-//    "content":"d\u00e9claration Balfour","start":"1917,11,2",
-//    "visFriendlyStart":"new Date(1917,11,2)","end":null,"visFriendlyEnd":""}]
-//    ...
-//    Je pourrais utiliser les groupes pour choisir ce que je veux mais je vais 
-//    préférer mutualiser toutes les méthodes relatives a vis timeline dans cet 
-//    objet.
-//    
 
     /**
      *
@@ -49,6 +30,10 @@ class VisTimeline {
         return $this->visFriendlyDates;
     }
 
+    /**
+     * List of get in shape timeline items
+     * @var VisTimelineItem[] 
+     */
     private $visTimelineItems;
 
     public function getVisTimelineItems() {
