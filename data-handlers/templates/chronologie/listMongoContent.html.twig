@@ -1,0 +1,24 @@
+{% if evenements is defined %}
+    <br/><hr><br/>
+    <h1>evenements</h1>
+    <section class="">
+        <div class="container-fluid">
+            <div class="row d-flex">
+                <table style="width:100%">
+                    <caption>All mongo content</caption>
+                    {% for ev in evenements %}
+                        <tr>
+                            <td>{{ ev.id|e }}</td>
+                            <td>{{ ev.content|e }}</td>
+                            <td>{{ ev.startYear|e }}/{{ ev.startMonth|e }}/{{ ev.startDay|e }}</td>
+                            {% if ev.endYear is defined %}
+                                <td>{{ ev.endYear|e }}/{{ ev.endMonth|e }}/{{ ev.endDay|e }}</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </section>
+{% endif %}
+

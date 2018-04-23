@@ -1,0 +1,82 @@
+<section class="">
+    <br/><hr><br/>
+    <div class="container-fluid">
+        <div class="row d-flex">
+            <div class="col-lg-4">
+                <div id="log"></div>
+            </div>
+            <div class="col-lg-8">
+                {{ form_start(controlPanel) }}
+                <div class="form-row">
+                    <div class="col-lg-8" style="height:100%;">
+                        {{ form_row(controlPanel.notes, {
+                                'attr': {
+                                    'class': 'form-control', 
+                                    'rows': '7',
+                                    'oninput': 'ctrlPnlManageUpdate(this)'
+                                }, 
+                                'label': 'Mes notes',
+                                'required': 'false'
+                            }) }}
+                    </div>
+                    <div class="col-lg-4">
+                        {{ form_row(controlPanel.content, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'oninput': 'ctrlPnlManageUpdate(this)'
+                                }, 
+                                'label': 'Titre',
+                                'required': 'true'
+                            }) }}
+                        {{ form_row(controlPanel.start, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': 'Exemple: -aaaaaa-mm-jj ou aaaa/mm/jj',
+                                    'oninput': 'ctrlPnlManageUpdate(this)'
+                                }, 
+                                'label': 'Date de début',
+                                'required': 'true'
+                            }) }}
+                        {{ form_row(controlPanel.end, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': 'Exemple: -aaaaaa-mm-jj ou aaaa-mm-jj',
+                                    'oninput': 'ctrlPnlManageUpdate(this)'
+                                }, 
+                                'label': 'Date de fin',
+                                'required': 'false'
+                            }) }}
+                        <div class="form-row">
+                            <div class="col-lg-4">
+                                {{ form_row(controlPanel.ajout, { 
+                                            'attr': {
+                                            'class': 'btn btn-primary btn-block btn-lg',
+                                            'onclick': 'ctrlPnlManageAjout()'
+                                        }, 
+                                        'label': 'Ajouter',
+                                        'disabled': 'false'
+                                    }) }}
+
+                            </div>
+                            <div class="col-lg-8">
+                                <input type="hidden" id="updatedDataSet" name="updatedDataSet" value="no-value-yet">
+                                <input type="hidden" id="visFriendlyIds" name="visFriendlyIds" value="no-value-yet">
+                                <input type="hidden" id="visFriendlyDates" name="visFriendlyDates" value="no-value-yet">
+                                {{ form_row(controlPanel.save, { 
+                                        'attr': {
+                                            'class': 'btn btn-primary btn-block btn-lg',
+                                            'onclick': 'fillHiddenField()',
+                                            'formaction': '/updateMongo',
+                                            'formmethod': 'post'
+                                        }, 
+                                        'label': 'Sauvegarder'
+                                    }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ form_end(controlPanel) }}
+            </div>
+        </div>
+    </div>
+</section>
