@@ -103,9 +103,16 @@ class VisTimeline {
 //    editable: true,
 //    showCurrentTime: true
         $options = '';
-        $options .= 'editable: true, ';
+        // add: true,         // add new items by double tapping
+        // updateTime: true,  // drag items horizontally
+        // updateGroup: true, // drag items from one group to another
+        // remove: true,       // delete an item by tapping the delete button top right
+        // overrideItems: false  // allow these options to override item.editable
+        $options .= 'editable: { add: false, updateTime: false, remove: true }, ';
+        // L'utilisateur doit cliquer sur la timeline pour pouvoir l'utiliser
         $options .= 'clickToUse: true, ';
 //        $options .= 'onInitialDrawComplete: function() { logEvent(\'Timeline initial draw completed\', {}); }, ';
+        // N'affiche pas la date d'aujourd'hui
         $options .= 'showCurrentTime: false';
         return $options;
     }

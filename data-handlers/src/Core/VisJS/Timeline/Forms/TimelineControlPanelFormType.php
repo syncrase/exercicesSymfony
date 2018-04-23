@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use App\Core\VisJS\Timeline\Forms\TimelineControlPanelFormType;
+use App\Core\VisJS\Timeline\Forms\TimelineControlPanelData;
 
 /**
  * Description of TimelineControlPanelFormType
@@ -35,7 +35,7 @@ class TimelineControlPanelFormType extends AbstractType {
 
     public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => TimelineControlPanelFormType::class,
+            'data_class' => TimelineControlPanelData::class,
         ));
     }
 

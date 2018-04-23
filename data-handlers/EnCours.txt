@@ -1,0 +1,44 @@
+# Ajouter toutes les fonctionnalités offertes par la timeline  http://visjs.org/timeline_examples.html
+
+Pas tout de suite, si je veux un bouton pour focus sur une certaine période il me faut un panneau de contrôle qui permette de le faire
+
+
+
+
+
+TODO
+
+BUG les sauts de lignes des notes ne sont pas pris en charge!!!
+
+1. Priorité: modélisation
+	dessiner les schémas du code pour faciliter le développement et le refactoring 
+		1. Diagramme de cas d'utilisation 	Spécification, cahier des charges
+		2. Diagramme de séquence
+		3. Diagramme d'activité (processus métiers)
+		4. Diagramme d'activité (cinématique et/ou processus applicatifs)
+		5. Diagramme de classe 	Conception architecturale
+		6. Diagramme d'objets
+		7. Diagramme de communication
+		8. Diagramme de déploiement
+		9. Diagramme de composants
+
+2. Amélioration UI
+Améliorer le template
+https://mijingo.com/blog/key-value-arrays-in-twig
+voir pour mutualiser tout le code de la timeline et uniquement celui dans un seul fichier voire extraire le js
+
+
+3. Nouveaux développements
+Ajout de la possibilité d'avoir plusieurs timelines (avec les groupes de jis.js)
+Ajout d'une mind map dans laquelle on peut afficher les éléments de la timeline
+Double cliquer (ou menu contextuel!) sur un élément pour avoir accès à une sous-timeline
+exporter les informations dans un tableur
+éditeur de texte pour la prise de notes (https://quilljs.com/  http://bootstrap-wysiwyg.github.io/bootstrap3-wysiwyg/  )
+styliser front-side les items de la timeline
+Persistance des options et modification front-side
+
+4. Environnement de développement
+	ajout des logs
+	ajout des tests de benchmark
+	
+.

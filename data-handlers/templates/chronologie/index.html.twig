@@ -15,7 +15,7 @@
             <div class="d-flex row">
                 <div id="timeline-container" class="">
 
-                    <div id="visualization"></div>
+                    <div id="timeline"></div>
 
                 </div>
             </div>
@@ -153,38 +153,38 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript">
-        var HTMLContainer = document.getElementById('visualization');
+        var HTMLContainer = document.getElementById('timeline');
         // Getting data to feed the timeline
         // Works if getDataSet() returns double quotes instead of simple quotes
-        var dataSetItems = new vis.DataSet({{ visChronologie.getDataSet()|raw }});
+        {#        var dataSetItems = new vis.DataSet({{ visChronologie.getDataSet()|raw }});#}
 
-        {#            
-        // Construct the dataSet here in order to manage escaping
-                    // It's necessary to have quotes and double quotes!!
-                {% set visTimelineItems = visChronologie.getVisTimelineItems() %}
-                {% set dataset = '[' %}
-                    //var dataSet = '[';
-                {% for visTimelineItem in visTimelineItems %}
-                    {% set dataset = dataset ~ '{' %}
-                    {% set dataset = dataset ~ 'id: ' ~ visTimelineItem.id %}
-                    {% set dataset = dataset ~ ', content: "'|raw ~ visTimelineItem.content ~ '"'|raw %}
-                    {% set dataset = dataset ~ ', start: "'|raw ~ visTimelineItem.start ~ '"'|raw %}
-                    {% if visTimelineItem.end is defined %}
-                        {% set dataset = dataset ~ ', end: "'|raw ~ visTimelineItem.end ~ '"'|raw %}
-                    {% endif %}
-                    {% if visTimelineItem.notes is defined %}
-                        {% set dataset = dataset ~ ', notes: "'|raw ~ visTimelineItem.notes ~ '"'|raw %}
-                    {% endif %}
-                    {% set dataset = dataset ~ '}' %}
-                        //Do not set coma at the end
-                    {% if not loop.last %}
-                        {% set dataset = dataset ~ ', ' %}
-                    {% endif %}
-                {% endfor %}
 
-                {% set dataset = dataset ~ ']' %}
-                    var dataSetItems = new vis.DataSet({{ dataset|raw }});
-        #}
+            // Construct the dataSet here in order to manage escaping in notes
+            // It's necessary to have quotes and double quotes!!
+        {% set visTimelineItems = visChronologie.getVisTimelineItems() %}
+        {% set dataset = '[' %}
+            //var dataSet = '[';
+        {% for visTimelineItem in visTimelineItems %}
+            {% set dataset = dataset ~ '{' %}
+            {% set dataset = dataset ~ 'id: ' ~ visTimelineItem.id %}
+            {% set dataset = dataset ~ ', content: "'|raw ~ visTimelineItem.content ~ '"'|raw %}
+            {% set dataset = dataset ~ ', start: "'|raw ~ visTimelineItem.start ~ '"'|raw %}
+            {% if visTimelineItem.end is defined and visTimelineItem.end != '' %}
+                {% set dataset = dataset ~ ', end: "'|raw ~ visTimelineItem.end ~ '"'|raw %}
+            {% endif %}
+            {% if visTimelineItem.notes is defined and visTimelineItem.notes != '' %}
+                {% set dataset = dataset ~ ', notes: "'|raw ~ visTimelineItem.notes|e('js') ~ '"'|raw %}
+            {% endif %}
+            {% set dataset = dataset ~ '}' %}
+                //Do not set coma at the end
+            {% if not loop.last %}
+                {% set dataset = dataset ~ ', ' %}
+            {% endif %}
+        {% endfor %}
+
+        {% set dataset = dataset ~ ']' %}
+            var dataSetItems = new vis.DataSet({{ dataset|raw }});
+
 
             // Get the last id before any modification. 
             // Permet d'identifier les ajouts, les suppression et les updates
@@ -219,10 +219,10 @@
 
             // Create a Timeline
             var timeline = new vis.Timeline(HTMLContainer, dataSetItems, dataSetOptions);
-            // subscribe to any change in the DataSet (drag & drop items)
-            dataSetItems.on('*', function (event, properties, senderId) {
-                console.log('event', event, properties);
-            });
+            // subscribe to any change in the DataSet 
+            //dataSetItems.on('*', function (event, properties, senderId) {
+            //    console.log('event', event, properties);
+            //});
 
 
             var focusedItem = 0;
@@ -245,6 +245,7 @@
              * @returns {undefined}
              */
             function ctrlPnlInputFeeder(event, properties) {
+                resetControlPanel();
                 // Complète le control panel avec les informations de l'item sélectionné
                 if (properties.item !== null) {
                     // properties.item is the id of the timeline item
@@ -269,7 +270,7 @@
                         document.querySelector('#'.concat(controlPanelNotes)).value = dataSetItem.notes;
                     }
                 } else {
-                    resetControlPanel();
+                    //resetControlPanel();
                 }
             }
 
@@ -310,7 +311,7 @@
                 if (focusedItem !== 0) {
                     // Modification live de l'item sélectionné
                     var dataSetItem = dataSetItems.get(focusedItem);
-                    if (formField.id === controlPanelContentNotes) {
+                    if (formField.id === controlPanelNotes) {
                         //alert(formField.value.replace(/\n/g, "\\n"));
                         // see https://stackoverflow.com/questions/25921319/escape-new-lines-with-js
                         dataSetItem.notes = formField.value.replace(/\n/g, "\\n");
@@ -325,13 +326,15 @@
                             dataSetItem.start = formField.value;
                             dataSetItems.update(dataSetItem);
                         } else {
-
+                            ctrlPnlValidateForm();
                         }
                     } else if (formField.id === controlPanelEnd) {
                         //alert('end date modif');
                         if (dateFormatValidation(formField.value)) {
                             dataSetItem.end = formField.value;
                             dataSetItems.update(dataSetItem);
+                        } else {
+                            ctrlPnlValidateForm();
                         }
                     } else {
                         // Remove this alert. Prefer to add a log error
@@ -346,11 +349,10 @@
             }
 
             /**
-             * Check the control panel fields in order to activate the add button
+             * Switch between 'is-valid' and 'is-invalid'  form inputs class
              * @returns {undefined}
              */
-            function ctrlPnlAddBtnActivation() {
-
+            function ctrlPnlValidateForm() {
                 if (document.getElementById(controlPanelContent).value !== '') {
                     document.getElementById(controlPanelContent).classList.remove('is-invalid');
                     document.getElementById(controlPanelContent).classList.add('is-valid');
@@ -383,6 +385,14 @@
                 }
                 //
                 // No validation for notes
+            }
+            /**
+             * Check the control panel fields in order to activate the add button
+             * @returns {undefined}
+             */
+            function ctrlPnlAddBtnActivation() {
+
+                ctrlPnlValidateForm();
 
                 // si les deux sont valides, supprimer l'attribut disabled
                 // TODO Il faut vérifier que les données sont cohérentes

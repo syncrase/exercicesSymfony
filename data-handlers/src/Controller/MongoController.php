@@ -31,7 +31,7 @@ class MongoController extends Controller {
 //        $this->addingPlatonTest();
         $repository = $this->get('doctrine_mongodb')->getRepository(TimelineItem::class);
         $evenements = $repository->findAll();
-
+//var_dump($evenements);
         $visChronologie = new VisTimeline();
         $visChronologie->initTimeline($evenements);
 
@@ -112,6 +112,7 @@ class MongoController extends Controller {
                 if (!$storedItem->equals($timelineItem)) {
                     $storedItem->updateFields($timelineItem);
                     $datamanager->flush();
+                    //var_dump($storedItem);
                 } else {
                     // Do not update the item because the current item wasn't be modified
                 }

@@ -10,6 +10,14 @@ namespace App\Core\VisJS\Timeline;
  */
 class Date {
 
+//    10^mod(3x): période de 1000
+//    secondes: période de 60
+//    minutes: période de 60
+//    heures: période de 24
+//    jours: période variante de 28 à 31
+//    mois: période de 12
+//    année : pas de période
+        
     function __construct($date) {
         // Match date format like: Sat Dec 31 1149 00:00:00 GMT+0100 (Paris, Madrid)
         // This is the format when dynamically created by vis.js
