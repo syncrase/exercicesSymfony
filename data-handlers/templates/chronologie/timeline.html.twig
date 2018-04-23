@@ -16,107 +16,15 @@
         </div>
     </section>
 
-{% include 'chronologie/controlPanel.html.twig' %}
+    {% include 'chronologie/controlPanel.html.twig' %}
+
+
 
 {% endblock %}
 
 
 
-{% block javascripts %}
-    {#    {{ parent() }}#}
-    <script type="text/javascript">
-        /*
-         * TIMELINE INITIALIZATION FROM REQUEST DATA
-         */
-
-        var HTMLContainer = document.getElementById('timeline');
-        // Getting data to feed the timeline
-        // Works if getDataSet() returns double quotes instead of simple quotes
-        {#        var dataSetItems = new vis.DataSet({{ visChronologie.getDataSet()|raw }});#}
 
 
-            // Construct the dataSet here in order to manage escaping in notes
-            // It's necessary to have quotes and double quotes!!
-        {% set visTimelineItems = visChronologie.getVisTimelineItems() %}
-        {% set dataset = '[' %}
-            //var dataSet = '[';
-        {% for visTimelineItem in visTimelineItems %}
-            {% set dataset = dataset ~ '{' %}
-            {% set dataset = dataset ~ 'id: ' ~ visTimelineItem.id %}
-            {% set dataset = dataset ~ ', content: "'|raw ~ visTimelineItem.content ~ '"'|raw %}
-            {% set dataset = dataset ~ ', start: "'|raw ~ visTimelineItem.start ~ '"'|raw %}
-            {% if visTimelineItem.end is defined and visTimelineItem.end != '' %}
-                {% set dataset = dataset ~ ', end: "'|raw ~ visTimelineItem.end ~ '"'|raw %}
-            {% endif %}
-            {% if visTimelineItem.notes is defined and visTimelineItem.notes != '' %}
-                {% set dataset = dataset ~ ', notes: "'|raw ~ visTimelineItem.notes|e('js') ~ '"'|raw %}
-            {% endif %}
-            {% set dataset = dataset ~ '}' %}
-                //Do not set coma at the end
-            {% if not loop.last %}
-                {% set dataset = dataset ~ ', ' %}
-            {% endif %}
-        {% endfor %}
-
-        {% set dataset = dataset ~ ']' %}
-            var dataSetItems = new vis.DataSet({{ dataset|raw }});
-
-
-            // Get the last id before any modification. 
-            // Permet d'identifier les ajouts, les suppression et les updates
-            // Parmis les ids allant de 1 à N. S'il y en a un de manquant il a été supprimé
-            // Tous les ids strictement supérieurs à N sont nouveaux
-            var ids = dataSetItems.getIds();
-            var lastId = ids[ids.length - 1];
-            // Configuration for the Timeline
-            var dataSetOptions = { {{ visChronologie.getOption()|raw }} };
-            // Correspondance entre les ids visjs {key} et les ids mongo {value}
-        {% set visFriendlyIds = visChronologie.getVisFriendlyIds() %}
-            // Initiate the associative array ([] or new Array() is just a basic array)
-            var visFriendlyIds = {};
-            // TODO vérifier que la taille du tableau est supérieure à 1
-        {% for id in 1..visFriendlyIds|length %}
-            visFriendlyIds['{{ id }}'] = '{{ visFriendlyIds[id] }}';
-        {% endfor %}
-
-
-        {% set visFriendlyDates = visChronologie.getVisFriendlyDates() %}
-            var visFriendlyDates = {};
-            var visFriendlyDatesLength = 0;
-        {% for id in 1..visFriendlyDates|length %}
-            visFriendlyDates['{{ id }}'] = {
-                start: '{{ visFriendlyDates[id]['start'] }}',
-                end: '{{ visFriendlyDates[id]['end'] }}'
-            }
-            ;
-            visFriendlyDatesLength = {{ id }};
-        {% endfor %}
-
-
-            // Create a Timeline
-            var timeline = new vis.Timeline(HTMLContainer, dataSetItems, dataSetOptions);
-            // subscribe to any change in the DataSet 
-            //dataSetItems.on('*', function (event, properties, senderId) {
-            //    console.log('event', event, properties);
-            //});
-
-
-            var focusedItem = 0;
-
-            // Ajoute l'event listener à chaque item de la timeline
-            timeline.on('click', function (properties) {
-                ctrlPnlInputFeeder('click', properties);
-            });
-
-
-            var controlPanelContent = 'timeline_control_panel_form_content';
-            var controlPanelStart = 'timeline_control_panel_form_start';
-            var controlPanelEnd = 'timeline_control_panel_form_end';
-            var controlPanelNotes = 'timeline_control_panel_form_notes';
-            var ctrlPnlAddBtn = 'timeline_control_panel_form_ajout';
-
-        
-
-    </script>
-{% endblock %}
+{% include 'chronologie/controlPanelInitialization.html.twig' %}
 {% include 'chronologie/controlPanelLogic.html.twig' %}

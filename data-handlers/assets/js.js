@@ -9,6 +9,10 @@ var $ = require('jquery');
 
 require('popper.js');
 require('bootstrap');
+
+//require('quill'); 
+//require('../node_modules/quill/dist/quill.js'); 
+//
 //require('vis');
 //var vis = require('vis');
 //var $ = require('vis');

@@ -107,7 +107,7 @@ class MongoController extends Controller {
                             'No TimelineItem found for id ' . $mongoId
                     );
                 }
-                
+
                 // Si les deux objets sont différents => update
                 if (!$storedItem->equals($timelineItem)) {
                     $storedItem->updateFields($timelineItem);
@@ -190,6 +190,7 @@ class MongoController extends Controller {
         $evenement5->setContent('Jésus christ');
         $evenement5->setStartYear('0000');
         $evenement5->setEndYear('0033');
+        $evenement5->setNotes('Ceci est une note');
 
 
         $entityManager = $this->get('doctrine_mongodb')->getManager();

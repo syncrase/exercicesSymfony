@@ -21,7 +21,8 @@
                     document.getElementById(controlPanelEnd).setAttribute('value', dataSetItem.end);
                 }
                 if (dataSetItem.notes !== undefined) {
-                    document.getElementById(controlPanelNotes).setAttribute('value', dataSetItem.notes);
+                    //quill.setText(dataSetItem.notes);
+                    quill.setContents(dataSetItem.notes);
                 }
                 // Handle the static DOM (le texte tapé à la main)
                 document.querySelector('#'.concat(controlPanelContent)).value = dataSetItem.content;
@@ -29,11 +30,10 @@
                 if (dataSetItem.end !== undefined) {
                     document.querySelector('#'.concat(controlPanelEnd)).value = dataSetItem.end;
                 }
-                if (dataSetItem.notes !== undefined) {
-                    document.querySelector('#'.concat(controlPanelNotes)).value = dataSetItem.notes;
-                }
+                //if (dataSetItem.notes !== undefined) {
+                //    document.querySelector('#'.concat(controlPanelNotes)).value = dataSetItem.notes;
+                //}
             } else {
-                //resetControlPanel();
             }
         }
 
@@ -52,14 +52,11 @@
             document.querySelector('#'.concat(controlPanelStart)).removeAttribute('required');
             document.querySelector('#'.concat(controlPanelEnd)).value = '';
             document.querySelector('#'.concat(controlPanelEnd)).removeAttribute('required');
-            document.querySelector('#'.concat(controlPanelNotes)).value = '';
-            document.querySelector('#'.concat(controlPanelNotes)).removeAttribute('required');
+            quill.setText('');
             // Handle the live DOM
-            //document.getElementById(controlPanelContent).innerHTML = 'tututu';
             document.getElementById(controlPanelContent).removeAttribute('value');
             document.getElementById(controlPanelStart).removeAttribute('value');
             document.getElementById(controlPanelEnd).removeAttribute('value');
-            document.getElementById(controlPanelNotes).removeAttribute('value');
             // Reset the validation coloration
             document.getElementById(controlPanelContent).classList.remove('is-invalid');
             document.getElementById(controlPanelContent).classList.remove('is-valid');
@@ -77,21 +74,20 @@
          * @returns {undefined}
          */
         function ctrlPnlManageUpdate(formField) {
-            //alert(formField.id);
+            // Update the editor with the last user insertion
+            quill.update();
             if (focusedItem !== 0) {
                 // Modification live de l'item sélectionné
                 var dataSetItem = dataSetItems.get(focusedItem);
                 if (formField.id === controlPanelNotes) {
-                    //alert(formField.value.replace(/\n/g, "\\n"));
                     // see https://stackoverflow.com/questions/25921319/escape-new-lines-with-js
-                    dataSetItem.notes = formField.value.replace(/\n/g, "\\n");
+                    //dataSetItem.notes = quill.getText();
+                    dataSetItem.notes = quill.getContents();
                     dataSetItems.update(dataSetItem);
                 } else if (formField.id === controlPanelContent) {
-                    //alert('content modif');
                     dataSetItem.content = formField.value;
                     dataSetItems.update(dataSetItem);
                 } else if (formField.id === controlPanelStart) {
-                    //alert('start date modif');
                     if (dateFormatValidation(formField.value)) {
                         dataSetItem.start = formField.value;
                         dataSetItems.update(dataSetItem);
@@ -99,7 +95,6 @@
                         ctrlPnlValidateForm();
                     }
                 } else if (formField.id === controlPanelEnd) {
-                    //alert('end date modif');
                     if (dateFormatValidation(formField.value)) {
                         dataSetItem.end = formField.value;
                         dataSetItems.update(dataSetItem);
@@ -111,7 +106,6 @@
                     alert('Id is unknown, please refer to the ctrlPnlManageUpdate method');
                 }
             } else {
-                //alert('no selected item');
                 //=> on débloque le bouton valider pour la création d'un nouvel objet
                 ctrlPnlAddBtnActivation();
             }
@@ -139,7 +133,6 @@
                 document.getElementById(controlPanelStart).classList.add('is-invalid');
             }
 
-            //alert(document.getElementById(controlPanelEnd).value !== '');
             if (document.getElementById(controlPanelEnd).value !== '') {
                 if (dateFormatValidation(document.getElementById(controlPanelEnd).value)) {
                     document.getElementById(controlPanelEnd).classList.remove('is-invalid');
@@ -156,29 +149,24 @@
             //
             // No validation for notes
         }
+
         /**
          * Check the control panel fields in order to activate the add button
          * @returns {undefined}
          */
         function ctrlPnlAddBtnActivation() {
-
             ctrlPnlValidateForm();
-
             // si les deux sont valides, supprimer l'attribut disabled
             // TODO Il faut vérifier que les données sont cohérentes
             // La date de début est-elle antérieure à la date de fin?
             //    alert(document.getElementById(controlPanelEnd).classList.contains('is-valid'));
-
             if (document.getElementById(controlPanelEnd).classList.contains('is-valid') &&
                     document.getElementById(controlPanelStart).classList.contains('is-valid') &&
                     document.getElementById(controlPanelContent).classList.contains('is-valid')) {
-                //alert('removeAttribute');
                 document.getElementById(ctrlPnlAddBtn).removeAttribute('disabled');
             } else {
-                //alert('removeAttribute');
                 document.getElementById(ctrlPnlAddBtn).setAttribute('disabled', 'true');
             }
-
         }
 
         /**
@@ -231,14 +219,11 @@
          * @returns {undefined}
          */
         function ctrlPnlManageAjout() {
-            var controlPanelContent = 'timeline_control_panel_form_content';
             var contentVal = document.getElementById(controlPanelContent).value;
-            var controlPanelStart = 'timeline_control_panel_form_start';
             var startVal = document.getElementById(controlPanelStart).value;
-            var controlPanelEnd = 'timeline_control_panel_form_end';
             var endVal = document.getElementById(controlPanelEnd).value;
-            var controlPanelNotes = 'timeline_control_panel_form_notes';
-            var notesVal = document.getElementById(controlPanelNotes).value;
+            //var notesVal = quill.getText();
+            var notesVal = quill.getContents();
             lastId++;
             dataSetItems.add({id: lastId, content: contentVal, start: startVal});
             if (endVal !== '') {

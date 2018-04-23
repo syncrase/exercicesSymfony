@@ -27,7 +27,7 @@ class TimelineControlPanelFormType extends AbstractType {
                 ->add('content', TextType::class)
                 ->add('start', TextType::class)
                 ->add('end', TextType::class)
-                ->add('notes', TextareaType::class)
+//                ->add('notes', TextareaType::class)
                 ->add('ajout', ButtonType::class)
                 ->add('save', SubmitType::class)
         ;

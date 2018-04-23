@@ -17,12 +17,13 @@ voir pour mutualiser tout le code de la timeline et uniquement celui dans un seu
 
 3. Nouveaux développements
 Ajout de la possibilité d'avoir plusieurs timelines (avec les groupes de jis.js)
-Ajout d'une mind map dans laquelle on peut afficher les éléments de la timeline
-Double cliquer (ou menu contextuel!) sur un élément pour avoir accès à une sous-timeline
-exporter les informations dans un tableur
+Ajout d'une mind map dans laquelle on peut afficher les éléments de la timeline pour pouvoir les lier entre eux de différentes manières (liens de causalités, d'appartenance, ...)
+Menu contextuel sur un élément pour avoir accès à une sous-timeline
+exporter les informations dans un tableur, un rapport
 éditeur de texte pour la prise de notes (https://quilljs.com/  http://bootstrap-wysiwyg.github.io/bootstrap3-wysiwyg/  )
 styliser front-side les items de la timeline
 Persistance des options et modification front-side
+Bouton pour focus sur la time line, un autre pour focus sur un item
 
 4. Environnement de développement
 	ajout des logs

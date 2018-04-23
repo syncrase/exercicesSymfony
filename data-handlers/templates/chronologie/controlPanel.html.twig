@@ -8,16 +8,17 @@
             <div class="col-lg-8">
                 {{ form_start(controlPanel) }}
                 <div class="form-row">
-                    <div class="col-lg-8" style="height:100%;">
-                        {{ form_row(controlPanel.notes, {
-                                'attr': {
-                                    'class': 'form-control', 
-                                    'rows': '7',
-                                    'oninput': 'ctrlPnlManageUpdate(this)'
-                                }, 
-                                'label': 'Mes notes',
-                                'required': 'false'
-                            }) }}
+                    <div class="col-lg-8">
+                        {#                        {{ form_row(controlPanel.notes, {
+                                                        'attr': {
+                                                            'class': 'form-control', 
+                                                            'rows': '7',
+                                                            'oninput': 'ctrlPnlManageUpdate(this)'
+                                                        }, 
+                                                        'label': 'Mes notes',
+                                                        'required': 'false'
+                                                    }) }}#}
+                        <div id="editor-container" oninput="ctrlPnlManageUpdate(this)" style="height:100%;"></div>
                     </div>
                     <div class="col-lg-4">
                         {{ form_row(controlPanel.content, {
