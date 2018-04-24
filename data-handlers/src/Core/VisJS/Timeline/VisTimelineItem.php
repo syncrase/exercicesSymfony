@@ -119,7 +119,7 @@ class VisTimelineItem {
                         ($ev->getEndDay() !== null ? $ev->getEndDay() : '01') : null
         );
 
-        $this->setNotes($ev->getNotes());
+//        $this->setNotes($ev->getNotes());
 
         return $this->computeDateAdaptationCode($ev);
     }
@@ -148,8 +148,8 @@ class VisTimelineItem {
                 ($ev->getEndMonth() !== null ? 2 : 0) +
                 ($ev->getEndDay() !== null ? 1 : 0);
         return [
-            'start' => $startDateCode,
-            'end' => $endDateCode
+            'startCode' => $startDateCode,
+            'endCode' => $endDateCode
         ];
     }
 

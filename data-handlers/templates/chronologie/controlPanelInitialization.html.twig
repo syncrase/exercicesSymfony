@@ -24,9 +24,9 @@
             {% if visTimelineItem.end is defined and visTimelineItem.end != '' %}
                 {% set dataset = dataset ~ ', end: "'|raw ~ visTimelineItem.end ~ '"'|raw %}
             {% endif %}
-            {% if visTimelineItem.notes is defined and visTimelineItem.notes != '' %}
-                {% set dataset = dataset ~ ', notes: "'|raw ~ visTimelineItem.notes|e('js') ~ '"'|raw %}
-            {% endif %}
+            {#            {% if visTimelineItem.notes is defined and visTimelineItem.notes != '' %}
+                            {% set dataset = dataset ~ ', notes: "'|raw ~ visTimelineItem.notes|e('js') ~ '"'|raw %}
+                        {% endif %}#}
             {% set dataset = dataset ~ '}' %}
                 //Do not set coma at the end
             {% if not loop.last %}
@@ -46,8 +46,17 @@
             var lastId = ids[ids.length - 1];
             // Configuration for the Timeline
             var dataSetOptions = { {{ visChronologie.getOption()|raw }} };
+            // Create a Timeline
+            var timeline = new vis.Timeline(HTMLContainer, dataSetItems, dataSetOptions);
+
+
+            /**
+             * TO REPLACE
+             * @type type
+             * 
+             */
             // Correspondance entre les ids visjs {key} et les ids mongo {value}
-        {% set visFriendlyIds = visChronologie.getVisFriendlyIds() %}
+{#        {% set visFriendlyIds = visChronologie.getVisFriendlyIds() %}
             // Initiate the associative array ([] or new Array() is just a basic array)
             var visFriendlyIds = {};
             // TODO vérifier que la taille du tableau est supérieure à 1
@@ -61,16 +70,49 @@
             var visFriendlyDatesLength = 0;
         {% for id in 1..visFriendlyDates|length %}
             visFriendlyDates['{{ id }}'] = {
-                start: '{{ visFriendlyDates[id]['start'] }}',
-                end: '{{ visFriendlyDates[id]['end'] }}'
+                start: '{{ visFriendlyDates[id]['startCode'] }}',
+                end: '{{ visFriendlyDates[id]['endCode'] }}'
             }
             ;
             visFriendlyDatesLength = {{ id }};
+        {% endfor %}#}
+
+            /**
+             * NEW LOGIC
+             * @type type
+             {#             * '{{ visFriendlyDates[id]['startCode'] }}'#}
+             {#             * '{{ visFriendlyDates[id]['endCode'] }}'#}
+             
+             * @type type              
+             */
+        {% set metaTimeline = visChronologie.getMetaTimeline() %}
+            var metaTimeline = {};
+            var startDate = {};
+            var endDate = {};
+
+        {% for metaItem in metaTimeline %}
+            // loop.index is the current 1 indexed iteration. represent the vis id
+            metaTimeline['{{ loop.index }}'] = {
+                mongoId: '{{ metaItem['mongoId'] }}',
+                notes: '{{ metaItem['notes']|escape('js') }}',
+                content: '{{ metaItem['content'] }}',
+                start: {
+                    code: '{{ metaItem['startDate']['code'] }}',
+                    year: '{{ metaItem['startDate']['year'] }}',
+                    month: '{{ metaItem['startDate']['month'] }}',
+                    day: '{{ metaItem['startDate']['day'] }}'
+                },
+                end: {
+                    code: '{{ metaItem['endDate']['code'] }}',
+                    year: '{{ metaItem['endDate']['year'] }}',
+                    month: '{{ metaItem['endDate']['month'] }}',
+                    day: '{{ metaItem['endDate']['day'] }}'
+                },
+                action: '{{ metaItem['action'] }}'
+            };
         {% endfor %}
+            //alert(JSON.stringify(metaTimeline));
 
-
-            // Create a Timeline
-            var timeline = new vis.Timeline(HTMLContainer, dataSetItems, dataSetOptions);
             // subscribe to any change in the DataSet 
             //dataSetItems.on('*', function (event, properties, senderId) {
             //    console.log('event', event, properties);
@@ -79,10 +121,7 @@
 
             var focusedItem = 0;
 
-            // Ajoute l'event listener à chaque item de la timeline
-            timeline.on('click', function (properties) {
-                ctrlPnlInputFeeder('click', properties);
-            });
+            
 
 
             var controlPanelContent = 'timeline_control_panel_form_content';
@@ -109,7 +148,7 @@
                 theme: 'snow'
             });
 
-{#            var form = document.querySelector('form');#}
+        {#            var form = document.querySelector('form');#}
         {#form.onsubmit = function () {
             // Populate hidden form on submit
             var about = document.querySelector('input[name=about]');

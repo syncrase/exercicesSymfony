@@ -14,21 +14,21 @@ class VisTimeline {
      *
      * @var array[visId][mongoId]
      */
-    private $visFriendlyIds = [];
-
-    public function getVisFriendlyIds() {
-        return $this->visFriendlyIds;
-    }
+//    private $visFriendlyIds = [];
+//
+//    public function getVisFriendlyIds() {
+//        return $this->visFriendlyIds;
+//    }
 
     /**
      * 
      * @var array[visId][initialDateFormatCode]
      */
-    private $visFriendlyDates = [];
-
-    public function getVisFriendlyDates() {
-        return $this->visFriendlyDates;
-    }
+//    private $visFriendlyDates = [];
+//
+//    public function getVisFriendlyDates() {
+//        return $this->visFriendlyDates;
+//    }
 
     /**
      * List of get in shape timeline items
@@ -41,6 +41,34 @@ class VisTimeline {
     }
 
     /**
+     * Contains all information relative to a timeline item 
+     * It's an associative array like
+     * 'visId' =>  [
+     *          'mongoId' => '',
+     *          'notes' => '',
+     *          'content' => '',
+     *          'startDate' => [
+     *              'code' => ''
+     *               'year' => ''
+     *               'month' => ''
+     *               'day' => ''
+     *            ],
+     *          'endDate' => [
+     *              'code' => ''
+     *               'year' => ''
+     *               'month' => ''
+     *               'day' => ''
+     *            ]
+     *         ]
+     * @var VisTimelineItem[] 
+     */
+    private $metaTimeline;
+
+    public function getMetaTimeline() {
+        return $this->metaTimeline;
+    }
+
+    /**
      * Récupère les informations reçues du document Mongo et les formate pour
      * leur utilisation par vis.js
      * @param TimelineItem[] $evenements
@@ -50,14 +78,38 @@ class VisTimeline {
         $id = 1;
         foreach ($evenements as $ev) {
             $visTimelineItem = new VisTimelineItem();
-            $this->visFriendlyDates[$id] = $visTimelineItem->adapt($ev);
+//            $this->visFriendlyDates[$id] = $visTimelineItem->adapt($ev);
             $visTimelineItem->setId($id);
             $visTimelineItems[] = $visTimelineItem;
 
-            // Fill associative array
-            $this->visFriendlyIds[$id] = $ev->getId();
+//            // Fill associative array
+//            $this->visFriendlyIds[$id] = $ev->getId();
+
+            /**
+             * FILL META ARRAY
+             */
+            $this->metaTimeline[$id]['mongoId'] = $ev->getId();
+            $this->metaTimeline[$id]['notes'] = $ev->getNotes();
+            $this->metaTimeline[$id]['content'] = $ev->getContent();
+            
+            $adaptationCode = $visTimelineItem->adapt($ev);
+            $this->metaTimeline[$id]['startDate']['code'] = $adaptationCode['startCode'];
+            $this->metaTimeline[$id]['startDate']['year'] = $ev->getStartYear();
+            $this->metaTimeline[$id]['startDate']['month'] = $ev->getStartMonth();
+            $this->metaTimeline[$id]['startDate']['day'] = $ev->getStartDay();
+            
+            $this->metaTimeline[$id]['endDate']['code'] = $adaptationCode['endCode'];
+            $this->metaTimeline[$id]['endDate']['year'] = $ev->getEndYear();
+            $this->metaTimeline[$id]['endDate']['month'] = $ev->getEndMonth();
+            $this->metaTimeline[$id]['endDate']['day'] = $ev->getEndDay();
+            
+            
+            $this->metaTimeline[$id]['action'] = 'no';
+
+            
             $id++;
         }
+//        var_dump($this->metaTimeline);
         $this->visTimelineItems = $visTimelineItems;
     }
 

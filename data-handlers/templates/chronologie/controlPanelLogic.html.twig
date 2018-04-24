@@ -30,12 +30,19 @@
                 if (dataSetItem.end !== undefined) {
                     document.querySelector('#'.concat(controlPanelEnd)).value = dataSetItem.end;
                 }
-                //if (dataSetItem.notes !== undefined) {
-                //    document.querySelector('#'.concat(controlPanelNotes)).value = dataSetItem.notes;
-                //}
+
+                if (metaTimeline[focusedItem]['notes'] !== undefined &&
+                        metaTimeline[focusedItem]['notes'] !== '') {
+                    quill.setContents(JSON.parse(metaTimeline[focusedItem]['notes']));
+                }
             } else {
             }
         }
+
+        // Ajoute l'event listener à chaque item de la timeline
+        timeline.on('click', function (properties) {
+            ctrlPnlInputFeeder('click', properties);
+        });
 
         /**
          * Reset the control panel fields
@@ -68,7 +75,7 @@
         }
 
         /**
-         * Get control panel content to add it in the timeline.
+         * Get control panel content to add it in the timeline and metaTimeline.
          * Method called at each modification in control panel.
          * @param {type} formField
          * @returns {undefined}
@@ -80,17 +87,20 @@
                 // Modification live de l'item sélectionné
                 var dataSetItem = dataSetItems.get(focusedItem);
                 if (formField.id === controlPanelNotes) {
-                    // see https://stackoverflow.com/questions/25921319/escape-new-lines-with-js
-                    //dataSetItem.notes = quill.getText();
-                    dataSetItem.notes = quill.getContents();
-                    dataSetItems.update(dataSetItem);
+                    metaTimeline[focusedItem]['notes'] = JSON.stringify(quill.getContents());
                 } else if (formField.id === controlPanelContent) {
+                    metaTimeline[focusedItem]['content'] = formField.value;
                     dataSetItem.content = formField.value;
                     dataSetItems.update(dataSetItem);
                 } else if (formField.id === controlPanelStart) {
                     if (dateFormatValidation(formField.value)) {
                         dataSetItem.start = formField.value;
                         dataSetItems.update(dataSetItem);
+                        // TODO
+                        // metaTimeline[focusedItem]['start']['year'] = formField.value;
+                        // metaTimeline[focusedItem]['start']['month'] = formField.value;
+                        // metaTimeline[focusedItem]['start']['day'] = formField.value;
+                        // metaTimeline[focusedItem]['start']['code'] = formField.value;
                     } else {
                         ctrlPnlValidateForm();
                     }
@@ -98,6 +108,12 @@
                     if (dateFormatValidation(formField.value)) {
                         dataSetItem.end = formField.value;
                         dataSetItems.update(dataSetItem);
+                        // TODO
+                        // metaTimeline[focusedItem]['end']['year'] = formField.value;
+                        // metaTimeline[focusedItem]['end']['month'] = formField.value;
+                        // metaTimeline[focusedItem]['end']['day'] = formField.value;
+                        // metaTimeline[focusedItem]['end']['code'] = formField.value;
+
                     } else {
                         ctrlPnlValidateForm();
                     }
@@ -134,14 +150,18 @@
             }
 
             if (document.getElementById(controlPanelEnd).value !== '') {
+                //alert('check date format');
                 if (dateFormatValidation(document.getElementById(controlPanelEnd).value)) {
+                    alert('date valide');
                     document.getElementById(controlPanelEnd).classList.remove('is-invalid');
                     document.getElementById(controlPanelEnd).classList.add('is-valid');
                 } else {
+                    alert('date invalide');
                     document.getElementById(controlPanelEnd).classList.remove('is-valid');
                     document.getElementById(controlPanelEnd).classList.add('is-invalid');
                 }
             } else {
+                //alert('champ vide');
                 // Si le champ est vide c'est valide
                 document.getElementById(controlPanelEnd).classList.remove('is-invalid');
                 document.getElementById(controlPanelEnd).classList.add('is-valid');
@@ -222,28 +242,46 @@
             var contentVal = document.getElementById(controlPanelContent).value;
             var startVal = document.getElementById(controlPanelStart).value;
             var endVal = document.getElementById(controlPanelEnd).value;
-            //var notesVal = quill.getText();
             var notesVal = quill.getContents();
             lastId++;
             dataSetItems.add({id: lastId, content: contentVal, start: startVal});
+            metaTimeline[lastId] = {};
+            metaTimeline[lastId]['action'] = 'create';
+            metaTimeline[lastId]['content'] = contentVal;
+            //alert('Ici ');
+
+            // TODO
+            // metaTimeline[focusedItem]['start']['year'] = formField.value;
+            // metaTimeline[focusedItem]['start']['month'] = formField.value;
+            // metaTimeline[focusedItem]['start']['day'] = formField.value;
+            // metaTimeline[focusedItem]['start']['code'] = formField.value;
             if (endVal !== '') {
                 dataSetItems.update({id: lastId, end: endVal});
+                // TODO
+                // metaTimeline[focusedItem]['end']['year'] = formField.value;
+                // metaTimeline[focusedItem]['end']['month'] = formField.value;
+                // metaTimeline[focusedItem]['end']['day'] = formField.value;
+                // metaTimeline[focusedItem]['end']['code'] = formField.value;
             }
             if (notesVal !== '') {
-                dataSetItems.update({id: lastId, notes: notesVal});
+                //dataSetItems.update({id: lastId, notes: notesVal});
+                // TODO Compléter le tableau metaTimeline
+                quill.update();
+                metaTimeline[lastId]['notes'] = JSON.stringify(quill.getContents());
             }
             // **TODO** ajout de la date dans le tableau associatif des dates 
             // pour signaler quels éléments n'ont pas été renseignés par 
             // l'utilisateur mais ajoutés tout de même pour rendre les 
             // dates visJS Friendly
-            visFriendlyDatesLength++;
+            // visFriendlyDatesLength++;
             // Dépends de ce qu'à renseigné l'utilisateur
             // TODO Check pour les deux dates si c'est 
             // année | année & mois | année & mois & jour
-            visFriendlyDates[String(visFriendlyDatesLength)] = {
-                start: '7',
-                end: '0'
-            };
+            // visFriendlyDates[String(visFriendlyDatesLength)] = {
+            //     start: '7',
+            //     end: '0'
+            // };
+            //alert('ajout réussi: ' + metaTimeline[lastId]['notes']);
             resetControlPanel();
         }
 
@@ -259,7 +297,7 @@
             // https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/JSON/stringify
             // Add the full content of the timeline to the 'updatedDataSet' hidden input
             var dataSet = dataSetItems.get({
-                fields: ['id', 'content', 'start', 'end', 'notes'],
+                fields: ['id', 'content', 'start', 'end'],
                 type: {
                     id: 'Number',
                     start: 'String',
@@ -271,10 +309,13 @@
             // Log d'erreur si la taille de la requête est supérieur à la taille permise par le serveur
             document.getElementById('updatedDataSet').setAttribute('value', JSON.stringify(dataSet, null, 2));
             // Add the first loaded (and unmodified) ids timelineItem association
-            document.getElementById('visFriendlyIds').setAttribute('value', JSON.stringify(visFriendlyIds, null, 2));
-            // Add the associative array to inform which dates are by default
-            document.getElementById('visFriendlyDates').setAttribute('value', JSON.stringify(visFriendlyDates, null, 2));
-        }
+        {#            document.getElementById('visFriendlyIds').setAttribute('value', JSON.stringify(visFriendlyIds, null, 2));#}
+                // Add the associative array to inform which dates are by default
+        {#            document.getElementById('visFriendlyDates').setAttribute('value', JSON.stringify(visFriendlyDates, null, 2));#}
+                // Add the metaTieline which contains all information
+                document.getElementById('metaTimeline').setAttribute('value', JSON.stringify(metaTimeline, null, 2));
+            }
+
     </script>
 
 {% endblock %}

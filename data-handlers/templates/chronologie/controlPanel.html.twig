@@ -44,8 +44,7 @@
                                     'placeholder': 'Exemple: -aaaaaa-mm-jj ou aaaa-mm-jj',
                                     'oninput': 'ctrlPnlManageUpdate(this)'
                                 }, 
-                                'label': 'Date de fin',
-                                'required': 'false'
+                                'label': 'Date de fin'
                             }) }}
                         <div class="form-row">
                             <div class="col-lg-4">
@@ -61,8 +60,9 @@
                             </div>
                             <div class="col-lg-8">
                                 <input type="hidden" id="updatedDataSet" name="updatedDataSet" value="no-value-yet">
-                                <input type="hidden" id="visFriendlyIds" name="visFriendlyIds" value="no-value-yet">
-                                <input type="hidden" id="visFriendlyDates" name="visFriendlyDates" value="no-value-yet">
+{#                                <input type="hidden" id="visFriendlyIds" name="visFriendlyIds" value="no-value-yet">#}
+{#                                <input type="hidden" id="visFriendlyDates" name="visFriendlyDates" value="no-value-yet">#}
+                                <input type="hidden" id="metaTimeline" name="metaTimeline" value="no-value-yet">
                                 {{ form_row(controlPanel.save, { 
                                         'attr': {
                                             'class': 'btn btn-primary btn-block btn-lg',

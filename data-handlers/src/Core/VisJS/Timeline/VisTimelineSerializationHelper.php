@@ -68,7 +68,7 @@ class VisTimelineSerializationHelper {
     private $timelineItem;
 
     /**
-     * Reconstruit un objet TimelineItem à partir des données reçues de la UI
+     * Reconstruit un objet TimelineItem à partir des attributs de cet objet
      */
     public function initTimelineItem() {
         $this->timelineItem = new TimelineItem();
@@ -102,7 +102,7 @@ class VisTimelineSerializationHelper {
      */
     public function unadapt($visFriendlyCodes) {
         // Start date
-        $startCode = $visFriendlyCodes['start'];
+        $startCode = $visFriendlyCodes['startCode'];
         if ($startCode >= 4) {
             // L'année n'est pas null
             $startCode -= 4;
@@ -124,7 +124,7 @@ class VisTimelineSerializationHelper {
             $this->timelineItem->setStartDay(null);
         }
         // End date
-        $endCode = $visFriendlyCodes['end'];
+        $endCode = $visFriendlyCodes['endCode'];
         if ($endCode >= 4) {
             // L'année n'est pas null
             $endCode -= 4;
