@@ -11,26 +11,6 @@ use App\Core\VisJS\Timeline\VisTimelineItem;
 class VisTimeline {
 
     /**
-     *
-     * @var array[visId][mongoId]
-     */
-//    private $visFriendlyIds = [];
-//
-//    public function getVisFriendlyIds() {
-//        return $this->visFriendlyIds;
-//    }
-
-    /**
-     * 
-     * @var array[visId][initialDateFormatCode]
-     */
-//    private $visFriendlyDates = [];
-//
-//    public function getVisFriendlyDates() {
-//        return $this->visFriendlyDates;
-//    }
-
-    /**
      * List of get in shape timeline items
      * @var VisTimelineItem[] 
      */
@@ -58,7 +38,8 @@ class VisTimeline {
      *               'year' => ''
      *               'month' => ''
      *               'day' => ''
-     *            ]
+     *            ],
+     *          'action' => 'no'|'create'|'update'|'delete'
      *         ]
      * @var VisTimelineItem[] 
      */
@@ -78,12 +59,9 @@ class VisTimeline {
         $id = 1;
         foreach ($evenements as $ev) {
             $visTimelineItem = new VisTimelineItem();
-//            $this->visFriendlyDates[$id] = $visTimelineItem->adapt($ev);
             $visTimelineItem->setId($id);
+            $adaptationCode = $visTimelineItem->adapt($ev);
             $visTimelineItems[] = $visTimelineItem;
-
-//            // Fill associative array
-//            $this->visFriendlyIds[$id] = $ev->getId();
 
             /**
              * FILL META ARRAY
@@ -92,7 +70,6 @@ class VisTimeline {
             $this->metaTimeline[$id]['notes'] = $ev->getNotes();
             $this->metaTimeline[$id]['content'] = $ev->getContent();
             
-            $adaptationCode = $visTimelineItem->adapt($ev);
             $this->metaTimeline[$id]['startDate']['code'] = $adaptationCode['startCode'];
             $this->metaTimeline[$id]['startDate']['year'] = $ev->getStartYear();
             $this->metaTimeline[$id]['startDate']['month'] = $ev->getStartMonth();
@@ -103,13 +80,10 @@ class VisTimeline {
             $this->metaTimeline[$id]['endDate']['month'] = $ev->getEndMonth();
             $this->metaTimeline[$id]['endDate']['day'] = $ev->getEndDay();
             
-            
             $this->metaTimeline[$id]['action'] = 'no';
 
-            
             $id++;
         }
-//        var_dump($this->metaTimeline);
         $this->visTimelineItems = $visTimelineItems;
     }
 

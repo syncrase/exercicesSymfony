@@ -103,7 +103,6 @@ class VisTimelineItem {
         $this->setContent($ev->getContent());
         // Start date
         // Quand il n'y a que l'année de disponible => placement de la date au 1er janvier
-        // '\'' .  . '\''
         $this->setStart(
                 $ev->getStartYear() . '-' .
                 ($ev->getStartMonth() !== null ? $ev->getStartMonth() : '01') . '-' .
@@ -111,15 +110,12 @@ class VisTimelineItem {
         );
 
         // End date
-        //'\'' .  . '\''
         $this->setEnd(
                 $ev->hasEnd() ?
                         $ev->getEndYear() . '-' .
                         ($ev->getEndMonth() !== null ? $ev->getEndMonth() : '01') . '-' .
                         ($ev->getEndDay() !== null ? $ev->getEndDay() : '01') : null
         );
-
-//        $this->setNotes($ev->getNotes());
 
         return $this->computeDateAdaptationCode($ev);
     }

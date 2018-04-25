@@ -80,35 +80,30 @@ class MongoController extends Controller {
      * @Route("/updateMongo", name="updateMongo")
      */
     public function updateMongo(Request $request) {
-//        $visFriendlyIds = json_decode($request->get('visFriendlyIds'), true);
-//        $visFriendlyDates = json_decode($request->get('visFriendlyDates'), true);
-
         $metaTimeline = json_decode($request->get('metaTimeline'), true);
-        //var_dump($metaTimeline);
         $encoders = array(new JsonEncoder());
         $normalizers = array(new ObjectNormalizer(), new ArrayDenormalizer());
         $serializer = new Serializer($normalizers, $encoders);
         $deserializedVisDataset = $serializer->deserialize(
                 $request->get('updatedDataSet'), VisTimelineSerializationHelper::class . '[]', 'json'
         );
-        //var_dump($deserializedVisDataset);
         $datamanager = $this->get('doctrine_mongodb')->getManager();
 
-        $report ='';
+        $report = '';
         foreach ($deserializedVisDataset as $datasetItem) {
             // Je regarde si l'item a un id mongo sinon je l'enregistre
             $visId = (string) $datasetItem->getId();
             $datasetItem->setNotes($metaTimeline[$visId]['notes']);
             $datasetItem->initTimelineItem();
-//var_dump($datasetItem);
             $datasetItem->unadapt([
                 'startCode' => $metaTimeline[$visId]['start']['code'],
                 'endCode' => $metaTimeline[$visId]['end']['code']
             ]);
-            //var_dump($datasetItem);
             $timelineItem = $datasetItem->getTimelineItem();
-//            var_dump($timelineItem);
-            $mongoId = $metaTimeline[$visId]['mongoId'];
+
+            $mongoId = array_key_exists('mongoId', $metaTimeline[$visId]) ?
+                    $metaTimeline[$visId]['mongoId'] :
+                    null;
             if ($mongoId !== null && $mongoId !== '') {
                 // Possède un id mongo => l'objet existe déjà dans mongo
                 $storedItem = $datamanager->getRepository(TimelineItem::class)->find($mongoId);
@@ -121,18 +116,15 @@ class MongoController extends Controller {
                 if (!$storedItem->equals($timelineItem)) {
                     $storedItem->updateFields($timelineItem);
                     $datamanager->flush();
-                    //var_dump('update');
                     $report .= 'u';
-                }else{
-//                    var_dump('nothing');
+                } else {
                     $report .= 'n';
                 }
             } else {
                 // Ne possède pas d'id mongo, l'objet doit être créé dans mongo
                 $datamanager->persist($timelineItem);
                 $datamanager->flush();
-//                    var_dump('create');
-                    $report .= 'c';
+                $report .= 'c';
             }
             unset($metaTimeline[$visId]);
             //var_dump($datasetItem);
@@ -140,10 +132,8 @@ class MongoController extends Controller {
 
 
         foreach (array_keys($metaTimeline) as $key) {
-
             $mongoId = $metaTimeline[$key]['mongoId'];
             if ($mongoId !== null && $mongoId !== '') {
-                // Possède un id mongo => l'objet existe déjà dans mongo
                 $storedItem = $datamanager->getRepository(TimelineItem::class)->find($mongoId);
                 if (!$storedItem) {
                     throw $this->createNotFoundException(
@@ -153,72 +143,16 @@ class MongoController extends Controller {
                 // Update s'il y a une différence
                 $datamanager->remove($storedItem);
                 $datamanager->flush();
-//                var_dump('delete');
-                    $report .= 'd';
+                $report .= 'd';
             }
             // ELSE this object was added and removed in the same modification
             unset($metaTimeline[$key]);
         }
-//        
-//        
-//        
-//        foreach ($deserializedVisDataset as $deserializedVisTimelineItem) {
-//
-//            $visId = (string) $deserializedVisTimelineItem->getId();
-//            // Initialize a timeline from the serialization helper
-//            $deserializedVisTimelineItem->setNotes($metaTimeline[$visId]['notes']);
-//            $deserializedVisTimelineItem->initTimelineItem();
-//            //var_dump($metaTimeline[$visId]);
-//            //var_dump($deserializedVisTimelineItem);
-//            // Remove the visJSFriendly adaptation
-//            $deserializedVisTimelineItem->unadapt($visFriendlyDates[$visId]);
-//            $timelineItem = $deserializedVisTimelineItem->getTimelineItem();
-////var_dump($deserializedVisTimelineItem);
-//            if (array_key_exists($visId, $visFriendlyIds)) {
-//                $mongoId = $visFriendlyIds[$visId];
-//                $storedItem = $datamanager->getRepository(TimelineItem::class)->find($mongoId);
-//                if (!$storedItem) {
-//                    throw $this->createNotFoundException(
-//                            'No TimelineItem found for id ' . $mongoId
-//                    );
-//                }
-//
-//                // Si les deux objets sont différents => update
-//                if (!$storedItem->equals($timelineItem)) {
-//                    $storedItem->updateFields($timelineItem);
-//                    $datamanager->flush();
-//                    //var_dump($storedItem);
-//                } else {
-//                    // Do not update the item because the current item wasn't be modified
-//                }
-//                // Suppression de la table d'association (les objets non supprimés de la table d'association sont
-//                // les objets supprimés depuis la UI)
-//                unset($visFriendlyIds[$visId]);
-//            } else {
-//                // L'évènement à été ajouté depuis la UI et doit être ajouté au document mongo
-//                $datamanager->persist($timelineItem);
-//                $datamanager->flush();
-//            }
-//        }
-        // Parcours de la table d'association pour supprimer du document mongo les évènements restants
-        // Les évènements qui restent dans la table d'association sont ceux qui ne sont pas dans la liste
-        // d'évènements reçue => ils ont donc été supprimés par l'utilisateur.
-//        foreach ($visFriendlyIds as $visFriendlyId) {
-//            // $visFriendlyId: this is the value = mongo id
-//            $storedItem = $datamanager->getRepository(TimelineItem::class)->find($visFriendlyId);
-//            if (!$storedItem) {
-//                throw $this->createNotFoundException(
-//                        'No TimelineItem found for id ' . $visFriendlyId
-//                );
-//            }
-//            $datamanager->remove($storedItem);
-//            $datamanager->flush();
-//        }
 
-//        return $this->redirectToRoute('home');
-        return new Response(
-            '<html><body>dumped report</body></html>'. var_dump($report)
-        );
+        return $this->redirectToRoute('home');
+//        return new Response(
+//                '<html><body>dumped report</body></html>' . var_dump($report)
+//        );
     }
 
     /*     * *******************************************************************

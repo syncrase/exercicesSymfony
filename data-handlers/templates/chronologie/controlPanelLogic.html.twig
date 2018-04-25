@@ -13,6 +13,7 @@
             if (properties.item !== null) {
                 // properties.item is the id of the timeline item
                 focusedItem = properties.item;
+                ctrlPnlAddBtnActivation();
                 var dataSetItem = dataSetItems.get(focusedItem);
                 // Handle the live DOM
                 document.getElementById(controlPanelContent).setAttribute('value', dataSetItem.content);
@@ -35,6 +36,7 @@
                         metaTimeline[focusedItem]['notes'] !== '') {
                     quill.setContents(JSON.parse(metaTimeline[focusedItem]['notes']));
                 }
+                ctrlPnlValidateForm();
             } else {
             }
         }
@@ -88,44 +90,46 @@
                 var dataSetItem = dataSetItems.get(focusedItem);
                 if (formField.id === controlPanelNotes) {
                     metaTimeline[focusedItem]['notes'] = JSON.stringify(quill.getContents());
+                    if (metaTimeline[focusedItem]['action'] !== 'create') {
+                        metaTimeline[focusedItem]['action'] = 'update';
+                    }
                 } else if (formField.id === controlPanelContent) {
                     metaTimeline[focusedItem]['content'] = formField.value;
+                    if (metaTimeline[focusedItem]['action'] !== 'create') {
+                        metaTimeline[focusedItem]['action'] = 'update';
+                    }
                     dataSetItem.content = formField.value;
                     dataSetItems.update(dataSetItem);
                 } else if (formField.id === controlPanelStart) {
                     if (dateFormatValidation(formField.value)) {
                         dataSetItem.start = formField.value;
                         dataSetItems.update(dataSetItem);
-                        // TODO
-                        // metaTimeline[focusedItem]['start']['year'] = formField.value;
-                        // metaTimeline[focusedItem]['start']['month'] = formField.value;
-                        // metaTimeline[focusedItem]['start']['day'] = formField.value;
-                        // metaTimeline[focusedItem]['start']['code'] = formField.value;
+                        if (metaTimeline[focusedItem]['action'] !== 'create') {
+                            metaTimeline[focusedItem]['action'] = 'update';
+                        }
+                        setDateInMeta(focusedItem, 'start', formField.value);
                     } else {
-                        ctrlPnlValidateForm();
                     }
                 } else if (formField.id === controlPanelEnd) {
+
                     if (dateFormatValidation(formField.value)) {
                         dataSetItem.end = formField.value;
                         dataSetItems.update(dataSetItem);
-                        // TODO
-                        // metaTimeline[focusedItem]['end']['year'] = formField.value;
-                        // metaTimeline[focusedItem]['end']['month'] = formField.value;
-                        // metaTimeline[focusedItem]['end']['day'] = formField.value;
-                        // metaTimeline[focusedItem]['end']['code'] = formField.value;
-
+                        if (metaTimeline[focusedItem]['action'] !== 'create') {
+                            metaTimeline[focusedItem]['action'] = 'update';
+                        }
+                        setDateInMeta(focusedItem, 'end', formField.value);
                     } else {
-                        ctrlPnlValidateForm();
                     }
                 } else {
                     // Remove this alert. Prefer to add a log error
                     alert('Id is unknown, please refer to the ctrlPnlManageUpdate method');
                 }
+                ctrlPnlValidateForm();
             } else {
                 //=> on débloque le bouton valider pour la création d'un nouvel objet
                 ctrlPnlAddBtnActivation();
             }
-
         }
 
         /**
@@ -150,23 +154,18 @@
             }
 
             if (document.getElementById(controlPanelEnd).value !== '') {
-                //alert('check date format');
                 if (dateFormatValidation(document.getElementById(controlPanelEnd).value)) {
-                    alert('date valide');
                     document.getElementById(controlPanelEnd).classList.remove('is-invalid');
                     document.getElementById(controlPanelEnd).classList.add('is-valid');
                 } else {
-                    alert('date invalide');
                     document.getElementById(controlPanelEnd).classList.remove('is-valid');
                     document.getElementById(controlPanelEnd).classList.add('is-invalid');
                 }
             } else {
-                //alert('champ vide');
                 // Si le champ est vide c'est valide
                 document.getElementById(controlPanelEnd).classList.remove('is-invalid');
                 document.getElementById(controlPanelEnd).classList.add('is-valid');
             }
-            //
             // No validation for notes
         }
 
@@ -176,13 +175,9 @@
          */
         function ctrlPnlAddBtnActivation() {
             ctrlPnlValidateForm();
-            // si les deux sont valides, supprimer l'attribut disabled
-            // TODO Il faut vérifier que les données sont cohérentes
-            // La date de début est-elle antérieure à la date de fin?
-            //    alert(document.getElementById(controlPanelEnd).classList.contains('is-valid'));
             if (document.getElementById(controlPanelEnd).classList.contains('is-valid') &&
                     document.getElementById(controlPanelStart).classList.contains('is-valid') &&
-                    document.getElementById(controlPanelContent).classList.contains('is-valid')) {
+                    document.getElementById(controlPanelContent).classList.contains('is-valid') && focusedItem === 0) {
                 document.getElementById(ctrlPnlAddBtn).removeAttribute('disabled');
             } else {
                 document.getElementById(ctrlPnlAddBtn).setAttribute('disabled', 'true');
@@ -196,40 +191,45 @@
          */
         function dateFormatValidation(date) {
             // see the html pattern attribute < ... pattern="[A-Za-z]{3}" ... >
-            var splitedDateContent = date.split('-');
-            if (splitedDateContent.length === 1) {
-                // Dans ce cas c'est censé n'être que l'année
-                var res = (/^-?\d+$/).test(splitedDateContent[0]);
-                if (res === true) {
-                    return true;
-                } else {
-                    return false;
+            if ((/^(-\d{6}|\d{4})$/).test(date)) {
+                return true;
+            } else if ((/^(-\d{6}|\d{4})-\d{2}-\d{2}$/).test(date)) {
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * Complete fields 'year', 'month', 'day' and 'code' of the item 
+         * metaTimeline[key][startOrEnd].
+         * Set 'code' = '0' if sDate === ''
+         * @param {number} key
+         * @param {string} startOrEnd
+         * @param {string} sDate
+         * @returns {undefined}
+         */
+        function setDateInMeta(key, startOrEnd, sDate) {
+            if (metaTimeline[key][startOrEnd] === undefined) {
+                metaTimeline[key][startOrEnd] = {};
+            }
+            var splitedDate;
+            if ((/^(-\d{6}|\d{4})$/).test(sDate)) {
+                metaTimeline[key][startOrEnd]['year'] = sDate;
+                metaTimeline[key][startOrEnd]['code'] = '4';
+            } else if ((/^(-\d{6}|\d{4})-\d{2}-\d{2}$/).test(sDate)) {
+                splitedDate = sDate.split('-');
+                if (splitedDate.length === 3) {
+                    metaTimeline[key][startOrEnd]['year'] = splitedDate[0];
+                    metaTimeline[key][startOrEnd]['month'] = splitedDate[1];
+                    metaTimeline[key][startOrEnd]['day'] = splitedDate[2];
+                } else if (splitedDate.length === 4) {
+                    metaTimeline[key][startOrEnd]['year'] = splitedDate[1];
+                    metaTimeline[key][startOrEnd]['month'] = splitedDate[2];
+                    metaTimeline[key][startOrEnd]['day'] = splitedDate[3];
                 }
-                // Dance ce cas la il va falloir que je renvoie le code d'adaptation de la date saisie!
-            } else if (splitedDateContent.length === 3) {
-                // Les expressions régulières peuvent être largement améliorées!
-                var res = (/^(-\d{6}|\d{4})$/).test(splitedDateContent[0]);
-                if (res === true) {
-                    // OK pour l'année
-                    res = (/^[0-1]?\d{1}$/).test(splitedDateContent[1]);
-                    if (res === true) {
-                        // OK pour le mois
-                        res = (/^[0-3]?\d{1}$/).test(splitedDateContent[2]);
-                        if (res === true) {
-                            // OK pour le jours
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    } else {
-                        return false;
-                    }
-                } else {
-                    return false;
-                }
-            } else {
-                // Ni une seule année ni une date complète.
-                return false;
+                metaTimeline[key][startOrEnd]['code'] = '7';
+            } else if (sDate === '') {
+                metaTimeline[key][startOrEnd]['code'] = '0';
             }
         }
 
@@ -248,40 +248,17 @@
             metaTimeline[lastId] = {};
             metaTimeline[lastId]['action'] = 'create';
             metaTimeline[lastId]['content'] = contentVal;
-            //alert('Ici ');
-
-            // TODO
-            // metaTimeline[focusedItem]['start']['year'] = formField.value;
-            // metaTimeline[focusedItem]['start']['month'] = formField.value;
-            // metaTimeline[focusedItem]['start']['day'] = formField.value;
-            // metaTimeline[focusedItem]['start']['code'] = formField.value;
+            setDateInMeta(lastId, 'start', startVal);
             if (endVal !== '') {
                 dataSetItems.update({id: lastId, end: endVal});
-                // TODO
-                // metaTimeline[focusedItem]['end']['year'] = formField.value;
-                // metaTimeline[focusedItem]['end']['month'] = formField.value;
-                // metaTimeline[focusedItem]['end']['day'] = formField.value;
-                // metaTimeline[focusedItem]['end']['code'] = formField.value;
+                setDateInMeta(lastId, 'end', endVal);
+            } else {
+                setDateInMeta(lastId, 'end', '');
             }
             if (notesVal !== '') {
-                //dataSetItems.update({id: lastId, notes: notesVal});
-                // TODO Compléter le tableau metaTimeline
                 quill.update();
                 metaTimeline[lastId]['notes'] = JSON.stringify(quill.getContents());
             }
-            // **TODO** ajout de la date dans le tableau associatif des dates 
-            // pour signaler quels éléments n'ont pas été renseignés par 
-            // l'utilisateur mais ajoutés tout de même pour rendre les 
-            // dates visJS Friendly
-            // visFriendlyDatesLength++;
-            // Dépends de ce qu'à renseigné l'utilisateur
-            // TODO Check pour les deux dates si c'est 
-            // année | année & mois | année & mois & jour
-            // visFriendlyDates[String(visFriendlyDatesLength)] = {
-            //     start: '7',
-            //     end: '0'
-            // };
-            //alert('ajout réussi: ' + metaTimeline[lastId]['notes']);
             resetControlPanel();
         }
 
@@ -308,13 +285,9 @@
             // + si possible la taille de la configuration serveur
             // Log d'erreur si la taille de la requête est supérieur à la taille permise par le serveur
             document.getElementById('updatedDataSet').setAttribute('value', JSON.stringify(dataSet, null, 2));
-            // Add the first loaded (and unmodified) ids timelineItem association
-        {#            document.getElementById('visFriendlyIds').setAttribute('value', JSON.stringify(visFriendlyIds, null, 2));#}
-                // Add the associative array to inform which dates are by default
-        {#            document.getElementById('visFriendlyDates').setAttribute('value', JSON.stringify(visFriendlyDates, null, 2));#}
-                // Add the metaTieline which contains all information
-                document.getElementById('metaTimeline').setAttribute('value', JSON.stringify(metaTimeline, null, 2));
-            }
+            // Add the metaTieline which contains all information
+            document.getElementById('metaTimeline').setAttribute('value', JSON.stringify(metaTimeline, null, 2));
+        }
 
     </script>
 
