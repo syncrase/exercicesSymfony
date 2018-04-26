@@ -1,24 +1,15 @@
 <section class="">
     <br/><hr><br/>
     <div class="container-fluid">
-        <div class="row d-flex">
+        <div class="row ">
             <div class="col-lg-4">
                 <div id="log"></div>
             </div>
-            <div class="col-lg-8">
+            <div class="col-lg-8" >
                 {{ form_start(controlPanel) }}
-                <div class="form-row">
-                    <div class="col-lg-8">
-                        {#                        {{ form_row(controlPanel.notes, {
-                                                        'attr': {
-                                                            'class': 'form-control', 
-                                                            'rows': '7',
-                                                            'oninput': 'ctrlPnlManageUpdate(this)'
-                                                        }, 
-                                                        'label': 'Mes notes',
-                                                        'required': 'false'
-                                                    }) }}#}
-                        <div id="editor-container" oninput="ctrlPnlManageUpdate(this)" style="height:100%;"></div>
+                <div class="form-row" >
+                    <div class="col-lg-8" >
+                        <div id="editor-container" oninput="ctrlPnlManageUpdate(this)" style="height: 350px ;"></div>
                     </div>
                     <div class="col-lg-4">
                         {{ form_row(controlPanel.content, {
@@ -60,8 +51,6 @@
                             </div>
                             <div class="col-lg-8">
                                 <input type="hidden" id="updatedDataSet" name="updatedDataSet" value="no-value-yet">
-{#                                <input type="hidden" id="visFriendlyIds" name="visFriendlyIds" value="no-value-yet">#}
-{#                                <input type="hidden" id="visFriendlyDates" name="visFriendlyDates" value="no-value-yet">#}
                                 <input type="hidden" id="metaTimeline" name="metaTimeline" value="no-value-yet">
                                 {{ form_row(controlPanel.save, { 
                                         'attr': {

@@ -5,7 +5,6 @@ Pas tout de suite, si je veux un bouton pour focus sur une certaine période il 
 
 
 
-bug : problème à l'ajout du lien quand on clique sur 'save' rien n'est mis à jour. WORKAROUND modifier la note après le save pour enregistrer la modification
 
 
 2. Amélioration UI
@@ -15,11 +14,11 @@ voir pour mutualiser tout le code de la timeline et uniquement celui dans un seu
 
 
 3. Nouveaux développements
-Ajout de la possibilité d'avoir plusieurs timelines (avec les groupes de jis.js)
+Ajout de la possibilité d'avoir plusieurs timelines (avec les groupes de jis.js) => foreign key dans mongo [timeline] 1<-->* [item]
 Ajout d'une mind map dans laquelle on peut afficher les éléments de la timeline pour pouvoir les lier entre eux de différentes manières (liens de causalités, d'appartenance, ...)
 Menu contextuel sur un élément pour avoir accès à une sous-timeline
-exporter les informations dans un tableur, un rapport
-
+exporter les informations dans un tableur, un rapport, .doc, .html, ...
+Editeur de texte -> pouvoir mettre des titres + choisir la grosseur du texte
 styliser front-side les items de la timeline
 Persistance des options et modification front-side
 Bouton pour focus sur la time line, un autre pour focus sur un item
