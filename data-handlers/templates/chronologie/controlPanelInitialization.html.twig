@@ -4,12 +4,10 @@
         /*
          * TIMELINE INITIALIZATION FROM REQUEST DATA
          */
-
         var HTMLContainer = document.getElementById('timeline');
         // Getting data to feed the timeline
         // Works if getDataSet() returns double quotes instead of simple quotes
         {#        var dataSetItems = new vis.DataSet({{ visChronologie.getDataSet()|raw }});#}
-
 
             // Construct the dataSet here in order to manage escaping in notes
             // It's necessary to have quotes and double quotes!!
@@ -24,9 +22,6 @@
             {% if visTimelineItem.end is defined and visTimelineItem.end != '' %}
                 {% set dataset = dataset ~ ', end: "'|raw ~ visTimelineItem.end ~ '"'|raw %}
             {% endif %}
-            {#            {% if visTimelineItem.notes is defined and visTimelineItem.notes != '' %}
-                            {% set dataset = dataset ~ ', notes: "'|raw ~ visTimelineItem.notes|e('js') ~ '"'|raw %}
-                        {% endif %}#}
             {% set dataset = dataset ~ '}' %}
                 //Do not set coma at the end
             {% if not loop.last %}
@@ -36,8 +31,6 @@
 
         {% set dataset = dataset ~ ']' %}
             var dataSetItems = new vis.DataSet({{ dataset|raw }});
-
-
             // Get the last id before any modification. 
             // Permet d'identifier les ajouts, les suppression et les updates
             // Parmis les ids allant de 1 à N. S'il y en a un de manquant il a été supprimé
@@ -45,51 +38,19 @@
             var ids = dataSetItems.getIds();
             var lastId = ids[ids.length - 1];
             // Configuration for the Timeline
-            var dataSetOptions = { {{ visChronologie.getOption()|raw }} };
+            var dataSetOptions = {
+        {{ visChronologie.getOption()|raw }},
+                        onRemove: function (item, callback) {
+                            metaTimeline[focusedItem]['action'] = 'delete';
+                            callback(item); // confirm deletion
+                        }
+            };
             // Create a Timeline
             var timeline = new vis.Timeline(HTMLContainer, dataSetItems, dataSetOptions);
 
 
-            /**
-             * TO REPLACE
-             * @type type
-             * 
-             */
-            // Correspondance entre les ids visjs {key} et les ids mongo {value}
-{#        {% set visFriendlyIds = visChronologie.getVisFriendlyIds() %}
-            // Initiate the associative array ([] or new Array() is just a basic array)
-            var visFriendlyIds = {};
-            // TODO vérifier que la taille du tableau est supérieure à 1
-        {% for id in 1..visFriendlyIds|length %}
-            visFriendlyIds['{{ id }}'] = '{{ visFriendlyIds[id] }}';
-        {% endfor %}
-
-
-        {% set visFriendlyDates = visChronologie.getVisFriendlyDates() %}
-            var visFriendlyDates = {};
-            var visFriendlyDatesLength = 0;
-        {% for id in 1..visFriendlyDates|length %}
-            visFriendlyDates['{{ id }}'] = {
-                start: '{{ visFriendlyDates[id]['startCode'] }}',
-                end: '{{ visFriendlyDates[id]['endCode'] }}'
-            }
-            ;
-            visFriendlyDatesLength = {{ id }};
-        {% endfor %}#}
-
-            /**
-             * NEW LOGIC
-             * @type type
-             {#             * '{{ visFriendlyDates[id]['startCode'] }}'#}
-             {#             * '{{ visFriendlyDates[id]['endCode'] }}'#}
-             
-             * @type type              
-             */
         {% set metaTimeline = visChronologie.getMetaTimeline() %}
             var metaTimeline = {};
-            var startDate = {};
-            var endDate = {};
-
         {% for metaItem in metaTimeline %}
             // loop.index is the current 1 indexed iteration. represent the vis id
             metaTimeline['{{ loop.index }}'] = {
@@ -111,7 +72,6 @@
                 action: '{{ metaItem['action'] }}'
             };
         {% endfor %}
-            //alert(JSON.stringify(metaTimeline));
 
             // subscribe to any change in the DataSet 
             //dataSetItems.on('*', function (event, properties, senderId) {
@@ -120,18 +80,11 @@
 
 
             var focusedItem = 0;
-
-            
-
-
             var controlPanelContent = 'timeline_control_panel_form_content';
             var controlPanelStart = 'timeline_control_panel_form_start';
             var controlPanelEnd = 'timeline_control_panel_form_end';
-        {#            var controlPanelNotes = 'timeline_control_panel_form_notes';#}
             var controlPanelNotes = 'editor-container';
             var ctrlPnlAddBtn = 'timeline_control_panel_form_ajout';
-
-
             /*******************************************************************
              ************************ Text editor
              *******************************************************************/

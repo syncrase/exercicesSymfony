@@ -17,7 +17,7 @@ class Date {
 //    jours: période variante de 28 à 31
 //    mois: période de 12
 //    année : pas de période
-        
+
     function __construct($date) {
         // Match date format like: Sat Dec 31 1149 00:00:00 GMT+0100 (Paris, Madrid)
         // This is the format when dynamically created by vis.js
@@ -30,7 +30,7 @@ class Date {
 
             // Match date format like: -000426-01-01 ou 2012-12-31
             // This the persisted format !
-        } elseif (preg_match('/^-?\d{1,6}-\d{2}-\d{2}$/', $date) === 1) {
+        } elseif (preg_match('/^(-\d{6}|\d{4})-\d{2}-\d{2}$/', $date) === 1) {
 
             $isBC = $date[0] === '-';
             // documentation http://php.net/ltrim
@@ -39,6 +39,8 @@ class Date {
             $this->year = ($isBC ? '-' : '') . $splittedDate[0];
             $this->month = $splittedDate[1];
             $this->day = $splittedDate[2];
+        } elseif (preg_match('/^(-\d{6}|\d{4})$/', $date) === 1) {
+            $this->year = $date;
         } else {
             var_dump('Date (' . (string) $date . ') non prise en charge');
         }

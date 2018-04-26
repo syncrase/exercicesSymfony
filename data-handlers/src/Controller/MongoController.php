@@ -81,72 +81,59 @@ class MongoController extends Controller {
      */
     public function updateMongo(Request $request) {
         $metaTimeline = json_decode($request->get('metaTimeline'), true);
-        $encoders = array(new JsonEncoder());
-        $normalizers = array(new ObjectNormalizer(), new ArrayDenormalizer());
-        $serializer = new Serializer($normalizers, $encoders);
-        $deserializedVisDataset = $serializer->deserialize(
-                $request->get('updatedDataSet'), VisTimelineSerializationHelper::class . '[]', 'json'
-        );
         $datamanager = $this->get('doctrine_mongodb')->getManager();
 
         $report = '';
-        foreach ($deserializedVisDataset as $datasetItem) {
-            // Je regarde si l'item a un id mongo sinon je l'enregistre
-            $visId = (string) $datasetItem->getId();
-            $datasetItem->setNotes($metaTimeline[$visId]['notes']);
-            $datasetItem->initTimelineItem();
-            $datasetItem->unadapt([
-                'startCode' => $metaTimeline[$visId]['start']['code'],
-                'endCode' => $metaTimeline[$visId]['end']['code']
-            ]);
-            $timelineItem = $datasetItem->getTimelineItem();
-
-            $mongoId = array_key_exists('mongoId', $metaTimeline[$visId]) ?
-                    $metaTimeline[$visId]['mongoId'] :
-                    null;
-            if ($mongoId !== null && $mongoId !== '') {
-                // Possède un id mongo => l'objet existe déjà dans mongo
-                $storedItem = $datamanager->getRepository(TimelineItem::class)->find($mongoId);
-                if (!$storedItem) {
+        foreach ($metaTimeline as $metaItem) {
+            if ($metaItem['action'] === 'no') {
+                $report .= 'n';
+                // Nothing to be done here!
+            } elseif ($metaItem['action'] === 'update') {
+                $report .= 'u';
+                // Object has been updated front-side
+                $evenement = $datamanager->getRepository(TimelineItem::class)->find($metaItem['mongoId']);
+                if (!$evenement) {
                     throw $this->createNotFoundException(
                             'No TimelineItem found for id ' . $mongoId
                     );
                 }
-                // Update s'il y a une différence
-                if (!$storedItem->equals($timelineItem)) {
-                    $storedItem->updateFields($timelineItem);
-                    $datamanager->flush();
-                    $report .= 'u';
-                } else {
-                    $report .= 'n';
-                }
-            } else {
-                // Ne possède pas d'id mongo, l'objet doit être créé dans mongo
-                $datamanager->persist($timelineItem);
+                $evenement->setContent($metaItem['content']);
+                $evenement->setNotes($metaItem['notes']);
+                $evenement->setStartYear($metaItem['start']['year']);
+                $evenement->setStartMonth($metaItem['start']['month']);
+                $evenement->setStartDay($metaItem['start']['day']);
+                $evenement->setEndYear($metaItem['end']['year']);
+                $evenement->setEndMonth($metaItem['end']['month']);
+                $evenement->setEndDay($metaItem['end']['day']);
                 $datamanager->flush();
+            } elseif ($metaItem['action'] === 'create') {
                 $report .= 'c';
-            }
-            unset($metaTimeline[$visId]);
-            //var_dump($datasetItem);
-        }
-
-
-        foreach (array_keys($metaTimeline) as $key) {
-            $mongoId = $metaTimeline[$key]['mongoId'];
-            if ($mongoId !== null && $mongoId !== '') {
-                $storedItem = $datamanager->getRepository(TimelineItem::class)->find($mongoId);
-                if (!$storedItem) {
+                // Object has been created front-side
+                $evenement = new TimelineItem();
+                $evenement->setContent($metaItem['content']);
+                $evenement->setNotes($metaItem['notes']);
+                $evenement->setStartYear($metaItem['start']['year']);
+                $evenement->setStartMonth($metaItem['start']['month']);
+                $evenement->setStartDay($metaItem['start']['day']);
+                $evenement->setEndYear($metaItem['end']['year']);
+                $evenement->setEndMonth($metaItem['end']['month']);
+                $evenement->setEndDay($metaItem['end']['day']);
+                $datamanager->persist($evenement);
+                $datamanager->flush();
+            } elseif ($metaItem['action'] === 'delete') {
+                $report .= 'd';
+                // Object has been deleted front-side
+                $evenement = $datamanager->getRepository(TimelineItem::class)->find($metaItem['mongoId']);
+                if (!$evenement) {
                     throw $this->createNotFoundException(
-                            'No TimelineItem found for id ' . $mongoId
+                            'No TimelineItem found for id ' . $metaItem['mongoId']
                     );
                 }
-                // Update s'il y a une différence
-                $datamanager->remove($storedItem);
+                $datamanager->remove($evenement);
                 $datamanager->flush();
-                $report .= 'd';
+            }else{
+                var_dump('Unkown action received from UI');
             }
-            // ELSE this object was added and removed in the same modification
-            unset($metaTimeline[$key]);
         }
 
         return $this->redirectToRoute('home');

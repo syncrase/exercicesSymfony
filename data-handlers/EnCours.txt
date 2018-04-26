@@ -5,14 +5,7 @@ Pas tout de suite, si je veux un bouton pour focus sur une certaine période il 
 
 
 
-
-TODO => supprimer les notes du dataset
-1. revoir l'initialisation du dataset																								5min				OK
-2. rassembler toutes les informations de la timeline dans un tableau associatif (php + js)											1h					OK
-3. revoir la serialisation des données avant l'envoie de la requête																	10min				OK
-4. revoir le code du controlleur																									30min
-5. revoir le code de la logique du control panel pour utiliser la nouvelle logique													2h
-																																			3h45'
+bug : problème à l'ajout du lien quand on clique sur 'save' rien n'est mis à jour. WORKAROUND modifier la note après le save pour enregistrer la modification
 
 
 2. Amélioration UI
@@ -30,7 +23,6 @@ exporter les informations dans un tableur, un rapport
 styliser front-side les items de la timeline
 Persistance des options et modification front-side
 Bouton pour focus sur la time line, un autre pour focus sur un item
-Ne pas renvoyer le dataset vers le controlleur, uniquement le tableau assciatif contenant toutes les informations à propos des modifications faite front-side => nouvelle variable 'action' = {no|create|update|delete}
 
 
 

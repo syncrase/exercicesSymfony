@@ -272,19 +272,10 @@
             // https://stackoverflow.com/questions/2364840/what-is-the-size-limit-of-a-post-request
             // // JSON.stringify documentation: 
             // https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/JSON/stringify
-            // Add the full content of the timeline to the 'updatedDataSet' hidden input
-            var dataSet = dataSetItems.get({
-                fields: ['id', 'content', 'start', 'end'],
-                type: {
-                    id: 'Number',
-                    start: 'String',
-                    end: 'String'
-                }
-            });
+
             // TODO mettre un log a cet endroit pour indiquer la taille de la requête avant du'elle parte
             // + si possible la taille de la configuration serveur
             // Log d'erreur si la taille de la requête est supérieur à la taille permise par le serveur
-            document.getElementById('updatedDataSet').setAttribute('value', JSON.stringify(dataSet, null, 2));
             // Add the metaTieline which contains all information
             document.getElementById('metaTimeline').setAttribute('value', JSON.stringify(metaTimeline, null, 2));
         }

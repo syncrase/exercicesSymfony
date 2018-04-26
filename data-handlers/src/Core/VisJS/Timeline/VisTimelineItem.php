@@ -105,16 +105,16 @@ class VisTimelineItem {
         // Quand il n'y a que l'année de disponible => placement de la date au 1er janvier
         $this->setStart(
                 $ev->getStartYear() . '-' .
-                ($ev->getStartMonth() !== null ? $ev->getStartMonth() : '01') . '-' .
-                ($ev->getStartDay() !== null ? $ev->getStartDay() : '01')
+                (($ev->getStartMonth() !== null && $ev->getStartMonth() !== '' ) ? $ev->getStartMonth() : '01') . '-' .
+                (($ev->getStartDay() !== null && $ev->getStartDay() !== '') ? $ev->getStartDay() : '01')
         );
 
         // End date
         $this->setEnd(
                 $ev->hasEnd() ?
                         $ev->getEndYear() . '-' .
-                        ($ev->getEndMonth() !== null ? $ev->getEndMonth() : '01') . '-' .
-                        ($ev->getEndDay() !== null ? $ev->getEndDay() : '01') : null
+                        (($ev->getEndMonth() !== null && $ev->getEndMonth() !== '' ) ? $ev->getEndMonth() : '01') . '-' .
+                        (($ev->getEndDay() !== null && $ev->getEndDay() !== '') ? $ev->getEndDay() : '01') : null
         );
 
         return $this->computeDateAdaptationCode($ev);
@@ -138,11 +138,11 @@ class VisTimelineItem {
      */
     private function computeDateAdaptationCode($ev) {
         $startDateCode = 4 + // there's always a start date
-                ($ev->getStartMonth() !== null ? 2 : 0) +
-                ($ev->getStartDay() !== null ? 1 : 0);
+                (($ev->getStartMonth() !== null && $ev->getStartMonth() !== '' ) ? 2 : 0) +
+                (($ev->getStartDay() !== null && $ev->getStartDay() !== '') ? 1 : 0);
         $endDateCode = ($ev->getEndYear() !== null ? 4 : 0) + // there's always a start date
-                ($ev->getEndMonth() !== null ? 2 : 0) +
-                ($ev->getEndDay() !== null ? 1 : 0);
+                (($ev->getEndMonth() !== null && $ev->getEndMonth() !== '' ) ? 2 : 0) +
+                (($ev->getEndDay() !== null && $ev->getEndDay() !== '') ? 1 : 0);
         return [
             'startCode' => $startDateCode,
             'endCode' => $endDateCode
