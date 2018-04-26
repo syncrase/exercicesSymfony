@@ -280,6 +280,21 @@
             document.getElementById('metaTimeline').setAttribute('value', JSON.stringify(metaTimeline, null, 2));
         }
 
+
+        quill.on('text-change', function (delta, oldDelta, source) {
+            if (source === 'api') {
+                // Nothing to do in this case
+            } else if (source === 'user') {
+                // Must implements this text change listener in order to apply 
+                // modification when toolbar save button is clicked
+                metaTimeline[focusedItem]['notes'] = JSON.stringify(quill.getContents());
+                if (metaTimeline[focusedItem]['action'] !== 'create') {
+                    metaTimeline[focusedItem]['action'] = 'update';
+                }
+            }
+        });
+
+
     </script>
 
 {% endblock %}
