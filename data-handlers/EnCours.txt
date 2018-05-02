@@ -11,14 +11,15 @@ voir pour mutualiser tout le code de la timeline et uniquement celui dans un seu
 
 
 3. Nouveaux développements
-Faire un toggle menu à gauche
+Pouvoir se connecter en tant qu'utilisateur
 Ajout de la possibilité d'avoir plusieurs timelines (avec les groupes de vis.js) 
 	=> foreign key dans mongo [timeline] 1<-->* [item]
 	=> une page qui offre la possibilité d'en créer une nouvelle
-Pouvoir se connecter en tant qu'utilisateur et visualiser toutes ses timelines
+Visualiser toutes ses timelines
 
-Ajout d'une mind map dans laquelle on peut afficher les éléments de la timeline pour pouvoir les lier entre eux de différentes manières (liens de causalités, d'appartenance, ...)
-Ajout de la possibilité d'afficher la timeline verticalement
+
+Ajout d'une mind map dans laquelle on peut afficher les éléments de la timeline pour pouvoir les lier entre eux de différentes manières (liens de causalités, d'appartenance, ...) ainsi qu'avec des éléments non temporels
+Ajout de la possibilité d'afficher la timeline verticalement (type story telling cf. https://www.w3schools.com/howto/howto_css_timeline.asp )
 
 
 3.1 Les petits plus

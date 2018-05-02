@@ -6,18 +6,20 @@ namespace App\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+//use Symfony\Component\HttpFoundation\Response;
 //use Symfony\Component\Validator\Validator\ValidatorInterface;
 // Serializer
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+//use Symfony\Component\Serializer\Serializer;
+//use Symfony\Component\Serializer\Encoder\JsonEncoder;
+//use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+//use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 // Handled objects
 use App\Document\TimelineItem;
 use App\Core\VisJS\Timeline\VisTimeline;
 use App\Core\VisJS\Timeline\Forms\TimelineControlPanelFormType;
-use App\Core\VisJS\Timeline\VisTimelineSerializationHelper;
+//use App\Core\VisJS\Timeline\VisTimelineSerializationHelper;
+use App\Core\User\Forms\SignInFormType;
+use App\Core\User\Forms\SignUpFormType;
 
 class MongoController extends Controller {
 
@@ -25,6 +27,20 @@ class MongoController extends Controller {
      * @Route("/", name="home")
      */
     public function index() {
+
+        $signInForm = $this->createForm(SignInFormType::class);
+        $signUpForm = $this->createForm(SignUpFormType::class);
+
+
+        return $this->render('common/login.html.twig', [
+                    'signIn' => $signInForm->createView(),
+                    'signUp' => $signUpForm->createView()]);
+    }
+
+    /**
+     * @Route("/timeline", name="timeline")
+     */
+    public function timeline() {
 //        $this->deleteAll();
 //        $this->adding5Tests();
 //        $this->addingJCTest();
@@ -73,7 +89,7 @@ class MongoController extends Controller {
             $entityManager->persist($evenement);
             $entityManager->flush();
         }
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('timeline');
     }
 
     /**
@@ -131,12 +147,12 @@ class MongoController extends Controller {
                 }
                 $datamanager->remove($evenement);
                 $datamanager->flush();
-            }else{
+            } else {
                 var_dump('Unkown action received from UI');
             }
         }
 
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('timeline');
 //        return new Response(
 //                '<html><body>dumped report</body></html>' . var_dump($report)
 //        );

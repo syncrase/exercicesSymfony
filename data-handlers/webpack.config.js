@@ -13,7 +13,9 @@ Encore
         // uncomment to define the assets of the project
         .addEntry('js/app', './assets/js.js')
 //        .addStyleEntry('css/app', './assets/style.scss') --> already inclue in js.js
-        // 
+        //.addStyleEntry('css/login', './assets/css/login.scss')
+        
+        .addEntry('css/app', './assets/js/login.js')
         // assets for the theme 1
 //        .addEntry('vis/js', './node_modules/vis/dist/vis.js')
 //        .addStyleEntry('vis/css', './node_modules/vis/dist/vis.css')

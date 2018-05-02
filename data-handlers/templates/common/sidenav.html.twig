@@ -11,10 +11,12 @@
 
 <script>
     var backgroundColor = document.body.style.backgroundColor;
+    var navId = "mySidenav";
+    var mainId = "main";
     
     function openNav() {
-        document.getElementById("mySidenav").style.width = "250px";
-        document.getElementById("main").style.marginLeft = "250px";
+        document.getElementById(navId).style.width = "250px";
+        document.getElementById(mainId).style.marginLeft = "250px";
         document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
     }
 

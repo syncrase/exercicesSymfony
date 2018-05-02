@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login page!{% endblock %}
+
+{% block stylesheets %}
+    {#    reset sidenav #}
+    <link rel="stylesheet" href="{{ asset('build/css/login.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/css/app.js') }}">
+
+{% endblock %}
+
+{% block sidenav %}
+    {#    reset sidenav 
+    https://www.w3schools.com/howto/howto_css_login_form.asp
+    #}
+{% endblock %}
+
+{% block body %}
+    <!-- 
+    https://www.w3schools.com/howto/howto_css_login_form.asp
+    https://codepen.io/ehermanson/pen/KwKWEv
+    https://www.w3schools.com/howto/howto_js_tabs.asp
+    -->
+
+    <div class="form">
+
+        <ul class="tab-group">
+            <li class="tab-title active" onclick="openTab(this, 'signUp')"><a href="javascript:void(0)">Sign Up</a></li>
+            <li class="tab-title" onclick="openTab(this, 'signIn')"><a href="javascript:void(0)">Log In</a></li>
+        </ul>
+
+        <div class="tab-container">
+            <div id="signUp" class="tab-content">   
+                <h1>Inscription</h1>
+                {{ form_start(signUp) }}
+                <div class="field-wrap">
+                    {{ form_row(signUp.username, {
+                            'label': 'Pseudo',
+                            'required': 'true'
+                        }) }}
+                </div>   
+                <div class="field-wrap">
+                    {{ form_row(signUp.password, {
+                            'label': 'Password',
+                            'required': 'true'
+                        }) }}
+                </div>   
+                <div class="field-wrap">
+                    {{ form_row(signUp.email, {
+                            'label': 'Email',
+                            'required': 'true'
+                        }) }}
+                </div>   
+
+                {{ form_row(signUp.save, { 
+                    'attr': {
+                        'class': 'button button-block pointer',
+                        'formaction': 'javascript:void(0)',
+                        'formmethod': 'post'
+                    }, 
+                    'label': 'Valider'
+                    }) }}
+
+                {{ form_end(signUp) }}
+            </div>
+
+            <div id="signIn" class="tab-content">   
+                <h1>Connexion</h1>
+                {{ form_start(signIn) }}
+                <div class="field-wrap">
+                    {{ form_row(signIn.username, {
+                            'label': 'Pseudo',
+                            'required': 'true'
+                        }) }}
+                </div>   
+                <div class="field-wrap">
+                    {{ form_row(signIn.password, {
+                            'label': 'Password',
+                            'required': 'true'
+                        }) }}
+                </div>   
+                <div class="field-wrap">
+                    {{ form_row(signIn.save, { 
+                        'attr': {
+                            'class': 'button button-block pointer',
+                            'formaction': 'javascript:void(0)',
+                            'formmethod': 'post'
+                        }, 
+                        'label': 'Valider'
+                        }) }}
+                </div> 
+                {{ form_end(signIn) }}
+
+            </div>
+        </div><!-- tab-content -->
+    </div> <!-- /form -->
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function openTab(object, tab) {
+            var i, tabcontent, tabtitles;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            document.getElementById(tab).style.display = "block";
+
+
+            tabtitles = document.getElementsByClassName("tab-title");
+            for (i = 0; i < tabtitles.length; i++) {
+                tabtitles[i].className = tabtitles[i].classList.remove("active");
+            }
+            object.classList.add("active");
+        }
+    </script>
+{% endblock %}
