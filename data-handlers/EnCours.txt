@@ -4,9 +4,6 @@ Pas tout de suite, si je veux un bouton pour focus sur une certaine période il 
 
 
 
-
-
-
 2. Amélioration UI
 Améliorer le template
 https://mijingo.com/blog/key-value-arrays-in-twig
@@ -14,16 +11,28 @@ voir pour mutualiser tout le code de la timeline et uniquement celui dans un seu
 
 
 3. Nouveaux développements
-Ajout de la possibilité d'avoir plusieurs timelines (avec les groupes de jis.js) => foreign key dans mongo [timeline] 1<-->* [item]
+Faire un toggle menu à gauche
+Pouvoir se connecter en tant qu'utilisateur et visualiser toutes ses timelines
+Ajout de la possibilité d'avoir plusieurs timelines (avec les groupes de vis.js) 
+	=> foreign key dans mongo [timeline] 1<-->* [item]
+	=> une page qui offre la possibilité d'en créer une nouvelle
+
 Ajout d'une mind map dans laquelle on peut afficher les éléments de la timeline pour pouvoir les lier entre eux de différentes manières (liens de causalités, d'appartenance, ...)
-Menu contextuel sur un élément pour avoir accès à une sous-timeline
-exporter les informations dans un tableur, un rapport, .doc, .html, ...
-Editeur de texte -> pouvoir mettre des titres + choisir la grosseur du texte
-styliser front-side les items de la timeline
+Ajout de la possibilité d'afficher la timeline verticalement
+
+
+3.1 Les petits plus
+Menu contextuel sur un élément pour avoir accès à une sous-timeline (implique qu'il y a un 'lien' entre l'item en question et une autre timeline)
+Exporter les informations dans un tableur, un rapport, .doc, .html, ...
+Styliser front-side les items de la timeline
 Persistance des options et modification front-side
 Bouton pour focus sur la time line, un autre pour focus sur un item
 
+3.2 Web scrolling et études statistiques 
+http://www.charlatans.info/pieges-statistiques.php
 
+3.3 Journaliste
+Possibilité de rédiger un article sur la base de ses études statistiques
 
 4. Environnement de développement
 	ajout des logs

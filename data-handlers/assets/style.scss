@@ -17,3 +17,4 @@ $icon-font-path: "~bootstrap/assets/fonts/bootstrap/";
 @import '~bootstrap/dist/css/bootstrap.css'; 
 /* ne fonctionne pas si c'est avant l'import bootstrap !? '*/
 @import './css/main.css';
+@import './css/sidenav.css';

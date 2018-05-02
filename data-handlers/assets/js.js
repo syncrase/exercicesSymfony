@@ -34,3 +34,4 @@ require('bootstrap');
 
 // Les styles suivant ne sont pas nécessaire au JS => en dernier pour ne pas être écrasé.
 require('./style.scss');
+//require('./js/sidenav.js');

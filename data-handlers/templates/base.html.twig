@@ -16,10 +16,13 @@
             <link rel="stylesheet" href="{{ asset('api/quill/quill.bubble.css') }}">
             <link rel="stylesheet" href="{{ asset('api/quill/quill.snow.css') }}">
             <script src="{{ asset('api/quill/quill.js') }}"></script>
-            
+
         {% endblock %}
     </head>
     <body>
+        {% block sidenav %}
+            {% include 'common/sidenav.html.twig' %}
+        {% endblock %}
     {% block body %}{% endblock %}
 
     {% block javascripts %}
