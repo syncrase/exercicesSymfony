@@ -25,33 +25,18 @@ $normal: 400;
 $bold: 600;
 $br: 4px;
 
-*, *:before, *:after {
-    box-sizing: border-box;
-}
-
-html {
-    overflow-y: scroll; 
-}
 
 body {
     background:$body-bg;
     font-family: 'Titillium Web', sans-serif;
 }
 
-a {
-    text-decoration:none;
-    color:$main;
-    transition:.5s ease;
-    &:hover {
-        color:$main-dark;
-    }
-}
-
 .form {
     background:rgba($form-bg,.9);
     padding: 40px;
-    max-width:600px;
-    margin:40px auto;
+    max-width:33%;
+    transform: translateY(150px);//50%
+    margin:auto;
     border-radius:$br;
     box-shadow:0 4px 10px 4px rgba($form-bg,.3);
 }
@@ -65,10 +50,9 @@ a {
         display: table;
         clear: both;
     }
-    li a {
-        display:block;
-        text-decoration:none;
-        padding:15px;
+    li div {
+        padding:10px;
+        filter: blur(2px);
         background:rgba($gray-light,.25);
         color:$gray-light;
         font-size:20px;
@@ -78,99 +62,28 @@ a {
         cursor:pointer;
         transition:.5s ease;
         &:hover {
-            background:$main-dark;//$main-dark
-            color:$white;//$white
+            background:$main-dark;
+            color:$white;
+            filter: blur(0);
         }
     }
-    .active a {
+    .active div {
         background:$main;
         color:$white;
+        filter: blur(0);
     }
 }
 
-.tab-container > div:last-child {
+.tab-container > div {
     display:none;
 }
 
-
-h1 {
-    text-align:center;
-    color:$white;
-    font-weight:$thin;
-    margin:0 0 40px;
+.tab-container > div:last-child {
+    display:block;
 }
 
 label {
-    position:absolute;
-    transform:translateY(6px);
-    left:13px;
     color:rgba($white,.5);
-    transition:all 0.25s ease;
-    -webkit-backface-visibility: hidden;
-    pointer-events: none;
-    font-size:22px;
-    .req {
-        margin:2px;
-        color:$main;
-    }
-}
-
-label.active {
-    transform:translateY(50px);
-    left:2px;
-    font-size:14px;
-    .req {
-        opacity:0;
-    }
-}
-
-label.highlight {
-    color:$white;
-}
-
-input, textarea {
-    font-size:22px;
-    display:block;
-    width:100%;
-    height:100%;
-    padding:5px 10px;
-    background:none;
-    background-image:none;
-    border:1px solid $gray-light;
-    color:$white;
-    border-radius:0;
-    transition:border-color .25s ease, box-shadow .25s ease;
-    &:focus {
-        outline:0;
-        border-color:$main;
-    }
-}
-
-textarea {
-    border:2px solid $gray-light;
-    resize: vertical;
-}
-
-.field-wrap {
-    position:relative;
-    margin-bottom:40px;
-}
-
-.top-row {
-    &:after {
-        content: "";
-        display: table;
-        clear: both;
-    }
-
-    > div {
-        float:left;
-        width:48%;
-        margin-right:4%;
-        &:last-child { 
-            margin:0;
-        }
-    }
 }
 
 .button {
@@ -198,9 +111,4 @@ textarea {
 
 .pointer{
     cursor: pointer;
-}
-
-.forgot {
-    margin-top:-20px;
-    text-align:right;
 }

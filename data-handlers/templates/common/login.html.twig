@@ -4,6 +4,7 @@
 
 {% block stylesheets %}
     {#    reset sidenav #}
+    {{ parent() }}
     <link rel="stylesheet" href="{{ asset('build/css/login.css') }}">
     <link rel="stylesheet" href="{{ asset('build/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('build/css/app.js') }}">
@@ -26,32 +27,25 @@
     <div class="form">
 
         <ul class="tab-group">
-            <li class="tab-title active" onclick="openTab(this, 'signUp')"><a href="javascript:void(0)">Sign Up</a></li>
-            <li class="tab-title" onclick="openTab(this, 'signIn')"><a href="javascript:void(0)">Log In</a></li>
+            <li class="tab-title" onclick="openTab(this, 'signUp');"><div>Sign Up</div></li>
+            <li class="tab-title active" onclick="openTab(this, 'signIn');"><div>Log In</div></li>
         </ul>
 
         <div class="tab-container">
-            <div id="signUp" class="tab-content">   
-                <h1>Inscription</h1>
+            <div id="signUp" class="tab-content"> 
                 {{ form_start(signUp) }}
-                <div class="field-wrap">
-                    {{ form_row(signUp.username, {
-                            'label': 'Pseudo',
-                            'required': 'true'
-                        }) }}
-                </div>   
-                <div class="field-wrap">
-                    {{ form_row(signUp.password, {
-                            'label': 'Password',
-                            'required': 'true'
-                        }) }}
-                </div>   
-                <div class="field-wrap">
-                    {{ form_row(signUp.email, {
-                            'label': 'Email',
-                            'required': 'true'
-                        }) }}
-                </div>   
+                {{ form_row(signUp.username, {
+                        'label': 'Pseudo',
+                        'required': 'true'
+                    }) }}
+                {{ form_row(signUp.password, {
+                        'label': 'Password',
+                        'required': 'true'
+                    }) }}
+                {{ form_row(signUp.email, {
+                        'label': 'Email',
+                        'required': 'true'
+                    }) }}
 
                 {{ form_row(signUp.save, { 
                     'attr': {
@@ -65,8 +59,7 @@
                 {{ form_end(signUp) }}
             </div>
 
-            <div id="signIn" class="tab-content">   
-                <h1>Connexion</h1>
+            <div id="signIn" class="tab-content">
                 {{ form_start(signIn) }}
                 <div class="field-wrap">
                     {{ form_row(signIn.username, {
