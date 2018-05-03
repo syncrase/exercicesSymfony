@@ -17,25 +17,10 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Document\TimelineItem;
 use App\Core\VisJS\Timeline\VisTimeline;
 use App\Core\VisJS\Timeline\Forms\TimelineControlPanelFormType;
+
 //use App\Core\VisJS\Timeline\VisTimelineSerializationHelper;
-use App\Core\User\Forms\SignInFormType;
-use App\Core\User\Forms\SignUpFormType;
 
-class MongoController extends Controller {
-
-    /**
-     * @Route("/", name="home")
-     */
-    public function index() {
-
-        $signInForm = $this->createForm(SignInFormType::class);
-        $signUpForm = $this->createForm(SignUpFormType::class);
-
-
-        return $this->render('common/login.html.twig', [
-                    'signIn' => $signInForm->createView(),
-                    'signUp' => $signUpForm->createView()]);
-    }
+class TimelineController extends Controller {
 
     /**
      * @Route("/timeline", name="timeline")

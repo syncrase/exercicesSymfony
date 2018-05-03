@@ -21,8 +21,8 @@ class SignInFormType extends AbstractType {
         // Text input doc: https://symfony.com/doc/current/reference/forms/types/text.html
         // Textarea input doc: https://symfony.com/doc/current/reference/forms/types/textarea.html
         $builder
-//                ->setAction('#') // No action because this is a front side only form
-//                ->setMethod('POST')
+                ->setAction('#')
+                ->setMethod('POST')
                 ->add('username', TextType::class)
                 ->add('password', PasswordType::class)
                 ->add('save', SubmitType::class)
