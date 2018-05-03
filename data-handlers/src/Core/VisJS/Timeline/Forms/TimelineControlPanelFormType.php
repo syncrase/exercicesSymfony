@@ -13,7 +13,7 @@ use App\Core\VisJS\Timeline\Forms\TimelineControlPanelData;
 
 /**
  * Description of TimelineControlPanelFormType
- *
+ * Needed bundles: twig, annotations, symfony/form
  * @author Pierre
  */
 class TimelineControlPanelFormType extends AbstractType {
