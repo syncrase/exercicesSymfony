@@ -1,0 +1,30 @@
+Rapport du tutoriel
+
+tuto url: https://knpuniversity.com/screencast/symfony
+next tutotials
+https://knpuniversity.com/screencast/symfony-fundamentals
+https://knpuniversity.com/screencast/symfony-security
+https://knpuniversity.com/screencast/twig
+
+> composer self-update
+> cd C:\Users\Pierre\dev\perso\exercicesSymfony
+> composer create-project symfony/skeleton full_tutorial
+
+download phpstorm
+
+> cd full_tutorial
+> composer require server
+> php bin/console server:run
+list available commands of 'console' php file
+> php bin/console
+
+Dans PS File/Settings/plugins: browse repo; look for symfony => install symfony plugins and php toolbox & annotations
+
+Implémentations du controller de base
+
+> composer require sec-checker
+> php bin/console security:check
+> composer require twig
+Implémentation du template base et du fichier avec le contenu
+
+> composer require profiler --dev
