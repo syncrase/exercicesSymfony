@@ -5,7 +5,7 @@
 {% block stylesheets %}
     {#    reset sidenav #}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('build/css/login.css') }}">
+    {#    <link rel="stylesheet" href="{{ asset('build/css/login.css') }}">#}
     <link rel="stylesheet" href="{{ asset('build/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('build/css/app.js') }}">
 
@@ -49,9 +49,7 @@
 
                 {{ form_row(signUp.save, { 
                     'attr': {
-                        'class': 'button button-block pointer',
-                        'formaction': 'javascript:void(0)',
-                        'formmethod': 'post'
+                        'class': 'button button-block pointer'
                     }, 
                     'label': 'Valider'
                     }) }}
@@ -63,30 +61,30 @@
                 {{ form_start(signIn) }}
                 <div class="field-wrap">
                     {{ form_row(signIn.username, {
-                            'label': 'Pseudo',
-                            'required': 'true'
-                        }) }}
+                                           'label': 'Pseudo',
+                                           'required': 'true'
+                                       }) }}
                 </div>   
                 <div class="field-wrap">
                     {{ form_row(signIn.password, {
-                            'label': 'Password',
-                            'required': 'true'
-                        }) }}
+                                           'label': 'Password',
+                                           'required': 'true'
+                                       }) }}
                 </div>   
                 <div class="field-wrap">
                     {{ form_row(signIn.save, { 
-                        'attr': {
-                            'class': 'button button-block pointer',
-                            'formaction': '/login',
-                            'formmethod': 'post'
-                        }, 
-                        'label': 'Valider'
-                        }) }}
+                                       'attr': {
+                                           'class': 'button button-block pointer'
+                                       }, 
+                                       'label': 'Valider'
+                                       }) }}
                 </div> 
                 {{ form_end(signIn) }}
 
+
+
             </div>
-        </div><!-- tab-content -->
+        </div><!-- tab-content   'label': 'Pseudo',    -->
     </div> <!-- /form -->
 {% endblock %}
 

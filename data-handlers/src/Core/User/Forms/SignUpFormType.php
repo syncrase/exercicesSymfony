@@ -9,7 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use App\Core\User\Forms\SignUpData;
+//use App\Core\User\Forms\SignUpData;
+use \App\Document\User;
 
 /**
  * Description of TimelineControlPanelFormType
@@ -22,8 +23,8 @@ class SignUpFormType extends AbstractType {
         // Text input doc: https://symfony.com/doc/current/reference/forms/types/text.html
         // Textarea input doc: https://symfony.com/doc/current/reference/forms/types/textarea.html
         $builder
-//                ->setAction('#')
-//                ->setMethod('POST')
+                ->setAction('/signup')
+                ->setMethod('POST')
                 ->add('username', TextType::class)
                 ->add('password', PasswordType::class)
                 ->add('email', EmailType::class)
@@ -33,7 +34,7 @@ class SignUpFormType extends AbstractType {
 
     public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => SignUpData::class,
+            'data_class' => User::class,
         ));
     }
 

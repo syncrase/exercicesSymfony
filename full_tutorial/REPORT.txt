@@ -90,7 +90,7 @@ Delpoyement
 Set .env APP_ENV var to prod
 > php bin/console cache:clear
 > php bin/console cache:warmup
-pour charger tous les fichiers cahce essentiels => accelère le 1er chargement.
+pour charger tous les fichiers cache essentiels => accelère le 1er chargement.
 Il vaut mieux exécuter cette commande lors du déploiement
 
 Pour utiliser un cache system uniqueement en dev, il faut créer un framework.yaml dans config/packages/dev/

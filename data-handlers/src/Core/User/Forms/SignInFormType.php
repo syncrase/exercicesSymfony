@@ -8,7 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use App\Core\User\Forms\SignInData;
+//use App\Core\User\Forms\SignInData;
+use \App\Document\User;
 
 /**
  * Description of SignInFormType
@@ -21,7 +22,7 @@ class SignInFormType extends AbstractType {
         // Text input doc: https://symfony.com/doc/current/reference/forms/types/text.html
         // Textarea input doc: https://symfony.com/doc/current/reference/forms/types/textarea.html
         $builder
-                ->setAction('#')
+                ->setAction('/login')
                 ->setMethod('POST')
                 ->add('username', TextType::class)
                 ->add('password', PasswordType::class)
@@ -31,7 +32,7 @@ class SignInFormType extends AbstractType {
 
     public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => SignInData::class,
+            'data_class' => User::class,
         ));
     }
 
