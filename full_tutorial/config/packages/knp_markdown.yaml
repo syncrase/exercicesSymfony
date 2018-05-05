@@ -1,0 +1,4 @@
+knp_markdown:
+    parser:
+#    Default is markdown.parser.max
+        service: markdown.parser.light
