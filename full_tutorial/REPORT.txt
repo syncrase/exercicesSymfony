@@ -44,10 +44,14 @@ Dans phpstorm, les préférences symfony, changer web directory de web à public
 
 Ajout d'un appel ajax pour mettre à jour la ui sans recharger la page!
 
-> php bin/console debug:autowiring
+> php bin/console debug:autowiring																								/_!_\ IMPORTANT  ВАЖНО  هام
 
 
-*** SUITE ***
+
+*************************************************************************************************************************
+********************************************************** SUITE ********************************************************
+*************************************************************************************************************************
+
 https://knpuniversity.com/screencast/symfony-fundamentals
 
 Commandesuivante pour ajouter un nouevau bundle qui permet d'utiliser le service markdown
@@ -65,8 +69,8 @@ Parceque symfony ne détecte pas le nouveau fichier (à exécuter à chaque que 
 
 > php bin/console debug:container --show-private
 Affiche TOUS les services disponibles (plus précis que debug:autowiring)
-
-> php bin/console config:dump FrameworkBundle 															/ ! \ IMPORTANT  ВАЖНО  هام
+		
+> php bin/console config:dump FrameworkBundle 																					/_!_\ IMPORTANT  ВАЖНО  هام
 pareil que
 > php bin/console config:dump framework
 Bien pour voir un fichier d'exemple avec tout les champs possibles
@@ -86,12 +90,12 @@ Téléchargement de l'extension (DLL) https://pecl.php.net/package/APCu
 Copie du .dll et modification du php.ini + relancer le serveur => it works
 
 
-Delpoyement
+Déploiement
 Set .env APP_ENV var to prod
 > php bin/console cache:clear
 > php bin/console cache:warmup
 pour charger tous les fichiers cache essentiels => accelère le 1er chargement.
-Il vaut mieux exécuter cette commande lors du déploiement
+Il vaut mieux exécuter cette commande lors du déploiement (deploy)
 
 Pour utiliser un cache system uniqueement en dev, il faut créer un framework.yaml dans config/packages/dev/
 framework:
@@ -106,7 +110,68 @@ Crée config/packages/monolog.yaml pour créer une nouvelle channel
 et > php bin/console cache:clear
 > php bin/console debug:container log
 pour vérifier que monolog.logger.markdown est apparu
-ajoute une nouvelle clé dans dev/monolog.yaml
+ajoute une nouvelle clé dans dev/monolog.yaml et dans services.yaml
+
+
+> php bin/console debug:container --parameters
+Permet d'afficher toutes les paramètres
+
+slack service installation -> https://knpuniversity.com/screencast/symfony-fundamentals/slack-legacy-bundles#play
+composer require nexylan/slack-bundle php-http/guzzle6-adapter
+ALors, configurer les nexy_slack endpoint
+Autowiring alias (-> Ajouter Nexy\Slack\Client: '@nexy_slack.client' dans services.yaml -> bind)
+dans services.yaml: nouvelle racine 'services' et ajouter Nexy\Slack\Client
+
+see all environnement variables
+> php bin/console about
+Copier le contenu de .env dans .env.dist, ce dernier étant commité, il faut retirer les parties sensibles. Ce fichier n'est pas lu par symfony, ce n'est qu'un template
+
+pour le déploiement https://knpuniversity.com/screencast/symfony-fundamentals/env-vars-tricks-production
+
+
+> composer require maker --dev
+=> nouvelle commandes console
+> php bin/console make:command
+user:stats => SUCCESS
+> php bin/console article:stats
+
+
+
+*************************************************************************************************************************
+********************************************************** SUITE ********************************************************
+*************************************************************************************************************************
+
+
+https://knpuniversity.com/screencast/symfony-doctrine
+
+> composer require doctrine
+modifie les valeurs de .env
+> php bin/console doctrine:database:create
+> php bin/console make:entity
+Création de l'entité. Re-run pour compléter l'entité
+> php bin/console make:migration
+> php bin/console doctrine:migrations:migrate
+On deploy: exécuter la même commande. La base en prod a son propre système de migration
+Modifier une entité puis
+> php bin/console doctrine:migrations:diff
+> php bin/console doctrine:migrations:migrate
+
+> php bin/console doctrine:query:sql "SELECT * FROM article"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

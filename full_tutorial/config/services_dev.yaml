@@ -1,0 +1,4 @@
+#File name is important in here. This is the built-in method to override the services.yaml
+# See: https://knpuniversity.com/screencast/symfony-fundamentals/parameters
+parameters:
+    cache_adapter: 'cache.adapter.filesystem'

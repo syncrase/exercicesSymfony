@@ -27,7 +27,7 @@ framework:
         #default_redis_provider: redis://localhost
 
         # APCu (not recommended with heavy random-write workloads as memory fragmentation can cause perf issues)
-        app: cache.adapter.apcu
+        app: '%cache_adapter%'
         # DEFAULT values cf. the command > php bin/console debug:config framework
         #app: cache.adapter.filesystem
         #system: cache.adapter.system

@@ -10,7 +10,8 @@ namespace App\Service;
 
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Michelf\MarkdownInterface;
-use Psr\Log\LoggerInterface;
+//use Psr\Log\LoggerInterface;
+use App\Helper\LoggerTrait;
 
 class MarkdownHelper
 {
@@ -18,29 +19,36 @@ class MarkdownHelper
      * @var AdapterInterface
      */
     private $cache;
+
     /**
      * @var MarkdownInterface
      */
     private $markdown;
+
     /**
-     * @var LoggerInterface
+     * @var bool
      */
-    private $logger;
+    private $isDebug;
+
+    use LoggerTrait;
 
     /**
      * MarkdownHelper constructor.
      */
-    public function __construct(AdapterInterface $cache, MarkdownInterface $markdown, LoggerInterface $logger)
+    public function __construct(AdapterInterface $cache, MarkdownInterface $markdown, bool $isDebug)
     {
         $this->cache = $cache;
         $this->markdown = $markdown;
-        $this->logger = $logger;
+        $this->isDebug = $isDebug;
     }
 
     public function parse(string $source): string
     {
-        if (stripos($source, 'bacon') !== false) {
-            $this->logger->info('They are talking about bacon again!');
+
+        // skip caching entirely in debug
+        if ($this->isDebug) {
+            $this->logInfo('Skip caching because we\'re debuging');
+            return $this->markdown->transform($source);
         }
 
         $item = $this->cache->getItem('markdown_'.md5($source));

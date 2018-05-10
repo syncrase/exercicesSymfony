@@ -21,13 +21,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     private $logger;
-    private $cache;
+//    private $cache; , AdapterInterface $cache
     private $markdownHelper;
 
-    function __construct(LoggerInterface $logger, AdapterInterface $cache, MarkdownHelper $markdownHelper)
+    function __construct(LoggerInterface $logger, MarkdownHelper $markdownHelper, $isDebug)
     {
         $this->logger = $logger;
-        $this->cache = $cache;
+//        $this->cache = $cache;
         $this->markdownHelper = $markdownHelper;
     }
 
@@ -43,7 +43,6 @@ class UserController extends AbstractController
      * @Route("/user/{showUserParam1}", name="show_user")
      */
     public function showUser($showUserParam1){
-//        return new Response(sprintf('hello %s', $id));
         $comments = [
             'I ate a normal rock once. It did NOT taste like bacon!',
             'Woohoo! I\'m going on an all-asteroid diet!',
@@ -67,25 +66,16 @@ cow est ribeye adipisicing. Pig hamburger pork belly enim. Do porchetta minim ca
 fugiat.
 EOF;
 
-        // Create a cache object in memory that helps to fetch and cache
-//        $item = $this->cache->getItem('markdown_'.md5($userContent));
-//        if(!$item->isHit()){
-//            $item->set($markdown->transform($userContent));
-//            $this->cache->save($item);
-//        }
-//        $userContent = $item->get();
-//        $userContent = $markdown->transform($userContent);
 
         $userContent = $this->markdownHelper->parse($userContent);
 
-//        dump($this->cache);die;
-//        dump($id, $this);
         return $this->render('user/show.html.twig', [
             'title' => ucwords(str_replace('-', ' ', $showUserParam1)),
             'slug' => $showUserParam1,
             'userContent' => $userContent,
             'comments' => $comments,
         ]);
+//        return new Response(sprintf('hello %s', $id));
     }
 
     /**
@@ -93,8 +83,10 @@ EOF;
      */
     public function toggleUserHeart($slug){
 
-        $this->logger->info('hi there');
+        $this->logger->info('User heart');
 //        return new JsonResponse(['hearts' => rand(5, 100)]);
         return $this->json(['hearts' => rand(5, 100)]);
     }
+
+
 }
