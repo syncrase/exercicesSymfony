@@ -156,7 +156,7 @@ Modifier une entité puis
 > php bin/console doctrine:migrations:diff
 > php bin/console doctrine:migrations:migrate
 
-> php bin/console doctrine:query:sql "SELECT * FROM article"
+> php bin/console doctrine:query:sql "SELECT * FROM user"
 
 
 

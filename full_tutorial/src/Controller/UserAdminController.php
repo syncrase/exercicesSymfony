@@ -27,7 +27,7 @@ class UserAdminController extends Controller
     {
         $user = new User();
         $user->setName('Why Asteroids Taste Like Bacon')
-            ->setEmail('email@email.email')
+            ->setEmail('email2@email.email')
             ->setPassword('password')
             ->setDescription(<<<EOF
 Spicy **jalapeno bacon** ipsum dolor amet veniam shank in dolore. Ham hock nisi landjaeger cow,
@@ -48,7 +48,7 @@ EOF
             );
 
         // Date de création aléatoire POUR L'INSTANT!!!
-        $user->setCreatedAt(new \DateTime(sprintf('-%d days', rand(1, 100))));
+        $user->setCreatedAt(new \DateTime());
 
         $em->persist($user);
         $em->flush();
