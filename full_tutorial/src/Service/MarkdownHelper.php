@@ -46,15 +46,18 @@ class MarkdownHelper
     {
 
         // skip caching entirely in debug
-        if ($this->isDebug) {
-            $this->logInfo('Skip caching because we\'re debuging');
-            return $this->markdown->transform($source);
-        }
+//        if ($this->isDebug) {
+//            $this->logInfo('Skip caching because we\'re debuging');
+//            return $this->markdown->transform($source);
+//        }
 
         $item = $this->cache->getItem('markdown_'.md5($source));
         if (!$item->isHit()) {
+            $this->logInfo('Write cache');
             $item->set($this->markdown->transform($source));
             $this->cache->save($item);
+        }else{
+            $this->logInfo('Do not write cache');
         }
         return $item->get();
     }
