@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -19,6 +20,50 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    /**
+     * @param $value
+     * @return User[]|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findAllCreatedOrderedByNewest()
+    {
+        $builder = $this->createQueryBuilder('u');
+        return $this->addIsCreatedQueryBuilder(array($builder))
+            ->orderBy('u.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+//        return $this->createQueryBuilder('u')
+//            ->andWhere('u.createdAt IS NOT NULL') // Always the case
+//            ->orderBy('u.createdAt', 'DESC')
+//            ->getQuery()
+//            ->getResult()
+//            ;
+    }
+
+    /**
+     * @param QueryBuilder[] $builder
+     * @return QueryBuilder
+     */
+    private function addIsCreatedQueryBuilder($queryBuilderArray){
+        return $this->getOrCreateQueryBuilder($queryBuilderArray)->andWhere('u.createdAt IS NOT NULL');
+    }
+
+    /**
+     * Returns the passed queryBuilder or created a new one if no one is passed
+     * @param QueryBuilder[] $queryBuilderArray
+     * @return QueryBuilder
+     */
+    private function getOrCreateQueryBuilder($queryBuilderArray){
+
+        if(count($queryBuilderArray) === 0){
+            return $this->createQueryBuilder('u');
+        }else if(count($queryBuilderArray) === 1){
+            return $queryBuilderArray[0];
+        }else{
+            // throw Exception !!!
+        }
+    }
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

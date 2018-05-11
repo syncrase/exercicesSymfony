@@ -159,8 +159,9 @@ Modifier une entité puis
 > php bin/console doctrine:query:sql "SELECT * FROM user"
 
 > php bin/console make:twig-extension
-Garder le nom par défaut puisque knp conseillle de n'avoir qu'une seule classe qui gère toutes les extension
+Garder le nom par défaut de l'extension puisque knp conseille de n'avoir qu'une seule classe qui gère toutes les extension
 > composer require knplabs/knp-time-bundle
+Permet un affichage de la date avec 'ago'
 
 
 
