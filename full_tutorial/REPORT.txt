@@ -1,10 +1,8 @@
 Rapport du tutoriel
 
-tuto url: https://knpuniversity.com/screencast/symfony
-next tutotials
-https://knpuniversity.com/screencast/symfony-fundamentals
-https://knpuniversity.com/screencast/symfony-security
-https://knpuniversity.com/screencast/twig
+https://knpuniversity.com/screencast/symfony
+
+
 
 > composer self-update
 > cd C:\Users\Pierre\dev\perso\exercicesSymfony
@@ -164,14 +162,52 @@ Garder le nom par défaut de l'extension puisque knp conseille de n'avoir qu'une
 Permet un affichage de la date avec 'ago'
 
 
+Modification d'une entité + génération du fichier de migration + migration + suppression du contenu existant
+> php bin/console make:entity
+> php bin/console make:migration
+> php bin/console doctrine:migrations:migrate
+> php bin/console doctrine:query:sql "TRUNCATE TABLE user"
+
+
+
+
+*************************************************************************************************************************
+********************************************************** SUITE ********************************************************
+*************************************************************************************************************************
+
+
+https://knpuniversity.com/screencast/doctrine-queries
 
 
 
 
 
+*************************************************************************************************************************
+********************************************************** SUITE ********************************************************
+*************************************************************************************************************************
+
+
+https://knpuniversity.com/screencast/twig
 
 
 
+
+*************************************************************************************************************************
+********************************************************** SUITE ********************************************************
+*************************************************************************************************************************
+
+
+https://knpuniversity.com/screencast/symfony-forms
+
+
+
+
+*************************************************************************************************************************
+********************************************************** SUITE ********************************************************
+*************************************************************************************************************************
+
+
+https://knpuniversity.com/screencast/symfony-security
 
 
 

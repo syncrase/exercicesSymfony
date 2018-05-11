@@ -14,6 +14,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\MarkdownHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Entity;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -74,13 +75,15 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/news/{slug}/heart", name="user_toggle_heart", methods={"post"})
+     * @Route("/news/{id}/heart", name="user_toggle_heart", methods={"post"})
      */
-    public function toggleUserHeart($slug){
+    public function toggleUserHeart(User $user, EntityManagerInterface $entityManager){
 
-        $this->logger->info('User heart');
-//        return new JsonResponse(['hearts' => rand(5, 100)]);
-        return $this->json(['hearts' => rand(5, 100)]);
+//        $this->logger->info('User heart: '.$user->getHeartCount());
+        $user->incrementHeartCount();
+        $entityManager->flush();
+        
+        return $this->json(['hearts' => $user->getHeartCount()]);
     }
 
 

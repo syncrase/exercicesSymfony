@@ -41,6 +41,16 @@ class User
      */
     private $description;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $imageFilename;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $heartCount = 0;
+
     public function getId()
     {
         return $this->id;
@@ -103,6 +113,45 @@ class User
     {
         $this->description = $description;
 
+        return $this;
+    }
+
+    public function getImageFilename(): ?string
+    {
+        return $this->imageFilename;
+    }
+
+    public function setImageFilename(?string $imageFilename): self
+    {
+        $this->imageFilename = $imageFilename;
+
+        return $this;
+    }
+
+    /**
+     * Used in twig templates
+     * @return string
+     */
+    public function getImagePath(): ?string
+    {
+        return 'images/'.$this->imageFilename;
+    }
+
+    public function getHeartCount(): ?int
+    {
+        return $this->heartCount;
+    }
+
+    public function setHeartCount(int $heartCount): self
+    {
+        $this->heartCount = $heartCount;
+
+        return $this;
+    }
+
+    public function incrementHeartCount(): self
+    {
+        $this->heartCount = $this->heartCount + 1;
         return $this;
     }
 }

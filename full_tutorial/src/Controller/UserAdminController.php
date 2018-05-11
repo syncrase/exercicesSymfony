@@ -26,8 +26,8 @@ class UserAdminController extends Controller
     public function new(EntityManagerInterface $em)
     {
         $user = new User();
-        $user->setName('Why Asteroids Taste Like Bacon')
-            ->setEmail('email2@email.email')
+        $user->setName('User name 4')
+            ->setEmail('email4@email.email')
             ->setPassword('password')
             ->setDescription(<<<EOF
 Spicy **jalapeno bacon** ipsum dolor amet veniam shank in dolore. Ham hock nisi landjaeger cow,
@@ -45,7 +45,8 @@ strip steak pork belly aliquip capicola officia. Labore deserunt esse chicken lo
 cow est ribeye adipisicing. Pig hamburger pork belly enim. Do porchetta minim capicola irure pancetta chuck
 fugiat.
 EOF
-            );
+            )
+        ->setImageFilename('asteroid.jpeg');
 
         // Date de création aléatoire POUR L'INSTANT!!!
         $user->setCreatedAt(new \DateTime());
