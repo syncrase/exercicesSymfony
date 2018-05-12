@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,9 +26,10 @@ class UserAdminController extends Controller
      */
     public function new(EntityManagerInterface $em)
     {
+        $nb = '3';
         $user = new User();
-        $user->setName('User name 4')
-            ->setEmail('email4@email.email')
+        $user->setName('User name '.$nb)
+            ->setEmail('email'.$nb.'@email.email')
             ->setPassword('password')
             ->setDescription(<<<EOF
 Spicy **jalapeno bacon** ipsum dolor amet veniam shank in dolore. Ham hock nisi landjaeger cow,
@@ -46,17 +48,32 @@ cow est ribeye adipisicing. Pig hamburger pork belly enim. Do porchetta minim ca
 fugiat.
 EOF
             )
-        ->setImageFilename('asteroid.jpeg');
-
-        // Date de création aléatoire POUR L'INSTANT!!!
-        $user->setCreatedAt(new \DateTime());
-
+            ->setImageFilename('asteroid.jpeg')
+            ->setCreatedAt(new \DateTime());
         $em->persist($user);
+
+
+        $comment = new Comment();
+        $comment->setUser($user)
+            ->setComment('I ate a normal rock once. It did NOT taste like bacon! ('.$nb.')')
+            ->setCreatedAt(new \DateTime());
+        $em->persist($comment);
+        $comment2 = new Comment();
+        $comment2->setUser($user)
+            ->setComment('Woohoo! I\'m going on an all-asteroid diet! ('.$nb.')')
+            ->setCreatedAt(new \DateTime());
+        $em->persist($comment2);
+        $comment3 = new Comment();
+        $comment3->setUser($user)
+            ->setComment('I like bacon too! Buy some from my site! bakinsomebacon.com ('.$nb.')')
+            ->setCreatedAt(new \DateTime());
+        $em->persist($comment3);
+
+
         $em->flush();
 
         return new Response(sprintf(
-            'Hiya! New user id: #%d name: %s',
-            $user->getId(),
+            'Hu mon dada! Nouvel utilisateur : %s',
             $user->getName()
         ));
 

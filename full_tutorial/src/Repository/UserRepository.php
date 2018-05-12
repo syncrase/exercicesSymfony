@@ -62,7 +62,20 @@ class UserRepository extends ServiceEntityRepository
             return $queryBuilderArray[0];
         }else{
             // throw Exception !!!
+            // The array must contains 0 or 1 element. That's the trick that allow the optional parameter
         }
+    }
+
+    public function associationExample($term)
+    {
+        return $this->createQueryBuilder('user')
+            ->andWhere('user.name LIKE :searchTerm
+                OR user.fieldY LIKE :searchTerm
+                OR comments.fieldX LIKE :searchTerm')
+            ->leftJoin('user.comments', 'comments')
+            ->setParameter('searchTerm', '%'.$term.'%')
+            ->getQuery()
+            ->execute();
     }
 //    /**
 //     * @return User[] Returns an array of User objects

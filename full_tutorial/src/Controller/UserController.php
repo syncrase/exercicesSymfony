@@ -52,14 +52,10 @@ class UserController extends AbstractController
      * @Route("/user/{id}", name="show_user")
      */
     public function showUser(User $user){
-        $comments = [
-            'I ate a normal rock once. It did NOT taste like bacon!',
-            'Woohoo! I\'m going on an all-asteroid diet!',
-            'I like bacon too! Buy some from my site! bakinsomebacon.com',
-        ];
+        $comments = $user->getComments();
 
 // No need to use these lines of code when we autowiring the entity. We just need to take care that the passed
-// wildcard name is also an entity name of the entity
+// wildcard name is also an field name of the entity
 //        $repository = $em->getRepository(User::class);
 //        $user = $repository->findOneBy(['id' => $id]);
 //        if (!$user) {
@@ -82,7 +78,7 @@ class UserController extends AbstractController
 //        $this->logger->info('User heart: '.$user->getHeartCount());
         $user->incrementHeartCount();
         $entityManager->flush();
-        
+
         return $this->json(['hearts' => $user->getHeartCount()]);
     }
 

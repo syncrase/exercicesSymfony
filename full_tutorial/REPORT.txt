@@ -171,6 +171,80 @@ Modification d'une entité + génération du fichier de migration + migration + 
 
 
 
+
+*************************************************************************************************************************
+********************************************************** SUITE ********************************************************
+*************************************************************************************************************************
+
+
+Exercice perso: Comment gérer la relation (User 1<--* Comment)
+cf. : https://symfony.com/doc/current/doctrine/associations.html
+
+
+https://stackoverflow.com/questions/12493865/what-is-the-difference-between-inversedby-and-mappedby
+-->	the class that would have the foreignkey_id is the one that needs to have inversedBy
+-> optimization purpose
+https://www.doctrine-project.org/projects/doctrine-orm/en/latest/reference/unitofwork-associations.html
+
+Création d'une association via ligne commande 
+> php bin/console make:entity User
+
+ Your entity already exists! So let's add some new fields!
+
+ New property name (press <return> to stop adding fields):
+ > comments
+
+ Field type (enter ? to see all types) [string]:
+ > relation
+
+ What class should this entity be related to?:
+ > Comment
+
+What type of relationship is this?
+ ------------ --------------------------------------------------------------
+  Type         Description
+ ------------ --------------------------------------------------------------
+  ManyToOne    Each User relates to (has) one Comment.
+               Each Comment can relate/has to (have) many User objects
+
+  OneToMany    Each User relates can relate to (have) many Comment objects.
+               Each Comment relates to (has) one User
+
+  ManyToMany   Each User relates can relate to (have) many Comment objects.
+               Each Comment can also relate to (have) many User objects
+
+  OneToOne     Each User relates to (has) exactly one Comment.
+               Each Comment also relates to (has) exactly one User.
+ ------------ --------------------------------------------------------------
+
+ Relation type? [ManyToOne, OneToMany, ManyToMany, OneToOne]:
+ > OneToMany
+
+ A new property will also be added to the Comment class so that you can access and set the related User object from it.
+
+ New field name inside Comment [user]:
+ > user
+
+ Is the Comment.user property allowed to be null (nullable)? (yes/no) [yes]:
+ > no
+
+ Do you want to activate orphanRemoval on your relationship?
+ A Comment is "orphaned" when it is removed from its related User.
+ e.g. $user->removeComment($comment)
+
+ NOTE: If a Comment may *change* from one User to another, answer "no".
+
+ Do you want to automatically delete orphaned App\Entity\Comment objects (orphanRemoval)? (yes/no) [no]:
+ > yes
+
+ updated: src/Entity/User.php
+ updated: src/Entity/Comment.php
+ 
+
+> php bin/console doctrine:query:sql "TRUNCATE TABLE user"
+ERROR ->  Cannot truncate a table referenced in a foreign key constraint (cf. : https://stackoverflow.com/questions/253849/cannot-truncate-table-because-it-is-being-referenced-by-a-foreign-key-constraint)
+> php bin/console doctrine:query:sql "DELETE FROM user"
+
 *************************************************************************************************************************
 ********************************************************** SUITE ********************************************************
 *************************************************************************************************************************
