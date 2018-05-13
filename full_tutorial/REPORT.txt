@@ -179,6 +179,7 @@ Modification d'une entité + génération du fichier de migration + migration + 
 
 Exercice perso: Comment gérer la relation (User 1<--* Comment)
 cf. : https://symfony.com/doc/current/doctrine/associations.html
+http://sql.sh/cours/jointures
 
 
 https://stackoverflow.com/questions/12493865/what-is-the-difference-between-inversedby-and-mappedby
@@ -250,7 +251,6 @@ ERROR ->  Cannot truncate a table referenced in a foreign key constraint (cf. : 
 *************************************************************************************************************************
 
 
-https://knpuniversity.com/screencast/doctrine-queries
 
 
 
@@ -283,6 +283,11 @@ https://knpuniversity.com/screencast/symfony-forms
 
 https://knpuniversity.com/screencast/symfony-security
 
+
+> composer require security
+Pour que l'entité user puisse implémenter UserInterface
+> php bin/console make:controller SecurityController
+> composer require form validator (-> in order to have the ability to use the makee:form command)
 
 
 
