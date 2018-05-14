@@ -5,14 +5,15 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
-use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\User\UserInterface;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User implements UserInterface
 {
+//    const ROLE_USER = 'ROLE_USER';
+//    const ROLE_ADMIN = 'ROLE_ADMIN';
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -34,13 +35,6 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=128)
      */
     private $password;
-
-    /**
-     * A non-persisted field that's used to create the encoded password.
-     *
-     * @var string
-     */
-    private $plainPassword;
 
     /**
      * @ORM\Column(type="datetime")
@@ -66,6 +60,18 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user", orphanRemoval=true)
      */
     private $comments;
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+    /**
+     * A non-persisted field that's used to create the encoded password.
+     *
+     * @var string
+     */
+    private $plainPassword;
 
     /**
      * User constructor.
@@ -214,7 +220,7 @@ class User implements UserInterface
     }
 
     /**
-     * Returns the roles granted to the user.
+     * Returns the roles granted to the user AND add 'ROLE_USER' by default
      *
      * <code>
      * public function getRoles()
@@ -231,7 +237,18 @@ class User implements UserInterface
      */
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        // give everyone ROLE_USER!
+        if (!in_array('ROLE_USER', $this->roles)) {
+            $this->roles[] = 'ROLE_USER';
+        }
+        return $this->roles;
+    }
+
+    public function setRoles($roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
     }
 
     /**
@@ -267,6 +284,8 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
+
+        // Security measure to prevent the plain-text password from being accidentally saved anywhere
         $this->plainPassword = null;
     }
 
@@ -275,7 +294,7 @@ class User implements UserInterface
      */
     public function getPlainPassword(): string
     {
-        // Security measure to prevent the plain-text password from being accidentally saved anywhere
+//        dump($this);die;
         return $this->plainPassword;
     }
 

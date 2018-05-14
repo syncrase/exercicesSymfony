@@ -11,6 +11,7 @@ namespace App\Controller;
 
 //use Michelf\MarkdownInterface;
 use App\Entity\User;
+use App\Form\UserRegistrationType;
 use App\Repository\UserRepository;
 use App\Service\MarkdownHelper;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,8 +20,10 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
@@ -82,5 +85,33 @@ class UserController extends AbstractController
         return $this->json(['hearts' => $user->getHeartCount()]);
     }
 
+    /**
+     * @Route("/register", name="user_register")
+     */
+    public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $form = $this->createForm(UserRegistrationType::class);
+        $form->handleRequest($request);
+//        dump($form);die;
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var User $user */
+            $user = $form->getData();
+//            dump($user);die;
+            $user->setCreatedAt(new \DateTime())
+                ->setPassword($passwordEncoder->encodePassword($user,'password'));
+            $user->getRoles();
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+            $this->addFlash('success', 'Welcome '.$user->getEmail());
+            return $this->redirectToRoute('app_homepage');
+        }
+
+        return $this->render('user/register.html.twig', [
+            'form' => $form->createView()
+        ]);
+
+    }
 
 }

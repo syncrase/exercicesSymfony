@@ -41,7 +41,7 @@ class UserAdminController extends Controller
     public function new(EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder)
     {
 
-        $nb = '1';
+        $nb = '2';
         $user = new User();
         $user->setName('User name '.$nb)
             ->setEmail('email'.$nb.'@email.email')
@@ -65,6 +65,7 @@ EOF
             )
             ->setImageFilename('asteroid.jpeg')
             ->setCreatedAt(new \DateTime());
+        $user->getRoles();
         $em->persist($user);
 
 
