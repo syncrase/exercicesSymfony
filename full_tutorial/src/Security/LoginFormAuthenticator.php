@@ -128,7 +128,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
         $form = $this->formFactory->create(UserType::class);
         $form->handleRequest($request);
-//        $form->isValid()
         $data = $form->getData();
         return $data;
 
@@ -143,15 +142,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         $username = $credentials['_username'];
-//        $password = $credentials['_password'];
-
         // fetch the column name which is specified in the property field of the user_provider
         $user = $userProvider->loadUserByUsername($username);
-
-
-//        $user = $this->em->getRepository(User::class)
-//            ->findOneBy(['name' => $username, 'password' => $password]);
-
         return $user;
 
     }
@@ -168,14 +160,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             return true;
         }
         return false;
-//        $user = $this->em->getRepository(User::class)
-//            ->findOneBy(['name' => $user->getUsername(), 'password' => $credentials['_password']]);
-////        dump($user);die;
-//        if (!$user) {
-////            throw new NotFoundHttpException(sprintf('No user found for password \'' . $credentials['_password'] . '\''));
-//            return false;
-//        }
-//        return true;
     }
 
     /**

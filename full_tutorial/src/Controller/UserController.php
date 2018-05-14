@@ -98,7 +98,7 @@ class UserController extends AbstractController
             $user = $form->getData();
 //            dump($user);die;
             $user->setCreatedAt(new \DateTime())
-                ->setPassword($passwordEncoder->encodePassword($user,'password'));
+                ->setPassword($passwordEncoder->encodePassword($user,$user->getPassword()));
             $user->getRoles();
 
             $em = $this->getDoctrine()->getManager();
