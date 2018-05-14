@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends Controller
@@ -24,27 +25,25 @@ class SecurityController extends Controller
     /**
      * @Route("/login", name="security_login")
      */
-    public function loginAction(AuthenticationUtils $authenticationUtils)
+    public function loginAction(AuthenticationUtils $authenticationUtils, Request $request)
     {
-//        , Request $request
-//        dump($request);
-        // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
+        // last username entered by the user. DOESN'T WORK ANYWHERE!!! Even when setting manually attribute in the request!!!
+        // But I keep it because it initialize the variable to 'null' !!!
         $lastUsername = $authenticationUtils->getLastUsername();
-
-        $form = $this->createForm(UserType::class, [
-            '_username' => $lastUsername,
-        ]);
-
-        if($form->isSubmitted()){
-            dump($form);die;
+        if ($request->getSession() instanceof SessionInterface) {
+            $lastUsername = $request->getSession()->get(Security::LAST_USERNAME);
         }
-//dump($authenticationUtils);die;
+
+        $form = $this->createForm(UserType::class
+            , [
+            '_username' => $lastUsername,
+        ]
+        );
+
         return $this->render(
             'security/login.html.twig',
             array(
-                // last username entered by the user
                 'form' => $form->createView(),
                 'error' => $error,
             )
