@@ -13,6 +13,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserRegistrationType;
 use App\Repository\UserRepository;
+use App\Security\LoginFormAuthenticator;
 use App\Service\MarkdownHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Entity;
@@ -24,6 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 class UserController extends AbstractController
 {
@@ -88,7 +90,7 @@ class UserController extends AbstractController
     /**
      * @Route("/register", name="user_register")
      */
-    public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardAuthenticatorHandler, LoginFormAuthenticator $loginFormAuthenticator)
     {
         $form = $this->createForm(UserRegistrationType::class);
         $form->handleRequest($request);
@@ -105,7 +107,8 @@ class UserController extends AbstractController
             $em->persist($user);
             $em->flush();
             $this->addFlash('success', 'Welcome '.$user->getEmail());
-            return $this->redirectToRoute('app_homepage');
+//            return $this->redirectToRoute('app_homepage');
+            return $guardAuthenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $loginFormAuthenticator, 'main');
         }
 
         return $this->render('user/register.html.twig', [

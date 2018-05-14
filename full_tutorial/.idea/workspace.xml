@@ -38,8 +38,8 @@
       <file leaf-file-name="User.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Entity/User.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="393">
-              <caret line="303" column="35" selection-start-line="303" selection-start-column="35" selection-end-line="303" selection-end-column="35" />
+            <state relative-caret-position="159">
+              <caret line="74" column="8" selection-start-line="74" selection-start-column="8" selection-end-line="79" selection-end-column="14" />
               <folding>
                 <element signature="e#30#78#0#PHP" expanded="true" />
               </folding>
@@ -47,14 +47,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserController.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="UserController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Controller/UserController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="100" column="89" selection-start-line="100" selection-start-column="89" selection-end-line="100" selection-end-column="89" />
+            <state relative-caret-position="549">
+              <caret line="110" column="148" selection-start-line="110" selection-start-column="148" selection-end-line="110" selection-end-column="148" />
               <folding>
                 <element signature="e#151#171#0#PHP" expanded="true" />
-                <element signature="e#2897#2922#0#PHP" expanded="true" />
+                <element signature="e#3993#4018#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -72,11 +72,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LoginFormAuthenticator.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="LoginFormAuthenticator.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1400">
-              <caret line="129" column="39" selection-start-line="129" selection-start-column="39" selection-end-line="129" selection-end-column="39" />
+            <state relative-caret-position="244">
+              <caret line="46" column="12" selection-start-line="46" selection-start-column="12" selection-end-line="46" selection-end-column="12" />
               <folding>
                 <element signature="e#32#52#0#PHP" expanded="true" />
               </folding>
@@ -146,9 +146,9 @@
         <option value="$PROJECT_DIR$/config/packages/security.yaml" />
         <option value="$PROJECT_DIR$/src/Form/UserRegistrationType.php" />
         <option value="$PROJECT_DIR$/templates/user/register.html.twig" />
+        <option value="$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php" />
         <option value="$PROJECT_DIR$/src/Entity/User.php" />
         <option value="$PROJECT_DIR$/src/Controller/UserController.php" />
-        <option value="$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php" />
       </list>
     </option>
   </component>
@@ -384,12 +384,12 @@
       <workItem from="1526218664245" duration="198000" />
       <workItem from="1526219427718" duration="3577000" />
       <workItem from="1526225136749" duration="16276000" />
-      <workItem from="1526308621001" duration="21121000" />
+      <workItem from="1526308621001" duration="22055000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="125869000" />
+    <option name="totallyTimeSpent" value="126803000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="916" extended-state="6" />
@@ -401,11 +401,11 @@
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.6721939" visible="true" weight="0.19023137" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.6721939" visible="true" weight="0.19023137" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.498125" weight="0.32780612" />
-      <window_info id="Structure" order="1" sideWeight="0.32780612" side_tool="true" visible="true" weight="0.19023137" />
+      <window_info active="true" id="Structure" order="1" sideWeight="0.32780612" side_tool="true" visible="true" weight="0.19023137" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -721,31 +721,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Entity/User.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="393">
-          <caret line="303" column="35" selection-start-line="303" selection-start-column="35" selection-end-line="303" selection-end-column="35" />
-          <folding>
-            <element signature="e#30#78#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/packages/security.yaml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="680">
           <caret line="40" column="41" selection-start-line="40" selection-start-column="41" selection-end-line="40" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Controller/UserController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="100" column="89" selection-start-line="100" selection-start-column="89" selection-end-line="100" selection-end-column="89" />
-          <folding>
-            <element signature="e#151#171#0#PHP" expanded="true" />
-            <element signature="e#2897#2922#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -791,10 +770,31 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1400">
-          <caret line="129" column="39" selection-start-line="129" selection-start-column="39" selection-end-line="129" selection-end-column="39" />
+        <state relative-caret-position="244">
+          <caret line="46" column="12" selection-start-line="46" selection-start-column="12" selection-end-line="46" selection-end-column="12" />
           <folding>
             <element signature="e#32#52#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Entity/User.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="74" column="8" selection-start-line="74" selection-start-column="8" selection-end-line="79" selection-end-column="14" />
+          <folding>
+            <element signature="e#30#78#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Controller/UserController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="549">
+          <caret line="110" column="148" selection-start-line="110" selection-start-column="148" selection-end-line="110" selection-end-column="148" />
+          <folding>
+            <element signature="e#151#171#0#PHP" expanded="true" />
+            <element signature="e#3993#4018#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>

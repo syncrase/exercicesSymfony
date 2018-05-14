@@ -72,12 +72,12 @@ class User implements UserInterface
      */
     private $roles = [];
 
-    /**
-     * A non-persisted field that's used to create the encoded password.
-     *
-     * @var string
-     */
-    private $plainPassword; // todo is this field really usefull? Just delete it!
+//    /**
+//     * A non-persisted field that's used to create the encoded password.
+//     *
+//     * @var string
+//     */
+//    private $plainPassword; // todo is this field really usefull? Just delete it!
 
     /**
      * User constructor.
@@ -295,23 +295,23 @@ class User implements UserInterface
         $this->plainPassword = null;
     }
 
-    /**
-     * @return string
-     */
-    public function getPlainPassword(): string
-    {
-//        dump($this);die;
-        return $this->plainPassword;
-    }
+//    /**
+//     * @return string
+//     */
+//    public function getPlainPassword(): string
+//    {
+////        dump($this);die;
+//        return $this->plainPassword;
+//    }
 
-    /**
-     * @param string $plainPassword
-     */
-    public function setPlainPassword(string $plainPassword): void
-    {
-        $this->plainPassword = $plainPassword;
-        // forces the object to look "dirty" to Doctrine. Avoids
-        // Doctrine *not* saving this entity, if only plainPassword changes
-        $this->password = null;
-    }
+//    /**
+//     * @param string $plainPassword
+//     */
+//    public function setPlainPassword(string $plainPassword): void
+//    {
+//        $this->plainPassword = $plainPassword;
+//        // forces the object to look "dirty" to Doctrine. Avoids
+//        // Doctrine *not* saving this entity, if only plainPassword changes
+//        $this->password = null;
+//    }
 }
