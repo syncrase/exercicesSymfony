@@ -8,6 +8,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserAdminController extends Controller
 {
@@ -24,13 +26,14 @@ class UserAdminController extends Controller
     /**
      * @Route("/admin/user/new")
      */
-    public function new(EntityManagerInterface $em)
+    public function new(EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder)
     {
-        $nb = '3';
+
+        $nb = '1';
         $user = new User();
         $user->setName('User name '.$nb)
             ->setEmail('email'.$nb.'@email.email')
-            ->setPassword('password')
+            ->setPassword($passwordEncoder->encodePassword($user,'password'))
             ->setDescription(<<<EOF
 Spicy **jalapeno bacon** ipsum dolor amet veniam shank in dolore. Ham hock nisi landjaeger cow,
 lorem proident [beef ribs](https://baconipsum.com/) aute enim veniam ut cillum pork chuck picanha. Dolore reprehenderit

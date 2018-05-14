@@ -52,6 +52,8 @@ class SecurityController extends Controller
     }
 
     /**
+     * Symfony intercept request before to reach this method.
+     * This method must exists because without it a 404 page would be triggered before the log out
      * @Route("/logout", name="security_logout")
      */
     public function logoutAction()
