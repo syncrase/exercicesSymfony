@@ -5,19 +5,31 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class UserAdminController extends Controller
 {
     /**
+     * Annotation may be set on the controller
+     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @Route("/user/admin", name="user_admin")
      */
-    public function index()
+    public function index(AuthorizationCheckerInterface $authChecker)
     {
+        // The second parameter is used to specify on what object the role is tested.
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page!');
+
+        if (false === $authChecker->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('Unable to access this page!');
+        }
+
         return $this->render('user_admin/index.html.twig', [
             'controller_name' => 'UserAdminController',
         ]);
