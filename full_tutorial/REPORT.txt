@@ -43,6 +43,7 @@ Dans phpstorm, les préférences symfony, changer web directory de web à public
 Ajout d'un appel ajax pour mettre à jour la ui sans recharger la page!
 
 > php bin/console debug:autowiring																								/_!_\ IMPORTANT  ВАЖНО  هام
+> php bin/console debug:container (affiche tous les services que l'on type-hinter)
 
 
 
@@ -289,10 +290,12 @@ Pour que l'entité user puisse implémenter UserInterface
 > php bin/console make:controller SecurityController
 > composer require form validator (-> in order to have the ability to use the makee:form command)
 
+> php bin/console make:auth
+
+https://symfony.com/doc/current/security/guard_authentication.html
 
 
-
-
+Doesn't work, stop here --> https://knpuniversity.com/screencast/symfony-security/authenticator-get-user-check-credentials
 
 
 

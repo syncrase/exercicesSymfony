@@ -249,7 +249,7 @@ class User implements UserInterface
 //        First getUsername()... is super-unimportant. Just return any unique user string you want -
 // a username, an email, a uuid, a funny, but unique joke - whatever.
 // This is only used to show you who is logged in when you're debugging
-        return $this->email;
+        return $this->name;
     }
 
     /**

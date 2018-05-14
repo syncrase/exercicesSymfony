@@ -16,12 +16,12 @@ class UserType extends AbstractType
         $builder
             ->add('_username')
 //            ->add('email')
-//            ->add('password')
-            ->add('_password', RepeatedType::class, array(
-                'type' => PasswordType::class,
-                'first_options'  => array('label' => 'Password'),
-                'second_options' => array('label' => 'Repeat Password'),
-            ))
+            ->add('_password', PasswordType::class)
+//            ->add('_password', RepeatedType::class, array(
+//                'type' => PasswordType::class,
+//                'first_options'  => array('label' => 'Password'),
+//                'second_options' => array('label' => 'Repeat Password'),
+//            ))
 //            ->add('createdAt')
 //            ->add('description')
 //            ->add('imageFilename')
